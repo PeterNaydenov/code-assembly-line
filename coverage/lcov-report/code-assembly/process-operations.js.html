@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for code-assembly/process-operations.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">code-assembly/</a> process-operations.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">97.58% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>121/124</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">90.48% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>38/42</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>15/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">97.27% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>107/110</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">63×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">16×</span>
+<span class="cline-any cline-yes">16×</span>
+<span class="cline-any cline-yes">16×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict'
+&nbsp;
+/*
+   Operations: 
+         - draw
+         - alterTemplate
+         - block
+         - set
+         - alter
+         - add 
+         - copy
+         - remove
+         - hook
+         - load // load is not part of the library but is valid op. Find it in process-tools
+*/
+&nbsp;
+&nbsp;
+const lib = {
+&nbsp;
+  draw : function ( template, data, missField, missData ) {   // ( intTemplate, {}[], string, string ) -&gt; string[]
+    // * Render template.
+    let result = [];
+    data.forEach ( obj =&gt; {
+                const keys = Object.keys(obj);
+                let 
+                      tpl = lib._copyList ( template.tpl )
+                    , places = Object.assign ( {}, template.placeholders )
+                
+                keys.forEach ( k =&gt; {
+                            const positions = places[k]
+                            if ( positions ) {
+                                    for (let position of positions ) tpl[position] = obj[k]
+                                    delete places[k]
+                               }
+                     })
+                
+                const neglected     =   Object.keys ( places )
+                    , someNeglected = ( neglected.length &gt; 0 )
+                    ;                    
+&nbsp;
+                if ( someNeglected &amp;&amp; missField ) { // miss field strategy
+                       for ( let position of neglected ) {
+                                 const id = places[position]
+                                 tpl[id]  = lib._neglectedUpdate ( position, missField )
+                           }  
+                   }
+               
+                if ( someNeglected &amp;&amp; missData ) { // miss data strategy
+                       tpl = ( missData == '_hide' ) ? [] : [ missData ]
+                  }
+                
+                if ( tpl.length &gt; 0 )   result.push ( tpl.join('') )
+        })
+    return result
+  } // draw func.
+&nbsp;
+&nbsp;
+&nbsp;
+, _neglectedUpdate : function ( position, missField ) {
+     switch ( missField ) {
+        case '_position' : return position
+        case '_hide'     : return ''
+        default          : return missField
+     }
+} // _neglectedUpdate
+&nbsp;
+&nbsp;
+&nbsp;
+, _copyList : function ( source ) { // (string[]) -&gt; string[]
+    let 
+          size = source.length
+        , result = []
+        ;
+    while (size--) result[size] = source[size]
+    return result
+} // _copyList func.
+&nbsp;
+&nbsp;
+&nbsp;
+, alterTemplate : function ( step, sourcePlaceholders  ) {   // (step{}, internalTpl.placeholers) -&gt; internalTpl.placeholders
+  // * Rename of placeholders
+  const 
+          changes = step.data 
+        , keysPh  = Object.keys ( sourcePlaceholders )
+        , placeholders = {};
+        ;
+&nbsp;
+  keysPh.forEach ( key =&gt; {
+        const k = changes[key] || <span class="branch-1 cbranch-no" title="branch not covered" >key;</span>
+        placeholders[k] = sourcePlaceholders[key]
+    }) 
+&nbsp;
+  return placeholders
+} // alterTemplate func.
+&nbsp;
+&nbsp;
+&nbsp;
+, block : function ( data ) {   //  ( string[] ) -&gt; string[]
+  // * Concatinate strings from array. Returns new array with a single entry
+    const result = data.reduce ( (res, item) =&gt; res += item, '')
+    return [ result ]
+} // block func.
+&nbsp;
+&nbsp;
+&nbsp;
+, set : function ( step, data) {   //  ( step{}, string[] ) -&gt; {}[]
+  // * Converts renders and blocks in object
+    const 
+          name = step.as
+        , result = data.reduce ( (res,item) =&gt; {
+                                let obj = {};
+                                obj[name] = item;
+                                res.push ( obj )
+                                return res
+                        },[])
+    return result;
+} // set func.
+&nbsp;
+&nbsp;
+&nbsp;
+, alter : function ( step, data ) {   // ( step{}, {}[] ) -&gt; {}[]
+  // * Change property names. 
+  const 
+         changes = step.data
+       , keys    = Object.keys ( changes )
+       , forUpdate = lib._normalizeSelection ( step.select, data.length )
+       ;
+  let result = data.map ( dataRecord =&gt; Object.assign ({}, dataRecord)   );
+  forUpdate.forEach ( el =&gt; {
+        const selected = result[el]
+        const dataKeys = Object.keys(selected)
+        let update = {}
+        dataKeys.forEach ( k =&gt; {
+                    let value = selected[k]
+                    if ( keys.includes(k) ) k = changes[k]
+                    update[k] = value
+            })
+        result[el] = update
+    })
+  return result
+} // alter func.
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+, _normalizeSelection: function ( list, length ) { 
+    let result = [];
+    if ( !list ) {
+         result = lib._generateList ( length )
+         return result
+       }
+    // if ( typeof(list) == 'string' ) list = [ list ]
+    if ( typeof(list) != 'object' ) list = [ list ]
+&nbsp;
+    list.forEach ( el =&gt; {
+            <span class="missing-if-branch" title="if path not taken" >I</span>if ( el == 'all') {
+<span class="cstat-no" title="statement not covered" >                 result = lib._generateList(length)</span>
+<span class="cstat-no" title="statement not covered" >                 return result</span>
+              }
+            switch ( el ) {
+                case 'first': 
+                              result.push(0)
+                              break;
+                case 'last' : 
+                              result.push(length-1)
+                              break
+                    default :
+                              if (el&lt;0) result.push(length-1+el)
+                              else      result.push(el-1)
+               }
+        })
+    return result
+} // _normalizeSelection func.
+&nbsp;
+&nbsp;
+&nbsp;
+, _generateList: function ( size ) {
+    let result = [];
+    for ( let i=0; i &lt; size; i++ ) result.push(i)
+    return result
+} // _generateList func.
+&nbsp;
+&nbsp;
+&nbsp;
+, add : function ( step, data ) {   // ( step{}, {}[] ) -&gt; {}[]
+  // * Add property names
+  const 
+         changes = step.data
+       , keys    = Object.keys ( changes )
+       , forUpdate = lib._normalizeSelection ( step.select, data.length )
+       ;
+  let result = data.map ( dataRecord =&gt; Object.assign ({}, dataRecord)   );
+  forUpdate.forEach ( el =&gt; {
+        const selected = result[el]
+        const dataKeys = Object.keys(selected)
+        let update = keys.reduce ( (res,k) =&gt; {
+                                if ( !selected[k] ) res[k] = changes[k]
+                                else                res[k] = lib._combineValues (selected[k], changes[k])
+                                return res
+                        }, {})
+        result[el] = Object.assign( selected, update )
+    })
+  return result  
+} // add func.
+&nbsp;
+&nbsp;
+&nbsp;
+, _combineValues: function ( existing, update ) {
+    let 
+          primitive = false
+        , result
+        ;
+    
+    <span class="missing-if-branch" title="else path not taken" >E</span>if ( typeof existing != 'object' )   primitive = true
+    <span class="missing-if-branch" title="else path not taken" >E</span>if ( primitive )   result = [ existing ]
+    else               <span class="cstat-no" title="statement not covered" >result = existing</span>
+&nbsp;
+    return result.concat ( update )
+} // _combineValues func.
+&nbsp;
+&nbsp;
+&nbsp;
+, copy : function ( step, data ) {   // ( step{}, {}[] ) -&gt; {}[]
+  // * Create new property copy the value.
+    const 
+         changes = step.data
+       , keys    = Object.keys ( changes )
+       , forUpdate = lib._normalizeSelection ( step.select, data.length )
+       , result = data.map ( record =&gt; Object.assign ({},record) )
+       ;
+&nbsp;
+    forUpdate.forEach ( dataRecord =&gt; {
+    keys.forEach ( k =&gt; {
+            const value     = result[dataRecord][k]
+            const copyKey   = changes[k]
+            result[dataRecord][copyKey] = value 
+       })
+       })
+&nbsp;
+    return result
+} // copy func.
+&nbsp;
+&nbsp;
+&nbsp;
+, remove : function ( step, data ) {   // ( step{}, {}[] ) -&gt; {}[]
+  // * Remove existing property
+    const 
+         keys = step.keys
+       , forUpdate = lib._normalizeSelection ( step.select, data.length )
+       , result = data.map ( record =&gt; Object.assign ({}, record) )
+       ;
+&nbsp;
+    forUpdate.forEach ( dataRecord =&gt; {
+    keys.forEach ( k =&gt; {
+                delete result[dataRecord][k]
+       })        
+       })
+    return result
+} // remove func.
+&nbsp;
+&nbsp;
+&nbsp;
+, hook : function ( data, cb ) {   // ( {}[], Function ) -&gt; {}[]
+  // * Function placeholder within render process
+    if ( !cb ) return data
+    return cb ( data , lib.modify )
+} // hook func.
+&nbsp;
+&nbsp;
+&nbsp;
+, _findIfString : ( list ) =&gt; (typeof(list[0]) == 'string')
+&nbsp;
+&nbsp;
+&nbsp;
+, modify : function ( data, step ) {   // ( {}[], step{} ) -&gt; {}[]
+  // * Access step-operations inside hook callbacks.
+    let 
+        act = step.do
+      , dataIsStr = lib._findIfString ( data )
+      ;
+&nbsp;
+    if ( dataIsStr ) {
+            console.error (`Data operations require objects but have strings. Data: ${data}`)
+            return data
+      }
+    return lib[act] ( step, data )
+} // modify func.
+&nbsp;
+} // lib
+&nbsp;
+&nbsp;
+&nbsp;
+module.exports = lib
+&nbsp;
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Nov 15 2017 07:31:13 GMT+0200 (EET)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
