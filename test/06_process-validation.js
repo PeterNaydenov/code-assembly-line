@@ -5,7 +5,7 @@ const
        chai         = require ('chai')
      , expect       = chai.expect
      , processTools = require ( '../process-tools' )
-     , errors       = require ( '../errors' )
+     , callErrors       = require ( '../errors' )
      ;
 
 
@@ -34,7 +34,7 @@ const
 
              expect ( result ).to.be.an ( 'array' )
              expect ( result ).to.have.length ( 1 )
-             expect ( result[0] ).to.be.equal ( errors.emptyExtProcess )            
+             expect ( result[0] ).to.be.equal ( callErrors('emptyExtProcess') )            
     }) // it empty array
 
 
@@ -47,7 +47,7 @@ const
 
              expect ( result ).to.be.an ( 'array' )
              expect ( result ).to.have.length ( 1 )
-             expect ( result[0] ).to.be.equal ( errors.wrongExtProcess )
+             expect ( result[0] ).to.be.equal ( callErrors('wrongExtProcess') )
     }) // it primitive
 
 
@@ -60,7 +60,7 @@ const
 
              expect ( result ).to.be.an ( 'array' )
              expect ( result ).to.have.length ( 1 )
-             expect ( result[0] ).to.be.equal ( errors.wrongExtProcess )            
+             expect ( result[0] ).to.be.equal ( callErrors('wrongExtProcess') )            
     }) // it object
 
 
@@ -76,7 +76,7 @@ const
 
              expect ( result ).to.be.an ( 'array' )
              expect ( result ).to.have.length ( 1 )
-             expect ( result[0] ).to.be.equal ( errors.missingOperation )            
+             expect ( result[0] ).to.be.equal ( callErrors('missingOperation') )            
     }) // it missing operation
 
 

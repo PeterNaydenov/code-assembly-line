@@ -1,6 +1,6 @@
 'use strict';
 
-const errors = require ('./errors');
+const callError = require ('./errors');
 const operation = require ( './process-operations')
 
 
@@ -43,17 +43,17 @@ interpret : function ( ext ) {
              , validType = ext instanceof Array
              ;
         
-        if ( !validType )      return [ errors.wrongExtProcess ]
-        if ( ext.length == 0 ) return [ errors.emptyExtProcess ]
+        if ( !validType )      return [ callError('wrongExtProcess') ]
+        if ( ext.length == 0 ) return [ callError('emptyExtProcess') ]
 
         ext.forEach ( step => {
                 let validOperation = false;
                 if ( !step.do ) {
-                        log.push ( errors.missingOperation )
+                        log.push ( callError('missingOperation'))
                         return
                    }
                 validOperation = validSteps.includes ( step.do )
-                if ( !validOperation ) log.push ( `Error: "${step.do}" is not a valid operation` )
+                if ( !validOperation ) log.push ( callError('notaValidOperation', [step.do] ) )
         })
         return log
 } // _validate func.
@@ -97,14 +97,14 @@ interpret : function ( ext ) {
            switch ( step ) {
             case 'draw' :
                           if ( currentIsStr ) {
-                                  console.error (`Error: Draw expects object data. ${console}`)   
+                                  console.error ( callError (dataExpectObject, current) )
                                   return
                             }
                             
-                            tplName   = todo.tpl
+                          tplName   = todo.tpl
                             
-                            if ( !libTemplates[tplName] ) {
-                                    console.error ( `Error. Template "${tplName}" doesn't exist.` )
+                          if ( !libTemplates[tplName] ) {
+                                    console.error ( callError('missingTemplate', current)  )
                                     return
                                }
                           
@@ -131,7 +131,7 @@ interpret : function ( ext ) {
                           break
             case 'block':
                           if ( !currentIsStr ) {
-                                 console.error ( `Block expects string data. ${current}` )
+                                 console.error ( callError ('blockExpectString', [current]) )
                                  return
                              }
                           
@@ -165,7 +165,7 @@ interpret : function ( ext ) {
                           break
                 default :
                           if ( currentIsStr ) {
-                                console.error (`Data operations require objects. ${current}`)
+                                console.error ( callError('dataExpectObject', [current])   )
                                 return
                              }
                           // data operations

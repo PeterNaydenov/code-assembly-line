@@ -3,17 +3,37 @@
 // * Error Messages
 
 
-const errors = {
-       
+const msg = {
+      'notDefined'        : 'Not defined error' 
        // Template errors
-      'brokenTemplate'    : 'Broken string template. Placeholder with missing closing tag.'
+    , 'brokenTemplate'    : 'Broken string template. Placeholder with missing closing tag.'
     , 'wrongDataTemplate' : 'Broken data template. Object is not according the standards.'
+    , 'overwriteTemplate' : 'Error: Overwrite of existing template is not permited by configuration.'
+    , 'missingTemplate'   : `Error: Template "%s" doesn't exist.`
        
        // Process errors
-    , 'wrongExtProcess'   : 'Wrong process data. "extProcess" should be an array of "processSteps".'
-    , 'emptyExtProcess'   : 'Empty process! Process should contain steps(processSteps)'
-    , 'brokenProcess'     : 'Broken process description.'
-    , 'missingOperation'  : 'Process has step with missing operation. Set parameter "do".' 
-}
+    , 'wrongExtProcess'    : 'Wrong process data. "extProcess" should be an array of "processSteps".'
+    , 'emptyExtProcess'    : 'Empty process! Process should contain steps(processSteps)'
+    , 'brokenProcess'      : 'Broken process description.'
+    , 'missingOperation'   : 'Process has step with missing operation. Set parameter "do".'
+    , 'overwriteProcess'   : 'Error: Process with name "%s" is already defined.'
+    , 'notaValidOperation' : `Error: "%s" is not a valid operation`
 
-module.exports = errors;
+    , 'blockExpectString'  : `Block expects string data. %s`
+    , 'dataExpectObject'   : `Data operations require objects. %s`
+
+  }
+
+
+
+const callError = function ( msgName, vars ) {
+  let result = msg[msgName] || msg['notDefined'];
+
+  if ( vars ) {
+    if ( !(vars instanceof Array))   vars = [vars]
+    vars.forEach ( v => result = result.replace('%s', v )   )
+  }
+  return result
+ } // msg func.
+
+module.exports = callError;

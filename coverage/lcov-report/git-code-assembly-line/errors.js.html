@@ -22,22 +22,22 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/2</span>
+        <span class='fraction'>10/10</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">83.33% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>5/6</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>1/1</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/2</span>
+        <span class='fraction'>8/8</span>
       </div>
     </div>
   </div>
@@ -61,7 +61,27 @@
 16
 17
 18
-19</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -79,31 +99,71 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">68×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">68×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">68×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span></td><td class="text"><pre class="prettyprint lang-js">'use strict'
 &nbsp;
 // * Error Messages
 &nbsp;
 &nbsp;
-const errors = {
-       
+const msg = {
+      'notDefined'        : 'Not defined error' 
        // Template errors
-      'brokenTemplate'    : 'Broken string template. Placeholder with missing closing tag.'
+    , 'brokenTemplate'    : 'Broken string template. Placeholder with missing closing tag.'
     , 'wrongDataTemplate' : 'Broken data template. Object is not according the standards.'
+    , 'overwriteTemplate' : 'Error: Overwrite of existing template is not permited by configuration.'
+    , 'missingTemplate'   : `Error: Template "%s" doesn't exist.`
        
        // Process errors
-    , 'wrongExtProcess'   : 'Wrong process data. "extProcess" should be an array of "processSteps".'
-    , 'emptyExtProcess'   : 'Empty process! Process should contain steps(processSteps)'
-    , 'brokenProcess'     : 'Broken process description.'
-    , 'missingOperation'  : 'Process has step with missing operation. Set parameter "do".' 
-}
+    , 'wrongExtProcess'    : 'Wrong process data. "extProcess" should be an array of "processSteps".'
+    , 'emptyExtProcess'    : 'Empty process! Process should contain steps(processSteps)'
+    , 'brokenProcess'      : 'Broken process description.'
+    , 'missingOperation'   : 'Process has step with missing operation. Set parameter "do".'
+    , 'overwriteProcess'   : 'Error: Process with name "%s" is already defined.'
+    , 'notaValidOperation' : `Error: "%s" is not a valid operation`
 &nbsp;
-module.exports = errors;</pre></td></tr>
+    , 'blockExpectString'  : `Block expects string data. %s`
+    , 'dataExpectObject'   : `Data operations require objects. %s`
+&nbsp;
+  }
+&nbsp;
+&nbsp;
+&nbsp;
+const callError = function ( msgName, vars ) {
+  let result = msg[msgName] || <span class="branch-1 cbranch-no" title="branch not covered" >msg['notDefined'];</span>
+&nbsp;
+  if ( vars ) {
+    if ( !(vars instanceof Array))   vars = [vars]
+    vars.forEach ( v =&gt; result = result.replace('%s', v )   )
+  }
+  return result
+ } // msg func.
+&nbsp;
+module.exports = callError;</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Nov 16 2017 10:51:21 GMT+0200 (EET)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Nov 16 2017 16:27:11 GMT+0200 (EET)
 </div>
 </div>
 <script src="../prettify.js"></script>

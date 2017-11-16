@@ -6,9 +6,10 @@
 */
 
 const 
-       templateTools      = require ( './template-tools' )
-     , processTools       = require ( './process-tools'  )
-     , tools              = require ( './general-tools'  )
+       templateTools = require ( './template-tools' )
+     , processTools  = require ( './process-tools'  )
+     , tools         = require ( './general-tools'  )
+     , callError     = require ( './errors'         )
      ;
 
 const str2intTemplate   = templateTools.str2intTemplate;
@@ -98,7 +99,7 @@ const lib = {
                 ;
 
           if ( keyExists && !doOverwrite ){
-                  console.error ( 'Error: Overwrite of existing template is not permited by configuration.' )
+                  console.error ( callError('overwriteTemplate') )
                   return
                }
           else {
@@ -213,7 +214,7 @@ const lib = {
     let mix = {};   // new process container
     
     if ( processExists && !doOverwrite ) {
-          console.error ( `Error: Process with name "${newProcessName}" is already defined.` )
+          console.error ( callError('overwriteProcess', newProcessName)  )
           return
        }
 
@@ -237,7 +238,7 @@ const lib = {
               mix['hooks'] = mix['hooks'].concat ( hookNames )
            })
     me.processes[newProcessName] = mix
-} // setProcess func.
+} // mixProcess func.
 
 
 

@@ -2,7 +2,7 @@
 
 const 
       chai          = require ('chai')
-    , errors        = require ( '../errors' )
+    , callError     = require ( '../errors' )
     , templateTools = require ('../template-tools' )
 
     , expect = chai.expect
@@ -35,10 +35,10 @@ describe ( 'Template interpreter', () => {
          const result = interpret ( str );
 
          expect ( result ).to.have.property ('error' )
-         expect ( result.error ).to.be.equal ( errors.brokenTemplate )
+         expect ( result.error ).to.be.equal ( callError('brokenTemplate') )
          expect ( result ).to.have.property ('tpl')
          expect ( result.tpl ).to.be.an('array')
-         expect ( result.tpl ).contains ( errors.brokenTemplate )
+         expect ( result.tpl ).contains ( callError('brokenTemplate') )
          expect ( result ).to.have.property ( 'placeholders' ).that.is.empty
        }) // it error string template
     
@@ -60,7 +60,7 @@ describe ( 'Template interpreter', () => {
         const result = interpret ( data );
 
         expect ( result ).to.have.property ( 'error' );
-        expect ( result.error ).to.be.equal ( errors.wrongDataTemplate )
+        expect ( result.error ).to.be.equal ( callError('wrongDataTemplate') )
     }) // it wrong data format
 
 }) // Describe interpret a template

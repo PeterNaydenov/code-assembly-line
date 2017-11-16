@@ -5,7 +5,7 @@ const
         chai       = require ('chai')
       , expect     = chai.expect
       , processOps = require ( '../process-tools' )
-      , errors     = require ( '../errors' )
+      , callErrors     = require ( '../errors' )
       ;
 
 describe ( 'Process Tools', () => {
@@ -48,7 +48,6 @@ describe ( 'Process Tools', () => {
         expect ( result ).to.have.property ( 'arguments' )
         expect ( result ).to.have.property ( 'hooks'     )
         expect ( result ).to.have.property ( 'errors'     )
-
         expect ( result.errors[0] ).to.be.equal ( `Error: "${fake}" is not a valid operation` )
     }) // it interpret: not a valid process name
 
@@ -58,7 +57,7 @@ describe ( 'Process Tools', () => {
         const result = processOps.interpret ( processChain )
 
         expect ( result ).to.have.property ( 'errors' )
-        expect ( result.errors[0] ).to.be.equal ( errors.missingOperation )
+        expect ( result.errors[0] ).to.be.equal ( callErrors('missingOperation') )
     }) // it interpret: missing operation
 
 
@@ -68,7 +67,7 @@ describe ( 'Process Tools', () => {
        const result = processOps.interpret ( processFake );
 
        expect ( result ).to.have.property ( 'errors' )
-       expect ( result.errors[0] ).to.be.equal ( errors.wrongExtProcess )
+       expect ( result.errors[0] ).to.be.equal ( callErrors('wrongExtProcess') )
     }) // it interpret: not a valid arguments
 
 
@@ -78,7 +77,7 @@ describe ( 'Process Tools', () => {
       const result = processOps.interpret ( emptyProcess );
 
       expect ( result ).to.have.property ( 'errors' )
-      expect ( result.errors[0] ).to.be.equal ( errors.emptyExtProcess )
+      expect ( result.errors[0] ).to.be.equal ( callErrors('emptyExtProcess') )
     }) // it interpret: Empty process
 
 

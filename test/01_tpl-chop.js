@@ -3,7 +3,7 @@
 const chai = require ( 'chai' );
 const expect = chai.expect
 const chop = require ('../template-chop');
-const errors = require ('../errors');
+const callError = require ('../errors');
 
 
 
@@ -71,7 +71,7 @@ describe ( 'Chop string templates', () => {
 
         expect ( result ).to.be.an('array')
         expect ( result ).to.have.length(1)
-        expect ( result[0] ).to.be.equal ( errors.brokenTemplate )
+        expect ( result[0] ).to.be.equal ( callError('brokenTemplate') )
   }) // it missing closing tag
 
 
@@ -82,7 +82,7 @@ describe ( 'Chop string templates', () => {
 
         expect ( result ).to.be.an('array')
         expect ( result ).to.have.length(1)
-        expect ( result).to.include ( errors.brokenTemplate )        
+        expect ( result).to.include ( callError('brokenTemplate') )        
   }) // it 
   
 
@@ -92,7 +92,7 @@ describe ( 'Chop string templates', () => {
         const result = chop (tpl);
 
         expect ( result ).to.be.an('array')
-        expect ( result).to.include ( errors.brokenTemplate )
+        expect ( result).to.include ( callError('brokenTemplate') )
   }) // it Closing tags before open ones
 
 }) // describe
