@@ -2,7 +2,7 @@
 
 const chai = require ( 'chai' );
 const expect = chai.expect
-const findPlaceholders = require ('../template-tools').findPlaceholders;
+const findPlaceholders = require ('../template-tools')._findPlaceholders;
 
 
 

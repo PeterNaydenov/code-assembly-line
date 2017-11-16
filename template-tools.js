@@ -34,7 +34,7 @@ const lib = {
     const error = r.includes ( callError('brokenTemplate') );
     let placeholders = {}
 
-    if ( !error )   placeholders = lib.findPlaceholders ( r )
+    if ( !error )   placeholders = lib._findPlaceholders ( r )
 
     const template = {
                         tpl:r
@@ -59,7 +59,7 @@ const lib = {
 
 
 
-, findPlaceholders : function ( tplArray ) {
+, _findPlaceholders : function ( tplArray ) {
     const placeholders = {};
     tplArray.forEach ( (item,i) => {
                 if ( item.slice(0,2) == '{{' ) {
