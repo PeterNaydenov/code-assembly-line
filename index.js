@@ -6,8 +6,9 @@
 */
 
 const 
-       templateTools      = require ( './template-tools'     )
-     , processTools       = require ( './process-tools'      )
+       templateTools      = require ( './template-tools' )
+     , processTools       = require ( './process-tools'  )
+     , tools              = require ( './general-tools'  )
      ;
 
 const str2intTemplate   = templateTools.str2intTemplate;
@@ -37,54 +38,28 @@ function codeAssembly ( cfg ) {
 
 
 const lib = {
-  insertTemplate : function ( extTemplate, altName ) {
+  insertTemplate : function ( extTemplate ) {
     /*
          ( extTemplate, altName ) -> void
-         extTemplate: ExtSimpleTemplate | ExtTempalteString | ExtTemplateData; External format of template;
-         altName?: string; Change template name for internal use;
+         extTemplate: ExternalTemplate. External format for templates;
     */
         let 
             me = this
-          , duplicate     = false // Boolean flag. Template with this name already exist
-          , internalTpl   = {}
-          , { name, tpl } = extTemplate
+          , templateNames = Object.keys( extTemplate )
           ;
 
-        if ( !tpl ) { 
-              // It's not ExtTempalteString but could be ExtSimpleTemplate
-              const simpleTemplates = Object.keys( extTemplate )
-              simpleTemplates
-                    .forEach ( name => lib.insertTemplate.call ( me, { name, tpl: extTemplate[name] }, altName )   )
-              return
-           }
+        templateNames.forEach ( name => {
+              const 
+                      entryExists    = me.templates.hasOwnProperty ( name )   // 'true' if template with this name already exists
+                    , entryForbidden = entryExists && !me.config.overwriteTemplates
+                    ;
 
-        if ( !name && !altName ) {
-             console.error ( 'Error: Missing template name' );
-             return
-           }
-
-        if ( altName ) name = altName
-        
-        duplicate = me.templates.hasOwnProperty ( name )
-        const entryForbidden = duplicate && !me.config.overwriteTemplates;
-        if ( entryForbidden ) return
-        
-        const tplArray = extTemplate.tpl instanceof Array
-        if  ( tplArray ) internalTpl = lib._replicateTpl ( extTemplate )
-        else             internalTpl = interpretTemplate ( extTemplate.tpl )
-                    
-        me.templates [ name ] = internalTpl
-  } // addTemplate func.
+                    if ( entryForbidden ) return
+                    me.templates [ name ] = interpretTemplate ( extTemplate[name] )
+            })        
+  } // insertTemplate func.
 
 
-
-, _replicateTpl : function ( ext ) {   //   (ExtTemplateData) -> InternalTpl
-      let internal = {};
-      internal.tpl = ext.tpl.map ( v => v )
-      if ( !ext.placeholders ) ext = interpretTemplate ( ext.tpl.join('') )
-      internal.placeholders = Object.assign ( {}, ext.placeholders )
-      return internal
-} // _replicateTpl func.
 
 
 
@@ -95,10 +70,15 @@ const lib = {
           ;
 
       simpleTemplates.forEach ( extName => {
-                                    const name = `${libName}/${extName}`;
-                                    lib.insertTemplate.call ( me, { name, tpl: extLib[extName]})
+                                const 
+                                        newTpl = {}
+                                      , name = `${libName}/${extName}`
+                                      ;
+                                    newTpl[name] = extLib[extName]
+                                    lib.insertTemplate.call ( me, newTpl )
                         })
   } // insertTemplateLib func.
+
 
 
 
@@ -325,10 +305,16 @@ const lib = {
 
 
 
+
+
+
+
 // codeAssembly API
 codeAssembly.prototype = {
+      tools : tools              // Usefull template and process related functions (external)
+   
     // Template I/O Operations
-      insertTemplate    : lib.insertTemplate     // Insert template;
+    , insertTemplate    : lib.insertTemplate     // Insert template;
     , insertTemplateLib : lib.insertTemplateLib  // Insert template library;    
     , getTemplate       : lib.getTemplate        // Exports template
     , getTemplateLib    : lib.getTemplateLib     // Export list of templates as library

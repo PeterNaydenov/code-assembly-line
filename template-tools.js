@@ -49,9 +49,7 @@ const lib = {
 , load_interpretTemplate : function ( convert2intTemplate ) {
   return ( tplItem ) => {
       let intTemplate = {}; // internal template
-      const type = (typeof tplItem == 'string') 
-                   ? 'string'
-                   : 'error';
+      const type = (typeof tplItem == 'string')  ? 'string' : 'error';
 
       if ( type == 'string' ) intTemplate = convert2intTemplate ( tplItem )
       else                    intTemplate = { error: errors.wrongDataTemplate }

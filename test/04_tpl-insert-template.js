@@ -21,9 +21,9 @@ describe ( 'Templates', () => {
 
 
 
-    it ( 'Insert ExtTempalteString', () => {
+    it ( 'Insert ExternalTemplate', () => {
          const tplEngine = new codeAssemblyLine ();
-         const tpl = { name:'hello', tpl: 'Hello, {{name}}!'};
+         const tpl = { 'hello' : 'Hello, {{name}}!'};
          
          tplEngine.insertTemplate( tpl )         
 
@@ -31,97 +31,18 @@ describe ( 'Templates', () => {
          expect ( tplEngine.templates.hello ).to.have.property ('tpl')
          expect ( tplEngine.templates.hello ).to.have.property ('placeholders')
          expect ( tplEngine.templates.hello.tpl ).to.be.an ('array')
-    }) // it insert  ExtTempalteString
-
-
-
-    it ( 'Change template name during insert', () => {
-         const tplEngine = new codeAssemblyLine ();
-         const tpl = { name:'hello', tpl: 'Hello, {{name}}!'};
-         
-         tplEngine.insertTemplate( tpl , 'ahoy' )         
-
-         expect ( tplEngine.templates ).to.have.property ('ahoy')
-         expect ( tplEngine.templates ).to.not.have.property ('hello')
-    }) // it use alternative name
+    }) // it insert  ExternalTemplate
 
 
 
     it ( 'Insert template as a library member', () => {
          const tplEngine = new codeAssemblyLine ();
-         const tpl = { name:'simple/ah', tpl: 'Hello, {{name}}!'};
+         const tpl = { 'simple/ah': 'Hello, {{name}}!'};
          
          tplEngine.insertTemplate( tpl )         
 
          expect ( tplEngine.templates ).to.have.property ('simple/ah')
     }) // it use alternative name
-
-
-
-    it ( 'Insert ExtSimpleTemplate', () => {
-         const tplEngine = new codeAssemblyLine ();
-         const tpl = { hello: 'Hello, {{name}}!'};
-         
-         tplEngine.insertTemplate( tpl )         
-
-         expect ( tplEngine.templates ).to.have.property ( 'hello' )
-         expect ( tplEngine.templates.hello ).to.have.property ('tpl')
-         expect ( tplEngine.templates.hello ).to.have.property ('placeholders')
-         expect ( tplEngine.templates.hello.tpl ).to.be.an ('array')
-    }) // it insert ExtSimpleTemplate
-
-
-
-    it ( 'Insert template and forget the name', () => {
-         const tplEngine = new codeAssemblyLine ();
-         const tpl = { tpl: 'Hello, {{name}}!'};
-         
-         tplEngine.insertTemplate( tpl )         
-
-         expect ( tplEngine.templates ).to.be.empty
-    }) // it insert template and forget the name
-    
-    
-    
-    it ( 'Insert ExtSimpleTemplate with altername', () => {
-         const tplEngine = new codeAssemblyLine ();
-         const tpl = { hello: 'Hello, {{name}}!'};
-         
-         tplEngine.insertTemplate( tpl, 'up' )         
-
-         expect ( tplEngine.templates       ).to.have.property ( 'up' )
-         expect ( tplEngine.templates['up'] ).to.have.property ('tpl')
-         expect ( tplEngine.templates['up'] ).to.have.property ('placeholders')
-         expect ( tplEngine.templates['up']['tpl'] ).to.be.an ('array')
-    }) // it insert ExtSimpleTemplate with altername
-
-
-
-    it ( 'Insert ExtTemplateData', () => {
-         const tplEngine = new codeAssemblyLine ();
-         const tpl = { name:'test', tpl: ['hello, ', '{{user}}'], placeholders: {user:[1]} };
-         
-         tplEngine.insertTemplate( tpl )         
-
-         expect ( tplEngine.templates ).to.have.property ( 'test' )
-         expect ( tplEngine.templates ).to.not.have.property ( 'error' )
-         expect ( tplEngine.templates.test ).to.have.property ( 'placeholders' )
-         expect ( tplEngine.templates.test ).to.have.property ( 'tpl' )
-    }) // it insert extTemplateData
-
-
-
-    it ( 'Insert ExtTemplateData without placeholders', () => {
-         const tplEngine = new codeAssemblyLine ();
-         const tpl = { name:'test', tpl: ['hello, ', '{{user}}']  };
-         
-         tplEngine.insertTemplate( tpl )         
-
-         expect ( tplEngine.templates ).to.have.property ( 'test' )
-         expect ( tplEngine.templates ).to.not.have.property ( 'error' )
-         expect ( tplEngine.templates.test ).to.have.property ( 'placeholders' )
-         expect ( tplEngine.templates.test ).to.have.property ( 'tpl' )
-    }) // it insert extTemplateData
 
 
 
@@ -139,7 +60,7 @@ describe ( 'Templates', () => {
 
 
 
-    it ( 'Insert many ExtSimpleTemplate at once', () => {
+    it ( 'Insert many ExternalTemplate at once', () => {
          const tplEngine = new codeAssemblyLine ();
          const tpl = { 
                            hello: 'Hello, {{name}}!'
@@ -156,8 +77,8 @@ describe ( 'Templates', () => {
 
     it ( 'Overwrite templates is forbidden', () => {
          const tplEngine = new codeAssemblyLine ({overwriteTemplates : false});
-         const tpl = { name:'hello', tpl: 'Hello, {{name}}!'};
-         const tpl2 = { name:'hello', tpl: 'Changes are allowed, {{name}}!'};
+         const tpl = { 'hello': 'Hello, {{name}}!'};
+         const tpl2 = { 'hello': 'Changes are allowed, {{name}}!'};
          
          tplEngine.insertTemplate( tpl )
          tplEngine.insertTemplate( tpl2 )
@@ -170,8 +91,8 @@ describe ( 'Templates', () => {
 
     it ( 'Overwrite templates is allowed', () => {
          const tplEngine = new codeAssemblyLine ({overwriteTemplates : true});
-         const tpl = { name:'hello', tpl: 'Hello, {{name}}!'};
-         const tpl2 = { name:'hello', tpl: 'Changes are allowed, {{name}}!'};
+         const tpl = { 'hello': 'Hello, {{name}}!'};
+         const tpl2 = { 'hello': 'Changes are allowed, {{name}}!'};
          
          tplEngine.insertTemplate( tpl )
          tplEngine.insertTemplate( tpl2 )

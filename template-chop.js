@@ -10,7 +10,7 @@ const errors = require ('./errors');
 
 
 
-function chopTemplate (text) {  
+function chopTemplate ( text ) {  
 
     let 
         start      // placeholder start
