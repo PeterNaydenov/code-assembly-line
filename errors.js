@@ -4,7 +4,7 @@
 
 
 const msg = {
-      'notDefined'        : 'Not defined error' 
+      'notDefined'        : 'Not defined error.' 
        // Template errors
     , 'brokenTemplate'    : 'Broken string template. Placeholder with missing closing tag.'
     , 'wrongDataTemplate' : 'Broken data template. Object is not according the standards.'
@@ -22,18 +22,21 @@ const msg = {
     , 'blockExpectString'  : `Block expects string data. %s`
     , 'dataExpectObject'   : `Data operations require objects. %s`
 
+    // Validation errors
+    , 'processNotExists'   : `Process "%s" doesn't exist.`
+    , 'templateNotExists'  : `Error: Template "%s" is not available`
+
   }
 
 
 
-const callError = function ( msgName, vars ) {
+const showError = function ( msgName, vars ) {
   let result = msg[msgName] || msg['notDefined'];
-
   if ( vars ) {
-    if ( !(vars instanceof Array))   vars = [vars]
-    vars.forEach ( v => result = result.replace('%s', v )   )
-  }
+          if ( !(vars instanceof Array))   vars = [vars]
+          vars.forEach ( v => result = result.replace('%s', v )   )
+    }
   return result
  } // msg func.
 
-module.exports = callError;
+module.exports = showError;

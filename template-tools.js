@@ -1,7 +1,7 @@
 'use strict';
 
 const chop = require ('./template-chop');
-const callError = require ('./errors' );
+const showError = require ('./errors' );
 
 /*
     Converts ExtTempalteString to InternalTpl.
@@ -31,7 +31,7 @@ const lib = {
  
  str2intTemplate : function (str) {
     const r = chop ( str );
-    const error = r.includes ( callError('brokenTemplate') );
+    const error = r.includes ( showError('brokenTemplate') );
     let placeholders = {}
 
     if ( !error )   placeholders = lib._findPlaceholders ( r )
@@ -40,7 +40,7 @@ const lib = {
                         tpl:r
                       , placeholders
                      };
-    if ( error )   template.error = callError('brokenTemplate')
+    if ( error )   template.errors = [showError('brokenTemplate')]
     return template
 } // str2inTemplate func.
 
@@ -52,7 +52,7 @@ const lib = {
       const type = (typeof tplItem == 'string')  ? 'string' : 'error';
 
       if ( type == 'string' ) intTemplate = convert2intTemplate ( tplItem )
-      else                    intTemplate = { error: callError('wrongDataTemplate') }
+      else                    intTemplate = { errors: [showError('wrongDataTemplate')] }
 
       return intTemplate
 }} // load_interpretTemplate func.

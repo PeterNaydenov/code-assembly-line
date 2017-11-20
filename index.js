@@ -9,7 +9,7 @@ const
        templateTools = require ( './template-tools' )
      , processTools  = require ( './process-tools'  )
      , tools         = require ( './general-tools'  )
-     , callError     = require ( './errors'         )
+     , showError     = require ( './errors'         )
      ;
 
 const str2intTemplate   = templateTools.str2intTemplate;
@@ -39,24 +39,18 @@ function codeAssembly ( cfg ) {
 
 
 const lib = {
-  insertTemplate : function ( extTemplate ) {
-    /*
-         ( extTemplate, altName ) -> void
-         extTemplate: ExternalTemplate. External format for templates;
-    */
+  insertTemplate : function ( extTemplate ) { // (extTemplate: ExternalTemplate) -> void
         let 
             me = this
           , templateNames = Object.keys( extTemplate )
           ;
 
         templateNames.forEach ( name => {
-              const 
-                      entryExists    = me.templates.hasOwnProperty ( name )   // 'true' if template with this name already exists
-                    , entryForbidden = entryExists && !me.config.overwriteTemplates
-                    ;
-
-                    if ( entryForbidden ) return
-                    me.templates [ name ] = interpretTemplate ( extTemplate[name] )
+              if ( lib._isTemplateWritingForbidden(me,name) ) {
+                    console.error ( showError('overwriteTemplate') )
+                    return
+                  }
+              me.templates [ name ] = interpretTemplate ( extTemplate[name] )
             })        
   } // insertTemplate func.
 
@@ -64,7 +58,7 @@ const lib = {
 
 
 
-, insertTemplateLib : function ( extLib, libName ) {  //   ( extLib: ExtTemplateSLib,  name: string ) -> void
+, insertTemplateLib : function ( extLib, libName ) {  //   ( extLib: ExternalTemplate,  name: string ) -> void
       let 
               me = this
           ,  simpleTemplates = Object.keys ( extLib )
@@ -75,10 +69,26 @@ const lib = {
                                         newTpl = {}
                                       , name = `${libName}/${extName}`
                                       ;
-                                    newTpl[name] = extLib[extName]
-                                    lib.insertTemplate.call ( me, newTpl )
+                                if ( lib._isTemplateWritingForbidden(me,name) ) {
+                                        console.error ( showError('overwriteTemplate')   )
+                                        return
+                                   }
+                                newTpl[name] = extLib[extName]
+                                lib.insertTemplate.call ( me, newTpl )
                         })
   } // insertTemplateLib func.
+
+
+
+
+
+, _isTemplateWritingForbidden : function ( me , name ) {
+    const
+           entryExists = me.templates.hasOwnProperty ( name ) // 'true' if template with this name already exists
+         , entryForbidden = entryExists && !me.config.overwriteTemplates
+         ;
+   return entryForbidden
+} // _isTemplateWritingForbidden func.
 
 
 
@@ -99,7 +109,7 @@ const lib = {
                 ;
 
           if ( keyExists && !doOverwrite ){
-                  console.error ( callError('overwriteTemplate') )
+                  console.error ( showError('overwriteTemplate') )
                   return
                }
           else {
@@ -111,7 +121,9 @@ const lib = {
 
 
 
-, removeTemplate : function ( tplName ) {   //   (string || string[]) -> void
+
+
+, removeTemplate : function ( tplName ) {   //   ( tplName:string|string[]) -> void
     const me = this;
     let listDelete;
 
@@ -126,7 +138,9 @@ const lib = {
 
 
 
-, getTemplate: function ( tplName ) {
+
+
+, getTemplate: function ( tplName ) { // (tplName: string|string[]) -> ExternalTemplate
   const 
         me = this
       , tpl = me.templates
@@ -149,14 +163,10 @@ const lib = {
 
 
 
-, getTemplateLib: function ( libName ) {
-  const 
-        me = this
-      , tpl = me.templates
-      , tplNames = Object
-                       .keys ( tpl )
-                       .filter ( name => name.includes('/')   )
-      ;
+
+
+, getTemplateLib: function ( libName ) { //   (libName:string|string[]) -> ExternalTemplate
+  const me = this;
   let libRequst;
 
   if ( libName instanceof Array )   libRequst = libName
@@ -165,40 +175,60 @@ const lib = {
           libRequst = t.map ( k => arguments[k] )
        }
   
-  return libRequst.reduce ( (res, libItem ) => {
-                      tplNames
-                          .filter  ( name => name.indexOf(libItem) == 0   )
-                          .forEach ( name => {
-                                    const 
-                                          sliceIndex = name.indexOf('/')
-                                        , prop = name.slice ( sliceIndex+1 )
-                                        ;
-                                    
-                                    res [prop] = tpl[name].tpl.join('')
-                              })
-                      return res
-                },{})
+  return lib._extractLib ( me.templates, libRequst )
 } // getTemplateLib func.
 
 
 
-, insertProcess: function ( ext, name ) {
-    /*
-        -> void
-        ext: extProcess. Process steps.
-        name: string. Process name
-    */
-    const
-           me = this
-         , duplicate = me.processes.hasOwnProperty ( name )
-         , entryForbidden = duplicate && !me.config.overwriteProcesses
-         ;
 
-    if ( entryForbidden ) return
 
-    const internalProcess = processTools.interpret ( ext );
-    me.processes[name] = internalProcess
-} // addProcess func.
+, _extractLib ( tpl, libRequst ) { //   (tpl:inTemplates[], libRequest:string[]) -> ExternalTemplate
+  // * Creates new ExternalTemplate by removing libName from template name 
+  const tplNames = Object.keys ( tpl ).filter ( name => name.includes('/')   );
+
+  return libRequst.reduce ( (res, libItem ) => {
+                tplNames
+                    .filter  ( name => name.indexOf(libItem) == 0   )
+                    .forEach ( name => {
+                              const 
+                                    sliceIndex = name.indexOf('/')
+                                  , prop = name.slice ( sliceIndex+1 )
+                                  ;
+                              
+                              res [prop] = tpl[name].tpl.join('')
+                        })
+                return res
+            },{})
+} // _extractLib func.
+
+
+
+
+
+, _isProcessWritingForbidden : function ( me , name ) {
+  const
+         entryExists = me.processes.hasOwnProperty ( name ) // 'true' if process with this name already exists
+       , entryForbidden = entryExists && !me.config.overwriteProcesses
+       ;
+ return entryForbidden
+} // _isProcessWritingForbidden func.
+
+
+
+
+
+, insertProcess: function ( ext, name ) { // (ext: extProcess, name: string) -> void
+    const me = this;
+
+    if ( lib._isProcessWritingForbidden(me,name) ) {
+          console.error ( showError('overwriteProcess',name) )
+          return
+        }
+
+    me.processes[name] = processTools.interpret ( ext )
+} // insertProcess func.
+
+
 
 
 
@@ -207,14 +237,12 @@ const lib = {
     const
             me            = this
           , processes     = me.processes
-          , doOverwrite   = me.config.overwriteTemplates
-          , processExists = processes[newProcessName] ? true : false
           ;
           
     let mix = {};   // new process container
     
-    if ( processExists && !doOverwrite ) {
-          console.error ( callError('overwriteProcess', newProcessName)  )
+    if ( lib._isProcessWritingForbidden(me,newProcessName) ) {
+          console.error ( showError('overwriteProcess', newProcessName)  )
           return
        }
 
@@ -242,6 +270,8 @@ const lib = {
 
 
 
+
+
 , getHooks   : function ( processName ) { //   (processName) -> { hookName : undefined }
     const recordExists = this.processes.hasOwnProperty ( processName );
     if ( recordExists )  { 
@@ -257,6 +287,7 @@ const lib = {
 
 
 
+
 , getPlaceholders : function ( templateName ) { //   (templateName:string) -> placeholderNames:string[].
     const tpl = this.templates [ templateName ];
 
@@ -266,24 +297,35 @@ const lib = {
 
 
 
+
+
 , _validateProcess : function ( engine, processName ) {
   // * Find if process exists. Find if all templates needed are available.
-  let error = [];
-  const processExists   = engine.processes.hasOwnProperty ( processName );
+  let errors = [];
+  const 
+          processExists   = engine.processes.hasOwnProperty ( processName )
+        , intProcess = engine.processes[processName]
+        ;
   
-  if   ( !processExists ) error.push ( `Process "${processName}" doesn't exist.` )
+  if ( processExists && intProcess['errors'] ) errors = errors.concat( intProcess['errors'])
+  
+  if ( !processExists )   errors.push ( showError('processNotExists',processName)   )
   else {
-    engine.processes[ processName ]['arguments']
-    .reduce ( (listTemplates, step) => { 
-                            if ( step.do == 'draw' && step.tpl )  listTemplates.push ( step.tpl )
-                            return listTemplates
-                       },[])
+          intProcess['arguments']
+              .reduce ( (listTemplates, step) => { 
+                                  if ( step.do == 'draw' && step.tpl )  listTemplates.push ( step.tpl )
+                                  return listTemplates
+                          },[])
               .forEach ( name => {
-                      if ( !engine.templates[name] ) error.push (`Error: Template "${name}" is not available` )
-              })
+                                  const tpl = engine.templates[name];
+                                  if ( tpl && tpl['errors'] )   errors = errors.concat ( tpl['errors'] )
+                                  if ( !tpl )                   errors.push ( showError('templateNotExists',name)   )
+                          })
       }
-  return error
+  return errors
 } // _validateProcess func.
+
+
 
 
 
@@ -295,11 +337,6 @@ const lib = {
 } // run func.
 
 } // lib
-
-
-
-
-
 
 
 

@@ -1,18 +1,12 @@
 'use strict';
 
-const callError = require ('./errors');
+const showError = require ('./errors');
 const operation = require ( './process-operations')
 
 
 
 const lib = {
-interpret : function ( ext ) {
-    /*
-        (ext) -> in
-        ext: extProcess. Process steps.
-        in: intProcess. Internal process structure.
-    */
-  
+interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
   const internal = {};
   
   internal.steps = []
@@ -43,17 +37,17 @@ interpret : function ( ext ) {
              , validType = ext instanceof Array
              ;
         
-        if ( !validType )      return [ callError('wrongExtProcess') ]
-        if ( ext.length == 0 ) return [ callError('emptyExtProcess') ]
+        if ( !validType )      return [ showError('wrongExtProcess') ]
+        if ( ext.length == 0 ) return [ showError('emptyExtProcess') ]
 
         ext.forEach ( step => {
                 let validOperation = false;
                 if ( !step.do ) {
-                        log.push ( callError('missingOperation'))
+                        log.push ( showError('missingOperation'))
                         return
                    }
                 validOperation = validSteps.includes ( step.do )
-                if ( !validOperation ) log.push ( callError('notaValidOperation', [step.do] ) )
+                if ( !validOperation ) log.push ( showError('notaValidOperation', [step.do] ) )
         })
         return log
 } // _validate func.
@@ -97,14 +91,14 @@ interpret : function ( ext ) {
            switch ( step ) {
             case 'draw' :
                           if ( currentIsStr ) {
-                                  console.error ( callError (dataExpectObject, current) )
+                                  console.error ( showError (dataExpectObject, current) )
                                   return
                             }
                             
                           tplName   = todo.tpl
                             
                           if ( !libTemplates[tplName] ) {
-                                    console.error ( callError('missingTemplate', current)  )
+                                    console.error ( showError('missingTemplate', current)  )
                                     return
                                }
                           
@@ -131,7 +125,7 @@ interpret : function ( ext ) {
                           break
             case 'block':
                           if ( !currentIsStr ) {
-                                 console.error ( callError ('blockExpectString', [current]) )
+                                 console.error ( showError ('blockExpectString', [current]) )
                                  return
                              }
                           
@@ -165,7 +159,7 @@ interpret : function ( ext ) {
                           break
                 default :
                           if ( currentIsStr ) {
-                                console.error ( callError('dataExpectObject', [current])   )
+                                console.error ( showError('dataExpectObject', [current])   )
                                 return
                              }
                           // data operations

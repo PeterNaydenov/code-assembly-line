@@ -1,6 +1,6 @@
 "use strict";
 
-const callError = require ('./errors');
+const showError = require ('./errors');
 
 /*
      Converts string template to internal template format
@@ -19,7 +19,7 @@ function chopTemplate ( text ) {
       , res = []   // template result array
       ;
 
-    if ( typeof(text) != 'string' ) return [ callError('brokenTemplate') ]
+    if ( typeof(text) != 'string' ) return [ showError('brokenTemplate') ]
     if ( text.length == 0 ) return []
 
     start = text.indexOf ( '{{' )
@@ -32,13 +32,13 @@ function chopTemplate ( text ) {
                 checkPoint = text.indexOf ( '{{', start+2 )
                 end = text.indexOf("}}")
 
-                if ( end < start ) return [ callError('brokenTemplate') ] // Placeholder closing tags without starting ones
-                if ( end == -1   ) return [ callError('brokenTemplate') ] // Placeholder with missing closing tags
+                if ( end < start ) return [ showError('brokenTemplate') ] // Placeholder closing tags without starting ones
+                if ( end == -1   ) return [ showError('brokenTemplate') ] // Placeholder with missing closing tags
                 else               end += 2 
 
                 if ( checkPoint != -1 && checkPoint < end ) {
                      // New placeholder before first ends
-                     return [ callError('brokenTemplate') ]
+                     return [ showError('brokenTemplate') ]
                    }
 
                 res.push( text.slice(start,end) )

@@ -2,7 +2,7 @@
 
 const 
       chai          = require ('chai')
-    , callError     = require ( '../errors' )
+    , showError     = require ( '../errors' )
     , templateTools = require ('../template-tools' )
 
     , expect = chai.expect
@@ -21,7 +21,7 @@ describe ( 'Template interpreter', () => {
 
          expect ( result ).to.be.an('object')
          expect ( result ).to.have.property('tpl')
-         expect ( result ).to.not.have.property ( 'error' )
+         expect ( result ).to.not.have.property ( 'errors' )
          expect ( result ).to.have.property('placeholders').that.has.property('action')
          expect ( result.placeholders.action ).to.be.an ( 'array' )
          expect ( result.placeholders.action ).to.have.length ( 1 )
@@ -34,11 +34,11 @@ describe ( 'Template interpreter', () => {
          const str = 'So }} errors happend{{';
          const result = interpret ( str );
 
-         expect ( result ).to.have.property ('error' )
-         expect ( result.error ).to.be.equal ( callError('brokenTemplate') )
+         expect ( result ).to.have.property ('errors' )
+         expect ( result.errors[0] ).to.be.equal ( showError('brokenTemplate') )
          expect ( result ).to.have.property ('tpl')
          expect ( result.tpl ).to.be.an('array')
-         expect ( result.tpl ).contains ( callError('brokenTemplate') )
+         expect ( result.tpl ).contains ( showError('brokenTemplate') )
          expect ( result ).to.have.property ( 'placeholders' ).that.is.empty
        }) // it error string template
     
@@ -48,7 +48,7 @@ describe ( 'Template interpreter', () => {
         const data = { hello: 'hello, {{user}}' };
         const result = interpret ( data );
 
-        expect ( result ).to.have.property ( 'error' )
+        expect ( result ).to.have.property ( 'errors' )
         expect ( result ).to.not.have.property ( 'tpl' )
         expect ( result ).to.not.have.property ( 'placeholders' )
     }) // it light data template
@@ -59,8 +59,8 @@ describe ( 'Template interpreter', () => {
         const data = 43;
         const result = interpret ( data );
 
-        expect ( result ).to.have.property ( 'error' );
-        expect ( result.error ).to.be.equal ( callError('wrongDataTemplate') )
+        expect ( result ).to.have.property ( 'errors' );
+        expect ( result.errors[0] ).to.be.equal ( showError('wrongDataTemplate') )
     }) // it wrong data format
 
 }) // Describe interpret a template

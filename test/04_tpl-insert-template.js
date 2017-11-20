@@ -52,8 +52,8 @@ describe ( 'Templates', () => {
 
          tplEngine.insertTemplate( tpl )    
 
-         expect ( tplEngine.templates.hello ).to.have.property('error')
-         expect ( tplEngine.templates.hello.error ).to.be.equal( errors('wrongDataTemplate') )
+         expect ( tplEngine.templates.hello ).to.have.property('errors')
+         expect ( tplEngine.templates.hello.errors[0] ).to.be.equal( errors('wrongDataTemplate') )
          expect ( tplEngine.templates.hello ).to.not.have.property ('tpl')
          expect ( tplEngine.templates.hello ).to.not.have.property ('placeholders')
     }) // it wrong data-format
