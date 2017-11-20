@@ -330,10 +330,12 @@ const lib = {
 
 
 , runProcess : function ( processList, data, hooks ) {    
-    let error = [];
     if ( !(data        instanceof Array ))   data        = [data]
     if ( !(processList instanceof Array ))   processList = [processList]
-    processList.forEach ( processName => error = error.concat ( lib._validateProcess ( this, processName ))  )
+    const error = processList.reduce ( (res, processName ) => {
+                                    const errorUpdate = lib._validateProcess(this, processName);
+                                    return res.concat ( errorUpdate )
+                        },[])
 
     if ( error.length == 0 )  {
           let current = data;
