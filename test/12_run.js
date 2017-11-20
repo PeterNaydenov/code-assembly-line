@@ -116,4 +116,26 @@ describe ( 'Run', () => {
         expect ( result[1] ).to.be.equal ( 'Find Ivan!' )
     }) // it set
 
+
+
+    it ( 'List of processes', () => {
+        const
+                  tplEngine = new CodeAssemblyLine()
+                , tpl = { test: 'Find {{who}}!' }
+                , data = [ 'Peter', 'Ivan' ]
+                , processSetData = [ { do: 'set', as: 'who'    }]
+                , processDraw    = [ { do: 'draw', tpl: 'test' }]
+                ;
+        
+        tplEngine.insertTemplate ( tpl )
+        tplEngine.insertProcess( processSetData, 'setData')
+        tplEngine.insertProcess( processDraw, 'draw' )
+        const result = tplEngine.run ( ['setData','draw'], data )
+
+        expect ( result ).to.be.an('array')
+        expect ( result ).to.have.length (2)
+        expect ( result[0] ).to.be.equal ( 'Find Peter!' )
+        expect ( result[1] ).to.be.equal ( 'Find Ivan!' )
+    }) // it list of processes
+
 }) // describe Run

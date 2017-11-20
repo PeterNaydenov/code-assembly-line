@@ -300,7 +300,7 @@ const lib = {
 
 
 , _validateProcess : function ( engine, processName ) {
-  // * Find if process exists. Find if all templates needed are available.
+  // * Find if process exists and no errors in it. Find if all templates needed are available.
   let errors = [];
   const 
           processExists   = engine.processes.hasOwnProperty ( processName )
@@ -329,11 +329,20 @@ const lib = {
 
 
 
-, runProcess : function ( processName, data, hooks ) {    
-    const error = lib._validateProcess ( this, processName );
-    if ( !(data instanceof Array)) data = [data]
-    if ( error.length == 0 )  return processTools.run.call ( this, this.processes[processName], data, hooks )
-    else                      return error
+, runProcess : function ( processList, data, hooks ) {    
+    let error = [];
+    if ( !(data        instanceof Array ))   data        = [data]
+    if ( !(processList instanceof Array ))   processList = [processList]
+    processList.forEach ( processName => error = error.concat ( lib._validateProcess ( this, processName ))  )
+
+    if ( error.length == 0 )  {
+          let current = data;
+          processList.forEach ( processName => {
+              current = processTools.run.call ( this, this.processes[processName], current, hooks )
+          })
+          return current
+      }
+    else  return error
 } // run func.
 
 } // lib

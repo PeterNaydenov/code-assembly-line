@@ -23,8 +23,8 @@ const msg = {
     , 'dataExpectObject'   : `Data operations require objects. %s`
 
     // Validation errors
-    , 'processNotExists'   : `Process "%s" doesn't exist.`
-    , 'templateNotExists'  : `Error: Template "%s" is not available`
+    , 'processNotExists'   : 'Process "%s" does not exist.'
+    , 'templateNotExists'  : 'Error: Template "%s" is not available'
 
   }
 
