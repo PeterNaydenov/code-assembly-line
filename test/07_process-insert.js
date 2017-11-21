@@ -35,18 +35,19 @@ const
 
 
 
-    it ( 'Hook', () => {
+    it ( 'Hooks', () => {
         const 
                 ext = [ 
-                           { do: 'draw', tpl: 'link' }
+                           { do: 'draw', tpl: 'link', hook:'drawHook' }
                          , { do: 'hook', name: 'test'} 
                       ]
               , result = processTools.interpret ( ext )
               ;
 
         expect ( result ).to.not.have.property ( 'errors' )
-        expect ( result.hooks ).to.have.length (1)
+        expect ( result.hooks ).to.have.length (2)
         expect ( result.hooks ).to.includes( 'test' )
+        expect ( result.hooks ).to.includes( 'drawHook' )
 
         expect ( result.steps ).to.have.length (2)
         expect ( result.steps ).to.includes ( 'draw' )

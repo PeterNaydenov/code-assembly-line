@@ -23,6 +23,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
         internal.steps.push ( step.do )
         internal.arguments.push ( step )
         if ( step.do == 'hook' ) internal.hooks.push ( step.name )
+        if ( step.hook         ) internal.hooks.push ( step.hook )
      })
 
   return internal
@@ -74,17 +75,19 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
     if ( proccessItems.hasOwnProperty('errors') ) return
     const dataIsArray = data instanceof Array;
     let 
-      me = this
-    , libTemplates = me.templates
-    , current  = data
-    , currentIsStr = lib._findIfString(current) // current is array of strings or array of objects
-    , contextPlaceholders = {}
-    , answer
-    ;
+          me = this
+        , libTemplates = me.templates
+        , current      = data
+        , currentIsStr = lib._findIfString(current) // current is array of strings or array of objects
+        , contextPlaceholders = {}
+        , answer
+        ;
 
-    if ( !dataIsArray )   data = [ data ]
-    proccessItems.steps.forEach ( (step,id) => {
-           const todo = proccessItems.arguments[id]
+        if ( !dataIsArray )   data = [ data ]
+        proccessItems.steps.forEach ( (step,id) => {
+          const 
+                  todo = proccessItems.arguments[id]
+                ;
 
            let tplName;
            
@@ -101,10 +104,11 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                                     console.error ( showError('missingTemplate', current)  )
                                     return
                                }
-                          
+
                           const
-                                  missField = todo.missField | false
-                                , missData  = todo.missData  | false
+                                  missField = todo.missField       || false
+                                , missData  = todo.missData        || false
+                                , hook      = hooks ? hooks[todo.hook] || false : false
                                 , tpl       = libTemplates[tplName]['tpl']
                                 , originalPlaceholders = libTemplates[tplName]['placeholders']
                                 , holdData  = !(todo.as == null)
@@ -114,7 +118,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                           localTemplate.tpl = tpl
                           localTemplate.placeholders = contextPlaceholders[tplName] || originalPlaceholders
                           
-                          const update = operation[step] ( localTemplate, current, missField, missData );
+                          const update = operation[step] ( localTemplate, current, missField, missData, hook );
                           if ( holdData ) {
                                   current = current.map ( (el,i) => el[todo.as] = update[i] )
                                }

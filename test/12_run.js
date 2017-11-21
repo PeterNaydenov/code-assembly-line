@@ -30,6 +30,244 @@ describe ( 'Run', () => {
         expect ( result ).to.be.an ('array')
         expect ( result[0] ).to.be.equal ( 'Some text with test string.' )
     }) // it Draw. Valid operation
+
+
+
+    it ( 'Draw with missField: _hide', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missField:'_hide' } 
+                              ]                                                       
+              , renderData  = [
+                                   { place: 'test string'}
+                                 , { place: 'ala-bala' }
+                                 , { place: 'pasion', more: 'Great to be here' }
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result[0] ).to.be.equal ( 'Some text with test string.' )
+        expect ( result[2] ).to.be.equal ( 'Some text with pasion.Great to be here' )
+    }) // it Draw with missField _hide.
+
+
+
+    it ( 'Draw with missField: _fn', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missField:'_fn', hook: 'ole' } 
+                              ]                                                       
+              , renderData  = [
+                                   { place: 'test string'}
+                                 , { place: 'ala-bala' }
+                                 , { place: 'pasion', more: 'Great to be here' }
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData , { ole: (x) => `Error: Missing data - ${x}` } )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result[0] ).to.be.equal ( 'Some text with test string.Error: Missing data - more' )
+        expect ( result[1] ).to.be.equal ( 'Some text with ala-bala.Error: Missing data - more' )
+        expect ( result[2] ).to.be.equal ( 'Some text with pasion.Great to be here' )
+    }) // it Draw with missField: _fn.
+
+
+
+    it ( 'Draw with missField: _fn but missing hook', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missField:'_fn', hook: 'ole' } 
+                              ]                                                       
+              , renderData  = [
+                                   { place: 'test string'}
+                                 , { place: 'ala-bala' }
+                                 , { place: 'pasion', more: 'Great to be here' }
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData , { oled: (x) => `Error: Missing data - ${x}` } )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result[0] ).to.be.equal ( 'Some text with test string.' )
+        expect ( result[2] ).to.be.equal ( 'Some text with pasion.Great to be here' )
+    }) // it Draw with missField: _fn but missing hook.
+
+
+
+    it ( 'Draw with missField: _fn but no hook object', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missField:'_fn', hook: 'ole' } 
+                              ]                                                       
+              , renderData  = [
+                                   { place: 'test string'}
+                                 , { place: 'ala-bala' }
+                                 , { place: 'pasion', more: 'Great to be here' }
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result[0] ).to.be.equal ( 'Some text with test string.' )
+        expect ( result[2] ).to.be.equal ( 'Some text with pasion.Great to be here' )
+    }) // it Draw with missField: _fn but no hook object.
+
+
+
+    it ( 'Draw with missData: _fn.', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missData:'_fn', hook: 'ole' } 
+                              ]                                                       
+              , renderData  = [
+                                   { place: 'test string'}
+                                 , { place: 'ala-bala' }
+                                 , { place: 'pasion', more: 'Great to be here' }
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData , { ole: (x) => `Error: Missing data - ${x.join(',')}` } )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result[0] ).to.be.equal ( 'Error: Missing data - more' )
+        expect ( result[1] ).to.be.equal ( 'Error: Missing data - more' )
+        expect ( result[2] ).to.be.equal ( 'Some text with pasion.Great to be here' )
+    }) // it Draw with missData: _fn.
+
+
+
+    it ( 'Draw with missData: _fn. but no hook function', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missData:'_fn', hook: 'ole' } 
+                              ]                                                       
+              , renderData  = [
+                                   { place: 'test string'}
+                                 , { place: 'ala-bala' }
+                                 , { place: 'pasion', more: 'Great to be here' }
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData , { oled: (x) => `Error: Missing data - ${x.join(',')}` } )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result ).to.have.length (1)
+        expect ( result[0] ).to.be.equal ( 'Some text with pasion.Great to be here' )
+    }) // it Draw with missData: _fn but no hook function.
+
+
+
+    it ( 'Draw with missData: _fn. but no hooks', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missData:'_fn', hook: 'ole' } 
+                              ]                                                       
+              , renderData  = [
+                                   { place: 'test string'}
+                                 , { place: 'ala-bala' }
+                                 , { place: 'pasion', more: 'Great to be here' }
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result ).to.have.length (1)
+        expect ( result[0] ).to.be.equal ( 'Some text with pasion.Great to be here' )
+    }) // it Draw with missData: _fn but no hooks.
+
+
+
+    it ( 'Draw with missData: _hide', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missData:'_hide' } 
+                              ]                                                       
+              , renderData  = [
+                                   { place: 'test string'}
+                                 , { place: 'ala-bala' }
+                                 , { place: 'pasion', more: 'Great to be here' }
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result ).to.have.length (1)
+        expect ( result[0] ).to.be.equal ( 'Some text with pasion.Great to be here' )
+    }) // it Draw with missData: _hide.
+
+
+
+    it ( 'Draw with missData: string', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missData:'ERROR' } 
+                              ]                                                       
+              , renderData  = [
+                                   { place: 'test string'}
+                                 , { place: 'ala-bala' }
+                                 , { place: 'pasion', more: 'Great to be here' }
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result ).to.have.length (3)
+        expect ( result[0] ).to.be.equal ( 'ERROR' )
+        expect ( result[1] ).to.be.equal ( 'ERROR' )
+        expect ( result[2] ).to.be.equal ( 'Some text with pasion.Great to be here' )
+    }) // it Draw with missData: string.
     
     
     

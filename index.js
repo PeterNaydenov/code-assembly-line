@@ -358,7 +358,7 @@ const lib = {
 
 
 
-// codeAssembly API
+// * Code-Assembly-Line API
 codeAssembly.prototype = {
       tools : tools              // Usefull template and process related functions (external)
    

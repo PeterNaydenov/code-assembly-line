@@ -17,9 +17,16 @@
 
 const lib = {
 
-  draw : function ( template, data, missField, missData ) {   // ( intTemplate, {}[], string, string ) -> string[]
+  draw : function ( template, data, missField, missData, hookFn ) {   // ( {intTemplate}, {}[], ?string, ?string, hookFn ) -> string[]
     // * Render template.
+    /*
+        MissField argument could be string but also has two predefined options:
+          '_position': will render placeholder name
+          '_hide'    : will not render anything
+          '_fn'      : hook function will take care about missing fields
+    */
     let result = [];
+    
     data.forEach ( obj => {
                 const keys = Object.keys(obj);
                 let 
@@ -38,16 +45,43 @@ const lib = {
                     , someNeglected = ( neglected.length > 0 )
                     ;                    
 
-                if ( someNeglected && missField ) { // miss field strategy
-                       for ( let position of neglected ) {
-                                 const id = places[position]
-                                 tpl[id]  = lib._neglectedUpdate ( position, missField )
-                           }  
-                   }
+                if ( someNeglected && missField ) {   // miss field strategy
+                            let missFieldUpdate;
+                            if ( missField == '_fn' && typeof(hookFn) != 'function' ) missField = '_hide'
+                            switch ( missField ) {
+                                case '_fn'       :
+                                                    missFieldUpdate = hookFn
+                                                    break
+                                case '_hide'     :
+                                                    missFieldUpdate = () => ''
+                                                    break
+                                case '_position' :
+                                                    missFieldUpdate = (pos) => pos
+                                                    break
+                                default          :
+                                                    missFieldUpdate = () => missField
+                                } // switch missField
+                            for ( let position of neglected ) {
+                                                const id = places[position]
+                                                tpl[id]  = missFieldUpdate ( position )
+                                }
+                   } // if missField
                
-                if ( someNeglected && missData ) { // miss data strategy
-                       tpl = ( missData == '_hide' ) ? [] : [ missData ]
-                  }
+                if ( someNeglected && missData ) {   // miss data strategy
+                            let missDataUpdate;
+                            if ( missData =='_fn'   &&   typeof(hookFn) != 'function' )    missData = '_hide'
+                            switch ( missData ) {
+                                case '_fn':
+                                              missDataUpdate = (x) => [hookFn(x)]
+                                              break
+                                case '_hide':
+                                              missDataUpdate  = () => []
+                                              break
+                                default:
+                                              missDataUpdate = () => [ missData ]
+                                } // switch missData                            
+                            tpl = missDataUpdate(neglected)
+                    } // if missData
                 
                 if ( tpl.length > 0 )   result.push ( tpl.join('') )
         })
@@ -56,13 +90,33 @@ const lib = {
 
 
 
-, _neglectedUpdate : function ( position, missField ) {
-     switch ( missField ) {
-        case '_position' : return position
-        case '_hide'     : return ''
-        default          : return missField
-     }
-} // _neglectedUpdate
+
+
+, _createAttributes : function ( data, attributes ) {   //   ({}, string[]) -> string
+// *** 'attr' placeholder calculation
+  const 
+        attr      = {}
+      , dataAttr  = new RegExp('^data-')
+      ;
+  let dataItems = '';
+
+  for ( let item in data ) {
+          if ( item === 'className'        )  attr['class'] = `class="${data[item]}"`
+          if ( attributes.includes (item)  )  attr[item]    = `${item}="${data[item]}"`
+          if ( dataAttr.test       (item)  ) {
+                                              attr[item]    = `${item}="${data[item]}"`
+                                              dataItems    += ` ${attr[item]}`
+             }
+        }
+
+  return attributes.reduce ( (res,item) => {
+                                        if ( attr[item]     ) res += ` ${attr[item]}`
+                                        if ( item == 'data' ) res += ` ${dataItems}`
+                                        return res
+               },'')
+} // _createAttributes func.
+
+
 
 
 
