@@ -33,6 +33,32 @@ describe ( 'Run', () => {
 
 
 
+    it ( 'Draw templates with _attr', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { 
+                                link: '<a{{_attr}}>{{text}}<a/>' 
+                              }
+              , processData =  [ 
+                                      { do: 'draw', tpl: 'link' } 
+                                    , { do: 'block' }
+                               ]                                                       
+              , renderData  = [
+                                { text: 'Test link', href: '#link', className:'hello'}
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result[0] ).to.be.equal ( '<a href="#link"  class="hello">Test link<a/>' )
+    }) // it Draw templates with _attr
+
+
+
     it ( 'Draw with missField: _hide', () => {
         const
                 tplEngine   = new CodeAssemblyLine()

@@ -21,6 +21,7 @@ const interpretTemplate = templateTools.load_interpretTemplate ( str2intTemplate
 const codeAssemblyConfig = { 
       overwriteTemplates : false
     , overwriteProcesses : false
+    , htmlAttributes     : [ 'id', 'name', 'href', 'src', 'value', 'data', 'alt', 'role', 'class' ]
 } // config
 
 

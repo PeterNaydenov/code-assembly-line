@@ -17,22 +17,36 @@
 
 const lib = {
 
-  draw : function ( template, data, missField, missData, hookFn ) {   // ( {intTemplate}, {}[], ?string, ?string, hookFn ) -> string[]
+  draw : function ( params ) {   // ( {intTemplate}, {any}[], ?string, ?string, hookFn ) -> string[]
     // * Render template.
     /*
-        MissField argument could be string but also has two predefined options:
-          '_position': will render placeholder name
-          '_hide'    : will not render anything
-          '_fn'      : hook function will take care about missing fields
+        MissField argument could be a string but also has two predefined options:
+          '_position': will render placeholder name;
+          '_hide'    : will not render anything;
+          '_fn'      : hook function will take care about missing fields;
+        
+        MissData argument could be a string or some of predefined options:
+         '_hide': will not render anything from this data-record
+         '_fn'  : hook function will take care about the record;
+        
+        hookFn: (placeholderName:string) -> renderResult:string. Result will be added to render result array.
     */
-    let result = [];
-    
+    let 
+          { template, data, htmlAttributes, missField, missData, hookFn } = params
+        , result = []
+        ;
+
     data.forEach ( obj => {
                 const keys = Object.keys(obj);
                 let 
                       tpl = lib._copyList ( template.tpl )
                     , places = Object.assign ( {}, template.placeholders )
                 
+                if ( places['_attr'] ) {   // calculate html attributes only if '_attr' placeholder exists in template
+                            const attrTarget = places['_attr'][0]
+                            tpl[attrTarget] = lib._createAttributes(obj, htmlAttributes )   // generate attributes string
+                   }
+
                 keys.forEach ( k => {
                             const positions = places[k]
                             if ( positions ) {

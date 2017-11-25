@@ -108,7 +108,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                           const
                                   missField = todo.missField       || false
                                 , missData  = todo.missData        || false
-                                , hook      = hooks ? hooks[todo.hook] || false : false
+                                , hookFn    = hooks ? hooks[todo.hook] || false : false
                                 , tpl       = libTemplates[tplName]['tpl']
                                 , originalPlaceholders = libTemplates[tplName]['placeholders']
                                 , holdData  = !(todo.as == null)
@@ -118,7 +118,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                           localTemplate.tpl = tpl
                           localTemplate.placeholders = contextPlaceholders[tplName] || originalPlaceholders
                           
-                          const update = operation[step] ( localTemplate, current, missField, missData, hook );
+                          const update = operation[step] ( { template:localTemplate, data:current, htmlAttributes:me.config.htmlAttributes, missField, missData, hookFn} );
                           if ( holdData ) {
                                   current = current.map ( (el,i) => el[todo.as] = update[i] )
                                }

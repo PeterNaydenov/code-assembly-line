@@ -17,7 +17,7 @@ describe ( 'Process Operations', () => {
                            }
               ,   data = [ { name : 'Peter' }, {name: 'Ivan'} ]
               ;
-        const result = processOps.draw ( template, data )
+        const result = processOps.draw ( {template, data} )
         expect ( result ).to.be.an ( 'array' )
         expect ( result ).to.have.length (2)
         expect ( result[0] ).to.be.equal ( 'Hello, Peter.')
@@ -35,7 +35,7 @@ describe ( 'Process Operations', () => {
               ,   data = [ { name1: 'Peter', name2: 'Ivan'} ]
               ;
 
-        const result = processOps.draw ( template, data )
+        const result = processOps.draw ( {template, data} )
         expect ( result ).to.be.an ( 'array' )
         expect ( result ).to.have.length (1)
         expect ( result[0] ).to.be.equal ( 'Peter and Ivan are working together.')
@@ -52,7 +52,7 @@ describe ( 'Process Operations', () => {
               ,   data = [ { name: 'Johnson', what: 'list'} ]
               ;
 
-        const result = processOps.draw ( template, data )
+        const result = processOps.draw ( {template, data} )
         expect ( result ).to.be.an ( 'array' )
         expect ( result ).to.have.length (1)
         expect ( result[0] ).to.be.equal ( 'Johnson and Johnson product list')
@@ -69,7 +69,7 @@ describe ( 'Process Operations', () => {
               ,   data = [ { name: 'Peter', age: '43'} ]
               ;
 
-        const result = processOps.draw ( template, data )
+        const result = processOps.draw ( {template, data} )
         expect ( result ).to.have.length (1)
         expect ( result[0] ).to.be.equal ( 'Happy Birthday to my friend Peter!')
     }) // it Draw: data > placeholders
@@ -85,7 +85,7 @@ describe ( 'Process Operations', () => {
               ,   data = [ { myName: 'Peter', age: '43'} ]
               ;
 
-        const result = processOps.draw ( template, data, '_hide' )
+        const result = processOps.draw ( { template, data, missField:'_hide' })
         expect ( result ).to.have.length (1)
         expect ( result[0] ).to.be.equal ( 'Hey !')
     }) // it Draw: missField strategy _hide
@@ -101,7 +101,7 @@ describe ( 'Process Operations', () => {
               ,   data = [ { myName: 'Peter', age: '43'} ]
               ;
 
-        const result = processOps.draw ( template, data, '_position' )
+        const result = processOps.draw ( { template, data,  missField: '_position'} )
         expect ( result ).to.have.length (1)
         expect ( result[0] ).to.be.equal ( 'Hey name!')
     }) // it Draw: missField strategy _position
@@ -117,7 +117,7 @@ describe ( 'Process Operations', () => {
               ,   data = [ { myName: 'Peter', age: '43'} ]
               ;
 
-        const result = processOps.draw ( template, data, '{error: No data}' )
+        const result = processOps.draw ( { template, data, missField:'{error: No data}'} )
         expect ( result ).to.have.length (1)
         expect ( result[0] ).to.be.equal ( 'Hey {error: No data}!')
     }) // it Draw: missField error strategy
@@ -137,7 +137,7 @@ describe ( 'Process Operations', () => {
                          ]
               ;
 
-        const result = processOps.draw ( template, data, false, '_hide' )
+        const result = processOps.draw ( { template, data, missData: '_hide'} )
         expect ( result ).to.have.length (2)
         expect ( result[0] ).to.be.equal ( 'Hey Ivan!')
         expect ( result[1] ).to.be.equal ( 'Hey Ivo!' )
@@ -158,7 +158,7 @@ describe ( 'Process Operations', () => {
                          ]
               ;
 
-        const result = processOps.draw ( template, data, false, 'Error: Missing data' )
+        const result = processOps.draw ({ template, data, missData: 'Error: Missing data' })
         expect ( result ).to.have.length (3)
         expect ( result[0] ).to.be.equal ( 'Error: Missing data')
         expect ( result[1] ).to.be.equal ( 'Hey Ivan!')
