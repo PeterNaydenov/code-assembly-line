@@ -21,6 +21,7 @@ const interpretTemplate = templateTools.load_interpretTemplate ( str2intTemplate
 const codeAssemblyConfig = { 
       overwriteTemplates : false
     , overwriteProcesses : false
+    , overwriteData      : false
     , htmlAttributes     : [ 'id', 'name', 'href', 'src', 'value', 'data', 'alt', 'role', 'class' ]
 } // config
 
@@ -30,7 +31,7 @@ function codeAssembly ( cfg ) {
             this.templates = {}
             this.processes = {}
             this.data = {}
-            this.data.blocks = {}
+            this.data.blocks = {} 
             this.config = {}
 
             Object.keys(codeAssemblyConfig).forEach ( k => this.config[k] = codeAssemblyConfig[k] )
@@ -57,23 +58,15 @@ function codeAssembly ( cfg ) {
 
 const help = {
 
-  _isTemplateWritingForbidden ( engine , name ) {
-    const
-           entryExists = engine.templates.hasOwnProperty ( name ) // 'true' if template with this name already exists
-         , entryForbidden = entryExists && !engine.config.overwriteTemplates
-         ;
-   return entryForbidden
-} // _isTemplateWritingForbidden func.
-
-
-
-, _isProcessWritingForbidden ( engine , name ) {
-  const
-         entryExists = engine.processes.hasOwnProperty ( name ) // 'true' if process with this name already exists
-       , entryForbidden = entryExists && !engine.config.overwriteProcesses
-       ;
- return entryForbidden
-} // _isProcessWritingForbidden func.
+ _isWritingForbidden ( engine , type, name ) {
+  let configProperty;
+  if      ( type == 'templates' ) configProperty = 'overwriteTemplates'
+  else if ( type == 'processes' ) configProperty = 'overwriteProcesses'
+  else                            configProperty = 'overwriteData'
+  const  entryExists = engine[type].hasOwnProperty ( name ); // 'true' if process with this name already exists
+  const  entryForbidden = entryExists && !engine.config[configProperty]
+  return entryForbidden
+} // _isWritingForbidden func.
 
 
 
@@ -123,6 +116,30 @@ const help = {
             },{})
 } // _extractLib func.
 
+
+
+, _flatten ( data, res , keyIn ) {
+  let result = res || {};
+  
+  keyIn = keyIn || ''
+  
+  for ( let key in data ) {
+          const value = data[key]
+          let newKey = key
+          if (keyIn) newKey = `${keyIn}/${key}`
+          if ( typeof value == 'function' )   return   //   Data can't contain functions
+          if ( help._isPrimitive(value)   )   result[newKey] = value
+          else                                return help._flatten ( value, result, newKey )
+       }
+  return result
+} // _flatten func.   -- Help
+
+
+
+, _isPrimitive ( value ) {
+    return ( typeof value === 'object' ) ? false : true;
+} // isPrimitive func. -- Help
+
 } // help lib
 
 
@@ -146,14 +163,14 @@ const help = {
 
 const lib_Template = {
 
-  insert ( extTemplate ) {   // (extTemplate: ExternalTemplate) -> void
+insert ( extTemplate ) {   // (extTemplate: ExternalTemplate) -> void
     let 
         me = this
       , templateNames = Object.keys( extTemplate )
       ;
 
     templateNames.forEach ( name => {
-          if ( help._isTemplateWritingForbidden(me,name) ) {
+          if ( help._isWritingForbidden(me,'templates',name) ) {
                 console.error ( showError('overwriteTemplate') )
                 return
               }
@@ -174,7 +191,7 @@ const lib_Template = {
                                     newTpl = {}
                                   , name = `${libName}/${extName}`
                                   ;
-                            if ( help._isTemplateWritingForbidden(me,name) ) {
+                            if ( help._isWritingForbidden(me,'templates',name) ) {
                                     console.error ( showError('overwriteTemplate')   )
                                     return
                                }
@@ -298,7 +315,7 @@ const lib_Process = {
   insert ( ext, name ) { // (ext: extProcess, name: string) -> void
     const me = this;
 
-    if ( help._isProcessWritingForbidden(me,name) ) {
+    if ( help._isWritingForbidden(me,'processes',name) ) {
           console.error ( showError('overwriteProcess',name) )
           return
         }
@@ -317,7 +334,7 @@ const lib_Process = {
           
     let mix = {};   // new process container
     
-    if ( help._isProcessWritingForbidden(me,newProcessName) ) {
+    if ( help._isWritingForbidden(me,'processes',newProcessName) ) {
           console.error ( showError('overwriteProcess', newProcessName)  )
           return
        }
@@ -399,8 +416,86 @@ else      return {}
 
 
 
-const lib_Data = {
+const lib_Data = {  
+ insert ( data ) {   //   ({}) -> void
+        const 
+              me = this
+            , flatData = help._flatten ( data )
+            , dataNames = Object.keys( flatData )
+            ;
 
+        dataNames.forEach ( name => {
+                  if ( help._isWritingForbidden(me,'data',name) ) {
+                              console.error ( showError('overwriteData', name) )
+                              return
+                      }
+                  me.data [ name ] = flatData[name]
+            })        
+  } //   insert func.   -- Data
+
+
+
+  , insertLib ( data, libName ) {   //   ({}, string) -> void
+        const 
+                me = this
+              , flatData = help._flatten ( data )
+              , dataNames = Object.keys( flatData )
+              ;
+
+        dataNames
+            .forEach ( name => {
+                      const newKey = `${libName}/${name}`
+                      if ( help._isWritingForbidden(me,'data', newKey) ) {
+                              console.error ( showError('overwriteData',newKey)   )
+                              return
+                          }
+                      me.data [ newKey ] = flatData[name]
+                })
+  } // insertLib func.   -- Data
+
+
+
+  , rename ( ops ) {   //   ({oldName:newName}) -> void
+    // * Change data-record names
+    const 
+            me = this
+          , list = Object.keys (ops)
+          , doOverwrite = me.config.overwriteData
+          ;
+
+    list.forEach ( key => {
+                  const 
+                        newKey = ops[key]
+                      , keyExists = (me.data[newKey]) ? true : false
+                      ;
+
+// TODO: If key doesn't exists should not be added. Check error msg for this specific case
+// error on key doesn't exists + !doOverwrite
+                  if ( keyExists && !doOverwrite ){
+                        console.error ( showError('overwriteData', newKey) )
+                        return
+                    }
+                  else {
+                        me.data[newKey] = me.data[key]
+                        delete me.data[key]
+                    }
+          })
+  } // rename func   --- Data
+
+
+
+  , remove ( dataName ) {   //   ( dataName:string|string[]) -> void
+    const me = this;
+    let listDelete;
+  
+    if ( dataName instanceof Array ) listDelete = dataName
+    else {
+            const t = Object.keys ( arguments );
+            listDelete = t.map ( k => arguments[k] )
+         }
+    
+    listDelete.forEach ( item => delete me.data[item])
+  } //   remove func.   -- Template
 }   // lib_Data lib
 
 
@@ -447,10 +542,13 @@ codeAssembly.prototype = {
     , run              : lib_Process.run    // Execute process
 
     // Data I/O
-    , insertData    : 'NA'   // Insert data. Save data. Word 'blocks'
-    , insertDataLib : 'NA'   // Insert set of data
-    , getData       : 'NA'   // Get data
-    , getDataLib    : 'NA'   // Get list of data-records by removing 
+    , insertData    : lib_Data.insert         // Insert data. Save data. Word 'blocks'
+    , insertDataLib : lib_Data.insertLib  // Insert set of data
+    , getBlock      : 'NA'   // Obtain rendered code snippets 
+
+    // Data Manipulation
+    , renameData       : lib_Data.rename   // change name of data record
+    , removeData       : lib_Data.remove   // remove data record from template engine
 } // codeAssembly prototype
 
 

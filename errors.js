@@ -22,6 +22,10 @@ const msg = {
     , 'blockExpectString'  : `Block expects string data. %s`
     , 'dataExpectObject'   : `Data operations require objects. %s`
 
+
+    // Data errors
+    , 'overwriteData'      : 'Error: Data with name "%s" is already defined.'
+
     // Validation errors
     , 'processNotExists'   : 'Process "%s" does not exist.'
     , 'templateNotExists'  : 'Error: Template "%s" is not available'

@@ -402,4 +402,7 @@ describe ( 'Run', () => {
         expect ( result[1] ).to.be.equal ( 'Find Ivan!' )
     }) // it list of processes
 
+
+    it ( 'Consume "data" for missing fields' )
+
 }) // describe Run
