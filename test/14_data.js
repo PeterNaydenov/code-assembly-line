@@ -156,6 +156,26 @@ describe ( 'Data', () => {
 
 
 
+  it ( 'Get block with no arguments', () => {
+    const
+            tplEngine   = new CodeAssemblyLine()
+          , template    = { 'dummy' : 'image description is missing'}
+          , testProcess =  [
+                              { do:'draw', tpl: 'dummy' }
+                            , { do: 'block', name: 'dummy' }
+                          ]
+          ;
+
+    tplEngine.insertTemplate ( template )
+    tplEngine.insertProcess  ( testProcess, 'test' )
+    tplEngine.run ( 'test' )
+
+    const result = tplEngine.getBlock ( )
+    expect ( result ).to.be.equal ( '' )
+  }) // it Get block with no arguments
+
+
+
   it ( 'Get single block', () => {
     const
             tplEngine = new CodeAssemblyLine()

@@ -114,7 +114,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                           localTemplate.tpl = tpl
                           localTemplate.placeholders = contextPlaceholders[tplName] || originalPlaceholders
 
-                          const update = operation[step] ( { template:localTemplate, data:current, htmlAttributes:me.config.htmlAttributes, missField, missData, hookFn} );
+                          const update = operation[step] ( { template:localTemplate, data:current, sharedData:me.data, htmlAttributes:me.config.htmlAttributes, missField, missData, hookFn} );
                           if ( holdData ) {
                                   current = current.map ( (el,i) => el[todo.as] = update[i] )
                                }

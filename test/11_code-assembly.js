@@ -316,5 +316,4 @@ describe ( 'Code Assembly', () => {
       expect ( result ).to.be.empty
     }) // it get hooks of non existing process
 
-    it ( 'Insert Data') 
 }) // describe Run

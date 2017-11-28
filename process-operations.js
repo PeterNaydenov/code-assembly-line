@@ -17,9 +17,18 @@
 
 const lib = {
 
-  draw : function ( params ) {   // ( {intTemplate}, {any}[], ?string, ?string, hookFn ) -> string[]
+  draw : function ( params ) {   // ( {params} ) -> string[]
     // * Render template.
     /*
+        Params:
+           template:{intTemplate}. Selected template for this draw operation;
+           data:{any}[]. Current data;
+           sharedData:{any}. Engine data object;
+           htmlAttributes: string[]. Render '_attr' will consider this list of items and their order;
+           missField?:string. Strategy for fulfill missing data-fields;
+           missData?:string.  Strategy for substitute data-record on missing data-fields;
+           hookFn: (placeholderName:string) -> renderResult:string. Result will be added to render result array;
+
         MissField argument could be a string but also has two predefined options:
           '_position': will render placeholder name;
           '_hide'    : will not render anything;
@@ -29,10 +38,9 @@ const lib = {
          '_hide': will not render anything from this data-record
          '_fn'  : hook function will take care about the record;
         
-        hookFn: (placeholderName:string) -> renderResult:string. Result will be added to render result array.
     */
     let 
-          { template, data, htmlAttributes, missField, missData, hookFn } = params
+          { template, data, sharedData, htmlAttributes, missField, missData, hookFn } = params
         , result = []
         ;
 
@@ -55,9 +63,22 @@ const lib = {
                                }
                      })
                 
-                const neglected     =   Object.keys ( places )
+                let   neglected     =   Object.keys ( places )
                     , someNeglected = ( neglected.length > 0 )
                     ;                    
+                
+                if ( someNeglected && sharedData ) {  // find values in sharedData
+                      for ( let placeholder of neglected ) {
+                            if ( sharedData[placeholder] ) {
+                                            const list = places [placeholder]
+                                            list.forEach ( id =>   tpl[id] = sharedData[placeholder]    )
+                                            delete places[placeholder]
+                                }
+                         }
+                } // if someNeglected
+
+                neglected = Object.keys ( places )
+                someNeglected = ( neglected.length > 0 )
 
                 if ( someNeglected && missField ) {   // miss field strategy
                             let missFieldUpdate;

@@ -19,8 +19,8 @@ it ( 'Rename templates', () => {
                               , 'hi'     : 'Hi {{user}}'
                             }
             ;
-        
-    const result = tplEngine.tools.renameTemplate ( tplLib, { 'hi':'hello'} )
+
+    const result =  tplEngine.tools.renameTemplate ( tplLib, { 'hi':'hello'} )
 
     expect ( result ).to.have.property('hello')
     expect ( result ).to.not.have.property('hi')

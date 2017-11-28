@@ -404,6 +404,25 @@ describe ( 'Run', () => {
     }) // it list of processes
 
 
-    it ( 'Consume "data" for missing fields' )
+
+    it ( 'Consume "data" for missing fields', () => {
+       const
+               tplEngine = new CodeAssemblyLine()
+             , tpl = { test : 'Find {{who}}! Address: {{location}}' }
+             , data = [ 
+                            { who: 'Peter', 'location' : 'Bulgaria,Sofia' }
+                          , { who: 'Ivan' }
+                      ]
+             , processDraw = [{ do: 'draw', tpl: 'test' }]
+             , defaultLocation = 'Location unknown'
+             ;
+
+      tplEngine.insertTemplate ( tpl )
+      tplEngine.insertProcess ( processDraw, 'draw' )
+      tplEngine.insertData ({'location': defaultLocation })
+
+      const result = tplEngine.run ( 'draw', data )
+      expect ( result[1] ).to.be.equal ( `Find Ivan! Address: ${defaultLocation}` )
+    }) // it consume "data" for missing fields
 
 }) // describe Run
