@@ -31,7 +31,6 @@ function codeAssembly ( cfg ) {
             this.templates = {}
             this.processes = {}
             this.data = {}
-            this.data.blocks = {} 
             this.config = {}
 
             Object.keys(codeAssemblyConfig).forEach ( k => this.config[k] = codeAssemblyConfig[k] )
@@ -508,7 +507,7 @@ const lib_Data = {
             blockRequst = t.map ( k => arguments[k] )
          }
     return blockRequst.reduce ( (res, name) => {
-                      const snippet =  ( me.data.blocks[name] ) ? me.data.blocks[name] : '';
+                      const snippet =  ( me.data[`block/${name}`] ) ? me.data[`block/${name}`] : '';
                       res += snippet
                       return res
           }, '')

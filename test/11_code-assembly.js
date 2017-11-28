@@ -16,7 +16,6 @@ describe ( 'Code Assembly', () => {
         expect ( tplEngine ).have.property ( 'templates' )
         expect ( tplEngine ).have.property ( 'processes' )
         expect ( tplEngine ).have.property ( 'data'      )
-        expect ( tplEngine.data ).have.property ( 'blocks' )
     }) // it start code Assembly
     
 

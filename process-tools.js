@@ -130,7 +130,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                              }
                           
                           current = operation[step] ( current )
-                          if ( todo.name ) me.data.blocks[ todo.name ] = current.join('')
+                          if ( todo.name ) me.data[ `block/${todo.name}` ] = current.join('')
                           break
             case 'alterTemplate' :
                           tplName = todo.tpl

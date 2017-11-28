@@ -354,7 +354,8 @@ describe ( 'Run', () => {
         tplEngine.insertProcess ( processData, 'change' )
                     
         const result = tplEngine.run ( 'change', data );
-        expect ( tplEngine.data.blocks ).to.have.property ( blockName )
+
+        expect ( tplEngine.data ).to.have.property ( `block/${blockName}` )
     }) // it write block
                 
                 
