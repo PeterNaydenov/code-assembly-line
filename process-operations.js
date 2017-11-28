@@ -136,9 +136,21 @@ const lib = {
   let dataItems = '';
 
   for ( let item in data ) {
-          if ( item === 'className'        )  attr['class'] = `class="${data[item]}"`
-          if ( attributes.includes (item)  )  attr[item]    = `${item}="${data[item]}"`
-          if ( dataAttr.test       (item)  ) {
+          if ( item === 'name'             )  continue  //   Ignore 'name'
+          if ( item === 'id'               ) {
+                                              attr['id'] = `id="${data[item]}"`
+                                              attr['name'] = `name="${data[item]}"`
+                                              continue
+              }
+          if ( item === 'className'        ) {
+                                              attr['class'] = `class="${data[item]}"`
+                                              continue
+             } 
+          if ( attributes.includes (item)  ) {
+                                              attr[item]    = `${item}="${data[item]}"`
+                                              continue
+             }
+          if ( dataAttr.test       (item)   ) {
                                               attr[item]    = `${item}="${data[item]}"`
                                               dataItems    += ` ${attr[item]}`
              }
