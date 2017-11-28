@@ -59,6 +59,32 @@ describe ( 'Run', () => {
 
 
 
+    it ( 'Draw with missField: string', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missField: 'ERROR!' } 
+                              ]                                                       
+              , renderData  = [
+                                   { place: 'test string'}
+                                 , { place: 'ala-bala' }
+                                 , { place: 'pasion', more: 'Great to be here' }
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result[0] ).to.be.equal ( 'Some text with test string.ERROR!' )
+        expect ( result[2] ).to.be.equal ( 'Some text with pasion.Great to be here' )
+    }) // it Draw with missField string.
+    
+    
+    
     it ( 'Draw with missField: _hide', () => {
         const
                 tplEngine   = new CodeAssemblyLine()

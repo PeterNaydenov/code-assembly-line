@@ -97,8 +97,8 @@ const lib = {
                                                     missFieldUpdate = () => missField
                                 } // switch missField
                             for ( let position of neglected ) {
-                                                const id = places[position]
-                                                tpl[id]  = missFieldUpdate ( position )
+                                                const list = places[position]
+                                                list.forEach ( el => tpl[el] = missFieldUpdate(position)     )
                                 }
                    } // if missField
                
