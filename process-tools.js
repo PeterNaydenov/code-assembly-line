@@ -93,15 +93,11 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
            
            switch ( step ) {
             case 'draw' :
-                          if ( currentIsStr ) {
-                                  console.error ( showError (dataExpectObject, current) )
-                                  return
-                            }
-                            
                           tplName   = todo.tpl
+                          if ( currentIsStr )  console.warn ( showError ('dataExpectObject', `Step "draw" with template "${tplName}"`) )
                             
                           if ( !libTemplates[tplName] ) {
-                                    console.error ( showError('missingTemplate', current)  )
+                                    console.error ( showError('missingTemplate', tplName)  )
                                     return
                                }
 
@@ -117,7 +113,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                           let localTemplate = {};
                           localTemplate.tpl = tpl
                           localTemplate.placeholders = contextPlaceholders[tplName] || originalPlaceholders
-                          
+
                           const update = operation[step] ( { template:localTemplate, data:current, htmlAttributes:me.config.htmlAttributes, missField, missData, hookFn} );
                           if ( holdData ) {
                                   current = current.map ( (el,i) => el[todo.as] = update[i] )
@@ -134,7 +130,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                              }
                           
                           current = operation[step] ( current )
-                          if ( todo.name ) me.data.blocks[ todo.name ] = current 
+                          if ( todo.name ) me.data.blocks[ todo.name ] = current.join('')
                           break
             case 'alterTemplate' :
                           tplName = todo.tpl

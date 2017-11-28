@@ -37,7 +37,7 @@ const lib = {
         ;
 
     data.forEach ( obj => {
-                const keys = Object.keys(obj);
+                const keys = obj ? Object.keys(obj) : [];
                 let 
                       tpl = lib._copyList ( template.tpl )
                     , places = Object.assign ( {}, template.placeholders )

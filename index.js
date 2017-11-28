@@ -485,18 +485,35 @@ const lib_Data = {
 
 
   , remove ( dataName ) {   //   ( dataName:string|string[]) -> void
+          const me = this;
+          let listDelete;
+        
+          if ( dataName instanceof Array ) listDelete = dataName
+          else {
+                  const t = Object.keys ( arguments );
+                  listDelete = t.map ( k => arguments[k] )
+              }
+          
+          listDelete.forEach ( item => delete me.data[item])
+  } //   remove func.   -- Data
+
+
+
+  , getBlock ( blockName ) {   //   ( string ) -> string
     const me = this;
-    let listDelete;
-  
-    if ( dataName instanceof Array ) listDelete = dataName
+    let blockRequst = [];
+    if ( blockName instanceof Array )   blockRequst = blockName
     else {
             const t = Object.keys ( arguments );
-            listDelete = t.map ( k => arguments[k] )
+            blockRequst = t.map ( k => arguments[k] )
          }
-    
-    listDelete.forEach ( item => delete me.data[item])
-  } //   remove func.   -- Template
-}   // lib_Data lib
+    return blockRequst.reduce ( (res, name) => {
+                      const snippet =  ( me.data.blocks[name] ) ? me.data.blocks[name] : '';
+                      res += snippet
+                      return res
+          }, '')
+  } // getBlock func.   -- Data
+}   // lib_Data
 
 
 
@@ -529,26 +546,27 @@ codeAssembly.prototype = {
     , getPlaceholders   : lib_Template.getPlaceholders    // Return placeholders per template;
       
     // Template Manipulation
-    , renameTemplate : lib_Template.rename // change name of template/templates
-    , removeTemplate : lib_Template.remove // remove template/templates
+    , renameTemplate : lib_Template.rename    // Change name of template/templates
+    , removeTemplate : lib_Template.remove    // Remove template/templates
 
     // Processes
-    , insertProcess    : lib_Process.insert // Insert new process
-    , mixProcess       : lib_Process.mix    // Set new process as combination of existing processes
+    , insertProcess    : lib_Process.insert     // Insert new process
+    , mixProcess       : lib_Process.mix        // Set new process as combination of existing processes
     , insertProcessLib : 'NA'
     , getProcess       : 'NA'
     , getProcessLib    : 'NA'    
-    , getHooks         : lib_Process.getHooks      // Provide information about hooks available
-    , run              : lib_Process.run    // Execute process
+    , getHooks         : lib_Process.getHooks   // Provide information about hooks available
+    , run              : lib_Process.run        // Execute process
 
     // Data I/O
-    , insertData    : lib_Data.insert         // Insert data. Save data. Word 'blocks'
-    , insertDataLib : lib_Data.insertLib  // Insert set of data
-    , getBlock      : 'NA'   // Obtain rendered code snippets 
+    , insertData    : lib_Data.insert      // Insert data. Save data. Word 'blocks'
+    , insertDataLib : lib_Data.insertLib   // Insert set of data
+    , getBlock      : lib_Data.getBlock    // Obtain rendered code snippets 
+    , getBlocks     : lib_Data.getBlock    
 
     // Data Manipulation
-    , renameData       : lib_Data.rename   // change name of data record
-    , removeData       : lib_Data.remove   // remove data record from template engine
+    , renameData       : lib_Data.rename   // Change name of data record
+    , removeData       : lib_Data.remove   // Remove data record from template engine
 } // codeAssembly prototype
 
 

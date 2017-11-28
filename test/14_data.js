@@ -133,5 +133,77 @@ describe ( 'Data', () => {
 
     expect ( tplEngine.data ).to.not.have.property ( 'alt' )
   }) // it Remove data-record
+
+
+
+  it ( 'Get missing block', () => {
+    const
+            tplEngine = new CodeAssemblyLine()
+          , template  = { 'dummy' : 'image description is missing'}
+          , pr        =  [
+                              { do:'draw', tpl: 'dummy' }
+                            , { do: 'block', name: 'dummy' }
+                         ]
+          ;
+
+    tplEngine.insertTemplate ( template )
+    tplEngine.insertProcess ( pr, 'test' )
+    tplEngine.run ( 'test' )
+
+    const result = tplEngine.getBlock ( 'missing' )
+    expect ( result ).to.be.equal ( '' )
+  }) // it Get missing block
+
+
+
+  it ( 'Get single block', () => {
+    const
+            tplEngine = new CodeAssemblyLine()
+          , template  = { 'dummy' : 'image description is missing'}
+          , pr        =  [
+                              { do:'draw', tpl: 'dummy' }
+                            , { do: 'block', name: 'dummy' }
+                        ]
+          ;
+
+    tplEngine.insertTemplate ( template )
+    tplEngine.insertProcess ( pr, 'test' )
+    tplEngine.run ( 'test' )
+
+    const result = tplEngine.getBlock ( 'dummy'  )
+    expect ( result ).to.be.equal ( template.dummy )
+  }) // it Get single block
+
+
+
+  it ( 'Get blocks in order', () => {
+    const
+            tplEngine = new CodeAssemblyLine ()
+          , templates = {
+                            'one' : 'First sentence.'
+                          , 'two' : 'Second sentence.'
+                        }
+          , pr1       = [
+                            { do:'draw', tpl: 'one' }
+                          , { do: 'block', name: 'first' }
+                        ]
+          , pr2       = [
+                            { do:'draw', tpl: 'two' }
+                          , { do: 'block', name: 'second' }
+                        ]
+
+    tplEngine.insertTemplate ( templates )
+    tplEngine.insertProcess ( pr1, 'doOne')
+    tplEngine.insertProcess ( pr2, 'doTwo')
+    tplEngine.run ( [ 'doTwo' , 'doOne'] )
+
+    const result = tplEngine.getBlock ( 'first', 'second' )
+
+    expect ( result ).to.be.a ( 'string' )
+    expect ( result ).to.be.equal ( templates.one + templates.two )
+  }) // it Get blocks in order
+
+
+
     
 }) // describe Tools
