@@ -321,7 +321,7 @@ const lib = {
 
 
 
-, copy : function ( step, data ) {   // ( step{}, {}[] ) -> {}[]
+, copy : function ( step, data ) {   //   ( step{}, {}[] ) -> {}[]
   // * Create new property copy the value.
     const 
          changes = step.data

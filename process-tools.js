@@ -81,8 +81,6 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
 
 , run : function ( proccessItems, data, hooks ) {
   // * Executes process/processes
-    if ( proccessItems.hasOwnProperty('errors') ) return
-    const dataIsArray = data instanceof Array;
     let 
           me = this
         , libTemplates = me.templates
@@ -92,9 +90,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
         , answer
         ;
 
-        if ( !dataIsArray )   data = [ data ]
-
-        proccessItems.steps.forEach ( (step,id) => {
+    proccessItems.steps.forEach ( (step,id) => {
           const todo = proccessItems.arguments[id];    //   Get full step instruction
           let tplName;
 
