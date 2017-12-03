@@ -678,4 +678,28 @@ describe ( 'Run', () => {
       expect ( D['block/result'] ).to.be.equal ('brum-brum')
     }) // it hook
 
+
+
+    it ( 'Draw templates with _count placeholder', () => {
+        const
+                tplEngine = new CodeAssemblyLine()
+              , userName = '{{_count}}. User: {{name}},{{_count}}'
+              , data = ['Peter', 'Ivan', 'Ivo', 'Stefan' ]
+              , processUserList = [
+                                      { do: 'set', as: 'name' }
+                                    , { do: 'draw', tpl:'userName'}
+                                  ]
+              ;
+
+        tplEngine.insertTemplate ( {userName})
+        tplEngine.insertProcess ( processUserList, 'userList' )
+
+        const result = tplEngine.run ( 'userList', data );
+
+        expect ( result ).to.be.an ('array')
+        expect ( result[0] ).to.be.equal ( '1. User: Peter,1'  )
+        expect ( result[1] ).to.be.equal ( '2. User: Ivan,2'   )
+        expect ( result[2] ).to.be.equal ( '3. User: Ivo,3'    )
+        expect ( result[3] ).to.be.equal ( '4. User: Stefan,4' )
+    }) //   it Draw templates with _count placeholder
 }) // describe Run

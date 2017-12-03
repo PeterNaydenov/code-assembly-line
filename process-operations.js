@@ -44,7 +44,7 @@ const lib = {
         , result = []
         ;
 
-    data.forEach ( obj => {
+    data.forEach ( (obj, _count) => {
                 const keys = obj ? Object.keys(obj) : [];
                 let 
                       tpl = lib._copyList ( template.tpl )
@@ -54,6 +54,11 @@ const lib = {
                             const attrTarget = places['_attr'][0]
                             tpl[attrTarget] = lib._createAttributes(obj, htmlAttributes )   // generate attributes string
                    }
+
+                if ( places['_count'] ) {   // replace _count if  '_count' placeholder exists in template
+                        const countTarget = places['_count']
+                        countTarget.forEach ( position => tpl[position] = _count + 1 )
+                  }
 
                 keys.forEach ( k => {
                             const positions = places[k]
