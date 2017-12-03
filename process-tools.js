@@ -1,7 +1,10 @@
 'use strict';
 
-const showError = require ('./errors');
-const operation = require ( './process-operations')
+const 
+        showError = require ('./errors')
+      , operation = require ( './process-operations')
+      , validSteps = [ 'draw', 'alterTemplate', 'alter', 'set', 'add', 'copy', 'remove', 'hook', 'block', 'save' ]
+      ;
 
 
 
@@ -33,8 +36,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
 
 , _validate : function (ext) {
       const 
-               validSteps = [ 'draw', 'alterTemplate', 'alter', 'set', 'add', 'copy', 'remove', 'hook', 'block', 'load' ]
-             , log = []
+               log = []
              , validType = ext instanceof Array
              ;
         
@@ -70,8 +72,15 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
 
 
 
+, _parse ( data ) {   //   (string) -> {} | false
+    try        {  return JSON.parse(data)   }
+    catch (er) {  return false              }
+} // _parse func.
+
+
+
 , run : function ( proccessItems, data, hooks ) {
-  // * Executes render process
+  // * Executes process/processes
     if ( proccessItems.hasOwnProperty('errors') ) return
     const dataIsArray = data instanceof Array;
     let 
@@ -84,14 +93,12 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
         ;
 
         if ( !dataIsArray )   data = [ data ]
-        proccessItems.steps.forEach ( (step,id) => {
-          const 
-                  todo = proccessItems.arguments[id]
-                ;
 
-           let tplName;
-           
-           switch ( step ) {
+        proccessItems.steps.forEach ( (step,id) => {
+          const todo = proccessItems.arguments[id];    //   Get full step instruction
+          let tplName;
+
+          switch ( step ) {
             case 'draw' :
                           tplName   = todo.tpl
                           if ( currentIsStr )  console.warn ( showError ('dataExpectObject', `Step "draw" with template "${tplName}"`) )
@@ -145,17 +152,30 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                           current = operation[step] ( current, hooks[step] )
                           currentIsStr = lib._findIfString ( current )
                           break
-            case 'load' :
-                          const name = todo.name
-                          current    = this.data[name]
-                          currentIsStr = lib._findIfString(current)
-                          break
             case 'save' :
-                          const 
-                                  saveName = todo.name
-                                , storage  = todo.in
-                                ;                          
-                          this[storage][saveName] = current
+                          const saveName = (todo.as != 'block') ? todo.name : `block/${todo.name}`;
+                          let currentData = {};
+
+                          switch ( todo.as ) {
+                                  case 'block':
+                                  case 'data':
+                                                  currentData[saveName] = current.join('')
+                                                  me.insertData ( currentData )
+                                                  // TODO: check twice!!!
+                                                  break
+                                  case 'template':
+                                                  currentData[saveName] = current[0]
+                                                  me.insertTemplate ( currentData )
+                                                  break
+                                  case 'process':
+                                                  let newProcess = lib._parse ( current[0] )
+                                                  if ( newProcess )   me.insertProcess ( newProcess, saveName )
+                                                  else                console.log (  showError('wrongExtProcess')   )
+                                                  break
+                                  default:
+                                                 console.log ( showError ('invalidStorageName', todo.as) )
+                                                 return
+                             }
                           break
                 default :
                           if ( currentIsStr ) {

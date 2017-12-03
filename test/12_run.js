@@ -383,9 +383,94 @@ describe ( 'Run', () => {
 
         expect ( tplEngine.data ).to.have.property ( `block/${blockName}` )
     }) // it write block
-                
-                
-                
+
+
+
+    it ( 'Save Template', () => {
+        const
+                  tplEngine = new CodeAssemblyLine ()
+                , tpl = { test: 'Find {{who}}!' }
+                , blockName = 'finding'
+                , processData = [
+                                      { do: 'draw', tpl: 'test' }
+                                    , { do: 'save', as:'template', name: blockName }
+                                ]
+                ;
+
+        tplEngine.insertTemplate ( tpl )
+        tplEngine.insertProcess ( processData, 'change' )
+        
+        tplEngine.run ( 'change', [{name:'Peter'},{name:'Ivan'}] );
+        
+        const templates = tplEngine.templates;
+        expect ( templates ).to.have.property ( blockName )
+        const test =  templates[blockName]['tpl'].join('');
+        expect ( test ).to.be.equal ( tpl.test )
+    }) // it save template
+
+
+
+    it ( 'Save Process, save Block', () => {
+        const
+                  tplEngine    = new CodeAssemblyLine ()
+                , testTPL      = 'Find {{who}}!'
+                , renderBlock  = `[
+                                      { "do": "draw", "tpl": "{{tpl}}" }
+                                    , { "do": "save", "as": "block", "name": "{{name}}" }
+                                  ]`
+                , setBlock = [
+                                     { do: 'draw', tpl: 'renderBlock' }
+                                   , { do: 'save', as: 'process', name: 'build/block' }
+                                ]
+                ;
+
+        tplEngine.insertTemplate ({ 
+                                        renderBlock
+                                      , test : testTPL
+                                  })
+        tplEngine.insertProcess ( setBlock, 'setBlock' )
+        
+        tplEngine.run ( 'setBlock', { name: 'first', tpl:'test' } )
+        tplEngine.run ( 'build/block', { who: 'Peter' })
+ 
+        const processes = tplEngine.processes;
+        expect ( processes ).to.have.property ( 'setBlock'    )
+        expect ( processes ).to.have.property ( 'build/block' )
+        expect ( tplEngine.data ).to.have.property ( 'block/first' )
+    }) // it save process, save Block
+
+
+
+    it ( 'Save as Data', () => {
+        const
+                  tplEngine   = new CodeAssemblyLine ()
+                , testTPL     = 'Find {{who}}!'
+                , findWho     = '{{findWho}}' 
+                , setData = [
+                                     { do: 'draw', tpl: 'test' }
+                                   , { do: 'save', as: 'data', name: 'findWho' }
+                                ]
+                , renderMyBlock = [
+                                     { do: 'draw', tpl: 'findWho' }
+                                   , { do: 'save', as: 'block', name: 'myBlock' }
+                                ]
+                ;
+
+        tplEngine.insertTemplate ({  test : testTPL, findWho })
+        tplEngine.insertProcess ( setData, 'setData' )
+        tplEngine.insertProcess ( renderMyBlock, 'renderMyBlock' )
+        
+        tplEngine.run ( 'setData', { who: 'Peter' } )
+        tplEngine.run ( 'renderMyBlock' )
+
+        const result = tplEngine.data;
+        expect ( result ).to.have.property ( 'findWho'       )
+        expect ( result ).to.have.property ( 'block/myBlock' )
+        expect ( result['findWho']).to.be.equal ( result['block/myBlock'])
+    }) // it save as Data
+
+
+    
     it ( 'Set', () => {
         const
                   tplEngine = new CodeAssemblyLine()

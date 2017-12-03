@@ -436,15 +436,15 @@ const lib_Data = {
 
   , insertLib ( data, libName ) {   //   ({}, string) -> void
         const 
-                me = this
-              , flatData = help._flatten ( data )
-              , dataNames = Object.keys( flatData )
+                me        = this
+              , flatData  = help._flatten ( data )
+              , dataNames = Object.keys ( flatData )
               ;
 
         dataNames
             .forEach ( name => {
                       const newKey = `${libName}/${name}`
-                      if ( help._isWritingForbidden(me,'data', newKey) ) {
+                      if ( help._isWritingForbidden ( me, 'data', newKey )   ) {
                               console.error ( showError('overwriteData',newKey)   )
                               return
                           }

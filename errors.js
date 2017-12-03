@@ -12,7 +12,7 @@ const msg = {
     , 'missingTemplate'   : `Error: Template "%s" doesn't exist.`
        
        // Process errors
-    , 'wrongExtProcess'    : 'Wrong process data. "extProcess" should be an array of "processSteps".'
+    , 'wrongExtProcess'    : 'Wrong process data. Should be an array of "processSteps".'
     , 'emptyExtProcess'    : 'Empty process! Process should contain steps(processSteps)'
     , 'brokenProcess'      : 'Broken process description.'
     , 'missingOperation'   : 'Process has step with missing operation. Set parameter "do".'
@@ -27,8 +27,9 @@ const msg = {
     , 'overwriteData'      : 'Error: Data with name "%s" is already defined.'
 
     // Validation errors
-    , 'processNotExists'   : 'Process "%s" does not exist.'
+    , 'processNotExists'   : 'Error: Process "%s" does not exist.'
     , 'templateNotExists'  : 'Error: Template "%s" is not available'
+    , 'invalidStorageName' : 'Error: Process-step "save" has param "as: %s". Should be "data", "template" or "process". '
 
   }
 

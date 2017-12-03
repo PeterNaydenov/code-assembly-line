@@ -142,7 +142,7 @@ describe ( 'Data', () => {
           , template  = { 'dummy' : 'image description is missing'}
           , pr        =  [
                               { do:'draw', tpl: 'dummy' }
-                            , { do: 'block', name: 'dummy' }
+                            , { do: 'save', as: 'block', name: 'dummy' }
                          ]
           ;
 
@@ -162,7 +162,7 @@ describe ( 'Data', () => {
           , template    = { 'dummy' : 'image description is missing'}
           , testProcess =  [
                               { do:'draw', tpl: 'dummy' }
-                            , { do: 'block', name: 'dummy' }
+                            , { do: 'save', as: 'block', name: 'dummy' }
                           ]
           ;
 
@@ -182,7 +182,7 @@ describe ( 'Data', () => {
           , template  = { 'dummy' : 'image description is missing'}
           , pr        =  [
                               { do:'draw', tpl: 'dummy' }
-                            , { do: 'block', name: 'dummy' }
+                            , { do: 'save', as: 'block', name: 'dummy' }
                         ]
           ;
 
@@ -205,11 +205,11 @@ describe ( 'Data', () => {
                         }
           , pr1       = [
                             { do:'draw', tpl: 'one' }
-                          , { do: 'block', name: 'first' }
+                          , { do: 'save', as: 'block', name: 'first' }
                         ]
           , pr2       = [
                             { do:'draw', tpl: 'two' }
-                          , { do: 'block', name: 'second' }
+                          , { do: 'save', as: 'block', name: 'second' }
                         ]
 
     tplEngine.insertTemplate ( templates )
