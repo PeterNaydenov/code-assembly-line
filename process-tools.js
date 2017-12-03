@@ -132,12 +132,16 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                           break
             case 'block':
                           if ( !currentIsStr ) {
-                                 console.error ( showError ('blockExpectString', [current]) )
+                                 console.error ( showError ('blockExpectString', JSON.stringify(current))   )
                                  return
                              }
                           
                           current = operation[step] ( current )
-                          if ( todo.name ) me.data[ `block/${todo.name}` ] = current.join('')
+                          if ( todo.name ) {
+                                        let newData = {};
+                                        newData[`block/${todo.name}`] = current.join('')
+                                        me.insertData ( newData )
+                              }
                           break
             case 'alterTemplate' :
                           tplName = todo.tpl

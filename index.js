@@ -418,14 +418,14 @@ else      return {}
 const lib_Data = {  
  insert ( data ) {   //   ({}) -> void
         const 
-              me = this
-            , flatData = help._flatten ( data )
+              me        = this
+            , flatData  = help._flatten ( data )
             , dataNames = Object.keys( flatData )
             ;
 
         dataNames.forEach ( name => {
-                  if ( help._isWritingForbidden(me,'data',name) ) {
-                              console.error ( showError('overwriteData', name) )
+                  if ( help._isWritingForbidden(me,'data',name)   ) {
+                              console.error ( showError('overwriteData', name)   )
                               return
                       }
                   me.data [ name ] = flatData[name]

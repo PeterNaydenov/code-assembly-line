@@ -383,6 +383,40 @@ describe ( 'Run', () => {
 
         expect ( tplEngine.data ).to.have.property ( `block/${blockName}` )
     }) // it write block
+   
+   
+   
+    it ( 'Can not overwrite Block', () => {
+        const
+                  tplEngine = new CodeAssemblyLine ()
+                , tpl = { test: 'Find {{who}}!' }
+                , blockName = 'finding'
+                , data = [
+                             { name: 'Peter' }
+                           , { name: 'Ivan' }
+                         ]
+                , altData     = [ { name: 'Joseph'} ]
+                , processData = [
+                                      { do: 'alterTemplate', tpl:'test', data: { 'who':'name'}  }
+                                    , { do: 'draw', tpl: 'test' }
+                                    , { do: 'block', name: blockName }
+                                ]
+                , badProcess = [ { do: 'block', name: 'bad' } ]
+                ;
+                    
+        tplEngine.insertTemplate ( tpl )
+        tplEngine.insertProcess ( processData, 'processData' )
+        tplEngine.insertProcess ( badProcess, 'badProcess' )
+                    
+        tplEngine.run ( 'badProcess', data )
+        tplEngine.run ( 'processData', data )
+        tplEngine.run ( 'processData', altData )
+
+        const D = tplEngine.data;
+        expect ( D ).to.have.property ( `block/${blockName}` )
+        expect ( D[`block/${blockName}`] ).to.be.equal ( 'Find Peter!Find Ivan!' )
+        expect ( D ).to.not.have.property ( 'bad' )
+    }) // it can not overwrite block
 
 
 
