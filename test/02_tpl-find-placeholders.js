@@ -10,7 +10,7 @@ describe ( 'Find a placeholders', () => {
 
     it ( 'No placeholders', () => {
         const tpl = [ 'Good morning!' ];
-        const result = findPlaceholders ( tpl );
+        const result = findPlaceholders ( tpl ).placeholders;
 
         expect ( result ).to.be.an('object')
         expect ( result ).to.be.empty
@@ -20,7 +20,7 @@ describe ( 'Find a placeholders', () => {
 
     it ( 'One placeholder', () => {
         const tpl = [ 'Good morning, ', '{{user}}' ];
-        const result = findPlaceholders ( tpl );
+        const result = findPlaceholders ( tpl ).placeholders;
 
         expect ( result ).to.be.an('object')
         expect ( result ).to.contain.property( 'user' )
@@ -32,7 +32,7 @@ describe ( 'Find a placeholders', () => {
 
     it ( 'Many placeholders', () => {
         const tpl = [ 'Today user ', '{{user}}', ' has a birthday. Turns ', '{{age}}', ' years.' ];
-        const result = findPlaceholders ( tpl );
+        const result = findPlaceholders ( tpl ).placeholders;
 
         expect ( result ).to.be.an('object')
         expect ( result ).to.contain.property( 'user' ).that.is.an ( 'array' )
@@ -47,7 +47,7 @@ describe ( 'Find a placeholders', () => {
 
     it ( 'Multiple used placeholders', () => {
         const tpl = [ '{{age}}', ' is like ', '{{age}}', '. Happy birthday ', '{{user}}' ];
-        const result = findPlaceholders ( tpl );
+        const result = findPlaceholders ( tpl ).placeholders;
 
         expect ( result ).to.be.an('object');
         expect ( result ).to.contain.property ('age' ).that.is.an ( 'array' )

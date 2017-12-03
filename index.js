@@ -169,11 +169,11 @@ insert ( extTemplate ) {   // (extTemplate: ExternalTemplate) -> void
       ;
 
     templateNames.forEach ( name => {
-          if ( help._isWritingForbidden(me,'templates',name) ) {
-                console.error ( showError('overwriteTemplate') )
-                return
-              }
-          me.templates [ name ] = interpretTemplate ( extTemplate[name] )
+            if ( help._isWritingForbidden(me,'templates',name) ) {
+                  console.error ( showError('overwriteTemplate') )
+                  return
+                }
+            me.templates [ name ] = interpretTemplate ( extTemplate[name] )
         })        
 } //   insert func.   -- Template
 

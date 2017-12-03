@@ -104,6 +104,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                                 , missData  = todo.missData        || false
                                 , hookFn    = hooks ? hooks[todo.hook] || false : false
                                 , tpl       = libTemplates[tplName]['tpl']
+                                , spaces    = libTemplates[tplName]['spaces']
                                 , originalPlaceholders = libTemplates[tplName]['placeholders']
                                 , holdData  = !(todo.as == null)
                                 ;
@@ -111,6 +112,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                           let localTemplate = {};
                           localTemplate.tpl = tpl
                           localTemplate.placeholders = contextPlaceholders[tplName] || originalPlaceholders
+                          localTemplate.spaces       = spaces
 
                           const update = operation[step] ( { template:localTemplate, data:current, sharedData:me.data, htmlAttributes:me.config.htmlAttributes, missField, missData, hookFn} );
                           if ( holdData ) {

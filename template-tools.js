@@ -32,13 +32,28 @@ const lib = {
  str2intTemplate : function (str) {
     const r = chop ( str );
     const error = r.includes ( showError('brokenTemplate') );
-    let placeholders = {}
+    let 
+          placeholders = {}
+        , spaces = {}  // { placeholderName: spaceType } 
+        ;
+    /*
+        placeholderName: string. Name of the placeholder.
+        spaceType:enum. 
+                1-space before, 
+                2-space after, 
+                3-both spaces
+    */
 
-    if ( !error )   placeholders = lib._findPlaceholders ( r )
+    if ( !error ) {  
+            const t = lib._findPlaceholders ( r )
+            spaces = t.spaces
+            placeholders = t.placeholders
+        }
 
     const template = {
                         tpl:r
                       , placeholders
+                      , spaces
                      };
     if ( error )   template.errors = [showError('brokenTemplate')]
     return template
@@ -60,15 +75,26 @@ const lib = {
 
 
 , _findPlaceholders : function ( tplArray ) {
-    const placeholders = {};
+    const 
+              placeholders = {}
+            , spaces = {}
+            ;
     tplArray.forEach ( (item,i) => {
                 if ( item.slice(0,2) == '{{' ) {
-                        const phName = item.slice ( 2, -2)
+                        let start = 2, end = -2;
+                        const before = item.slice(2,4) == '~~';
+                        const after  = item.slice (-4,-2) == '~~';
+                        if (before) start = 4
+                        if ( after ) end = -4
+                        const phName = item.slice ( start, end );
+                        if ( before && after ) spaces [ phName ] = 3  // before and after
+                        else if ( after  )     spaces [ phName ] = 2  // only after
+                        else if ( before )     spaces [ phName ] = 1  // only before
                         if ( placeholders.hasOwnProperty(phName) ) placeholders [ phName ].push (i)
                         else                                       placeholders [ phName ] = [i]
                    }
             })
-    return placeholders
+    return { spaces, placeholders }
 } // findPlaceholders func.
 
 } // lib

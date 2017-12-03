@@ -14,6 +14,7 @@ describe ( 'Process Operations', () => {
               template = {
                                tpl : [ 'Hello, ', '{{name}}', '.' ]
                              , placeholders: { name: [1] }
+                             , spaces: {}
                            }
               ,   data = [ { name : 'Peter' }, {name: 'Ivan'} ]
               ;
@@ -31,6 +32,7 @@ describe ( 'Process Operations', () => {
               template = {
                                tpl : [ '{{name1}}', ' and ', '{{name2}}', ' are working together.' ]
                              , placeholders: { name1: [0], name2: [2] }
+                             , spaces: {}
                            }
               ,   data = [ { name1: 'Peter', name2: 'Ivan'} ]
               ;
@@ -48,6 +50,7 @@ describe ( 'Process Operations', () => {
               template = {
                                tpl : [ '{{name}}', ' and ', '{{name}}', ' product ', '{{what}}'  ]
                              , placeholders: { name: [0,2], what:[4] }
+                             , spaces: {}
                            }
               ,   data = [ { name: 'Johnson', what: 'list'} ]
               ;
@@ -65,6 +68,7 @@ describe ( 'Process Operations', () => {
               template = {
                                tpl : [ 'Happy Birthday to my friend ', '{{name}}', '!']
                              , placeholders: { name: [1] }
+                             , spaces: {}
                            }
               ,   data = [ { name: 'Peter', age: '43'} ]
               ;
@@ -81,6 +85,7 @@ describe ( 'Process Operations', () => {
               template = {
                                tpl : [ 'Hey ', '{{name}}', '!']
                              , placeholders: { name: [1] }
+                             , spaces: {}
                            }
               ,   data = [ { myName: 'Peter', age: '43'} ]
               ;
@@ -97,6 +102,7 @@ describe ( 'Process Operations', () => {
               template = {
                                tpl : [ 'Hey ', '{{name}}', '!']
                              , placeholders: { name: [1] }
+                             , spaces: {}
                            }
               ,   data = [ { myName: 'Peter', age: '43'} ]
               ;
@@ -113,6 +119,7 @@ describe ( 'Process Operations', () => {
               template = {
                                tpl : [ 'Hey ', '{{name}}', '!']
                              , placeholders: { name: [1] }
+                             , spaces: {}
                            }
               ,   data = [ { myName: 'Peter', age: '43'} ]
               ;
@@ -129,6 +136,7 @@ describe ( 'Process Operations', () => {
               template = {
                                tpl : [ 'Hey ', '{{name}}', '!']
                              , placeholders: { name: [1] }
+                             , spaces : {}
                            }
               ,   data = [ 
                               { myName: 'Peter', age: '43'} 
@@ -150,6 +158,7 @@ describe ( 'Process Operations', () => {
               template = {
                                tpl : [ 'Hey ', '{{name}}', '!']
                              , placeholders: { name: [1] }
+                             , spaces : {}
                            }
               ,   data = [ 
                               { myName: 'Peter', age: '43'} 

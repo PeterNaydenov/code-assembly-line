@@ -49,21 +49,31 @@ const lib = {
                 let 
                       tpl = lib._copyList ( template.tpl )
                     , places = Object.assign ( {}, template.placeholders )
+                    , spaces = template.spaces
+                    , spaceBefore = '' 
+                    , spaceAfter = ''
+                    ;
                 
                 if ( places['_attr'] ) {   // calculate html attributes only if '_attr' placeholder exists in template
                             const attrTarget = places['_attr'][0]
-                            tpl[attrTarget] = lib._createAttributes(obj, htmlAttributes )   // generate attributes string
+                            spaceBefore = ( spaces['_attr'] && spaces['_attr']%2 ) ? ' ' : '' 
+                            spaceAfter  = ( spaces['_attr'] && spaces['_attr']>1 ) ? ' ' : ''
+                            tpl[attrTarget] = `${spaceBefore}${lib._createAttributes(obj, htmlAttributes )}${spaceAfter}`   // generate attributes string
                    }
 
                 if ( places['_count'] ) {   // replace _count if  '_count' placeholder exists in template
                         const countTarget = places['_count']
-                        countTarget.forEach ( position => tpl[position] = _count + 1 )
+                        spaceBefore = ( spaces['_count'] && spaces['_count']%2 ) ? ' ' : '' 
+                        spaceAfter  = ( spaces['_count'] && spaces['_count']>1 ) ? ' ' : ''
+                        countTarget.forEach ( position => tpl[position] = `${spaceBefore}${_count + 1}${spaceAfter}` )
                   }
 
                 keys.forEach ( k => {
-                            const positions = places[k]
+                            const positions = places[k];
+                            spaceBefore = ( spaces[k] && spaces[k]%2 ) ? ' ' : '' 
+                            spaceAfter  = ( spaces[k] && spaces[k]>1 ) ? ' ' : ''    
                             if ( positions ) {
-                                    for (let position of positions ) tpl[position] = obj[k]
+                                    for (let position of positions ) tpl[position] = `${spaceBefore}${obj[k]}${spaceAfter}`
                                     delete places[k]
                                }
                      })
@@ -76,7 +86,9 @@ const lib = {
                       for ( let placeholder of neglected ) {
                             if ( sharedData[placeholder] ) {
                                             const list = places [placeholder]
-                                            list.forEach ( id =>   tpl[id] = sharedData[placeholder]    )
+                                            spaceBefore = ( spaces[placeholder] && spaces[placeholder]%2 ) ? ' ' : '' 
+                                            spaceAfter  = ( spaces[placeholder] && spaces[placeholder]>1 ) ? ' ' : ''                    
+                                            list.forEach ( id =>   tpl[id] = `${spaceBefore}${sharedData[placeholder]}${spaceAfter}`    )
                                             delete places[placeholder]
                                 }
                          }

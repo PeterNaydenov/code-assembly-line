@@ -702,4 +702,33 @@ describe ( 'Run', () => {
         expect ( result[2] ).to.be.equal ( '3. User: Ivo,3'    )
         expect ( result[3] ).to.be.equal ( '4. User: Stefan,4' )
     }) //   it Draw templates with _count placeholder
+
+
+
+    it ( 'Whitespaces with external data', () => {
+        const
+                tplEngine = new CodeAssemblyLine()
+              , simple = '{{_count}}{{~~name}}'
+              , data = ['Peter', 'Ivan', 'Ivo', 'Stefan' ]
+              , renderSimple = [
+                                      { do: 'set', as: 'name' }
+                                    , { do: 'draw', tpl:'simple'}
+                                  ]
+              ;
+        
+        tplEngine.insertTemplate ({simple})
+        tplEngine.insertProcess ( renderSimple, 'renderSimple' )
+
+        const result = tplEngine.run ( 'renderSimple', data );
+
+        expect ( result[0] ).to.be.equal ( '1 Peter'  )
+        expect ( result[1] ).to.be.equal ( '2 Ivan'   )
+        expect ( result[2] ).to.be.equal ( '3 Ivo'    )
+        expect ( result[3] ).to.be.equal ( '4 Stefan' )
+    }) // it whitespaces with external data
+
+
+
+    it ( 'Whitespaces with system placeholders' )
+    it ( 'Whitespaces with data' )
 }) // describe Run
