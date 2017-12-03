@@ -33,6 +33,33 @@ describe ( 'Run', () => {
 
 
 
+    it ( 'Draw. Enrich data', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , simple = 'Some text with {{place}}.'
+              , complex  = '{{place}}: {{text}}'
+              , processTest =  [ 
+                                      { do: 'draw', tpl: 'simple', as: 'text' }
+                                    , { do: 'draw', tpl: 'complex'  }
+                                    , { do: 'block', name: 'result' }
+                               ]                                                       
+              , renderData  = [{ place: 'test string'}]
+              ;
+        
+        tplEngine.insertProcess ( processTest, 'test')
+        tplEngine.insertTemplate ( {simple, complex} )
+        
+        const result = tplEngine.run ( 'test', renderData )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result[0] ).to.be.equal ( 'test string: Some text with test string.' )
+    }) // it Draw. Enrich data
+
+
+
+
+
+
     it ( 'Draw templates with _attr', () => {
         const
                 tplEngine   = new CodeAssemblyLine()
@@ -569,5 +596,36 @@ describe ( 'Run', () => {
       const result = tplEngine.run ( 'draw', data )
       expect ( result[1] ).to.be.equal ( `Find Ivan! Address: ${defaultLocation}` )
     }) // it consume "data" for missing fields
+
+
+    it ( 'Hook', () => {
+      const
+              tplEngine = new CodeAssemblyLine ({ overwriteData: true})
+            , simple = 'Just simple text, {{name}}!'
+            , processWithHook = [
+                                      { do: 'draw', tpl: 'simple' }
+                                    , { do: 'hook', name: 'afterSimple' }
+                                    , { do: 'block', name: 'result' }
+                                 ]
+            ;
+      
+      const hookFn  = function ( ) { return 'ala-bala' };
+      const hookAlt = function ( ) { return ['brum-brum']};
+      
+      tplEngine.insertProcess  ( processWithHook, 'withHook' )
+      tplEngine.insertTemplate ( {simple} )
+
+      const hookObject = tplEngine.getHooks ( 'withHook' );
+      hookObject['afterSimple'] = hookFn
+      tplEngine.run ( 'withHook', {name:'Johny'}, hookObject )
+      
+      const  D = tplEngine.data;
+      expect ( D ).to.have.property ( 'block/result' )
+      expect ( D['block/result'] ).to.be.equal ('ala-bala')
+
+      hookObject['afterSimple'] = hookAlt
+      tplEngine.run ( 'withHook', {name:'Johny'}, hookObject )
+      expect ( D['block/result'] ).to.be.equal ('brum-brum')
+    }) // it hook
 
 }) // describe Run

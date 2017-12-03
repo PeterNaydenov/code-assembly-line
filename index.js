@@ -181,7 +181,7 @@ insert ( extTemplate ) {   // (extTemplate: ExternalTemplate) -> void
 
 , insertLib ( extLib, libName ) {  //   ( extLib: ExternalTemplate,  name: string ) -> void
   let 
-          me = this
+         me = this
       ,  simpleTemplates = Object.keys ( extLib )
       ;
 

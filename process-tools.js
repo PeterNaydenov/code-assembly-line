@@ -123,7 +123,11 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
 
                           const update = operation[step] ( { template:localTemplate, data:current, sharedData:me.data, htmlAttributes:me.config.htmlAttributes, missField, missData, hookFn} );
                           if ( holdData ) {
-                                  current = current.map ( (el,i) => el[todo.as] = update[i] )
+                                    current = current.reduce ( (res,el,i) => {
+                                                                el[todo.as] = update[i]
+                                                                res.push(el)
+                                                                return res
+                                                        }, [])
                                }
                           else {
                                   current      = update
@@ -153,7 +157,9 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                           currentIsStr = false
                           break
             case 'hook' :  
-                          current = operation[step] ( current, hooks[step] )
+                          let hooked = operation[step] ( current, hooks[todo.name] )
+                          if ( hooked instanceof Array ) current = hooked
+                          else                           current = [hooked]
                           currentIsStr = lib._findIfString ( current )
                           break
             case 'save' :
