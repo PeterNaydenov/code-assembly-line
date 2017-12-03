@@ -237,6 +237,25 @@ describe ( 'Process Operations', () => {
 
 
 
+    it ( 'Alter with selection "all"', () => {
+        const 
+               step = { do: 'alter', select:'all', data: {'user':'text'} }
+             , data = [
+                          { user: 'Peter', age: 43 }
+                        , { user: 'Ivo', age: 19 }
+                      ]
+
+        const result = processOps.alter ( step, data )
+        expect ( result ).to.be.an('array')
+        expect ( result ).to.have.length (2)
+        expect ( result[0] ).to.have.property('text')
+        expect ( result[0]['text'] ).to.be.equal ( 'Peter' )
+        expect ( result[0] ).to.have.property('age')
+        expect ( result[0] ).to.not.have.property('user')
+    }) // it alter with selection "all"
+
+
+
     it ( 'Alter with selection "first"', () => {
         const 
                step = { do: 'alter', select:'first', data: {'user':'text'} }

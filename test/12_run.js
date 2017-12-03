@@ -58,8 +58,6 @@ describe ( 'Run', () => {
 
 
 
-
-
     it ( 'Draw templates with _attr', () => {
         const
                 tplEngine   = new CodeAssemblyLine()
@@ -502,6 +500,34 @@ describe ( 'Run', () => {
 
 
 
+    it ( 'Try to save as a process invalid JSON', () => {
+        const
+                  tplEngine    = new CodeAssemblyLine ()
+                , testTPL      = 'Find {{who}}!'
+                , renderBlock  = `{
+                                       'name': "{{name}}" 
+                                  }`
+                , setBlock = [
+                                     { do: 'draw', tpl: 'renderBlock' }
+                                   , { do: 'save', as: 'process', name: 'result' }
+                                ]
+                ;
+
+        tplEngine.insertTemplate ({ 
+                                        renderBlock
+                                      , test : testTPL
+                                  })
+        tplEngine.insertProcess ( setBlock, 'setBlock' )
+        
+        tplEngine.run ( 'setBlock', { name: 'first', tpl:'test' } )
+        tplEngine.run ( 'build/block', { who: 'Peter' })
+
+        const processes = tplEngine.processes;
+        expect ( processes ).to.not.have.property ( 'result' )
+    }) // it Try to save as a process invalid JSON 
+
+
+
     it ( 'Save as Data', () => {
         const
                   tplEngine   = new CodeAssemblyLine ()
@@ -529,6 +555,30 @@ describe ( 'Run', () => {
         expect ( result ).to.have.property ( 'block/myBlock' )
         expect ( result['findWho']).to.be.equal ( result['block/myBlock'])
     }) // it save as Data
+
+
+
+    it ( 'Save as non existing item', () => {
+        const
+                  tplEngine   = new CodeAssemblyLine ()
+                , testTPL     = 'Find {{who}}!'
+                , renderMyBlock = [
+                                     { do: 'draw', tpl: 'test' }
+                                   , { do: 'save', as: 'memo', name: 'myBlock' }
+                                ]
+                ;
+
+        tplEngine.insertTemplate ({  test : testTPL })
+        tplEngine.insertProcess ( renderMyBlock, 'renderMyBlock' )
+        
+        const result = tplEngine.run ( 'renderMyBlock', { who: 'Peter' } )
+
+        expect ( result[0] ).to.be.equal ( 'Find Peter!')
+        expect ( tplEngine           ).to.not.have.property ( 'memo' )
+        expect ( tplEngine.data      ).to.not.have.property ( 'memo' )
+        expect ( tplEngine.templates ).to.not.have.property ( 'memo' )
+        expect ( tplEngine.processes ).to.not.have.property ( 'memo' )
+    }) // it save as non existing item
 
 
     

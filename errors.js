@@ -29,7 +29,8 @@ const msg = {
     // Validation errors
     , 'processNotExists'   : 'Error: Process "%s" does not exist.'
     , 'templateNotExists'  : 'Error: Template "%s" is not available'
-    , 'invalidStorageName' : 'Error: Process-step "save" has param "as: %s". Should be "data", "template" or "process". '
+    , 'invalidStorageName' : 'Error: Process-step "save" has param "as: %s". Param "as" should be "data", "template" or "process". '
+    , 'invalidJSON'        : 'Error: Invalid JSON format was provided for saving in "processes": %s'
 
   }
 

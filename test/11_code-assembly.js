@@ -27,12 +27,20 @@ describe ( 'Code Assembly', () => {
                               'hello' : 'Hello {{user}}'
                             , 'bye'   : 'Good bye {{user}}'
                         }
+            , tplLib2 = {
+                             'hello'   : 'Hi {{user}}'
+                           , 'welcome' : 'Welcome {{user}}'
+                        }
             ;
 
-      tplEngine.insertTemplateLib ( tplLib, 'custom' )
+      tplEngine.insertTemplateLib ( tplLib, 'custom'  )
+      tplEngine.insertTemplateLib ( tplLib2, 'custom' )
 
       expect ( tplEngine.templates ).to.have.property ('custom/hello'   )
-      expect ( tplEngine.templates ).to.have.property ('custom/bye')
+      expect ( tplEngine.templates ).to.have.property ('custom/bye'     )
+      expect ( tplEngine.templates ).to.have.property ('custom/welcome' )
+      const tpl = tplEngine.getTemplate ( 'custom/hello' );
+      expect ( tpl['custom/hello'] ).to.be.equal ( tplLib.hello )
     }) // it insert template library
 
     

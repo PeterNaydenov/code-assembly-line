@@ -102,11 +102,6 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
             case 'draw' :
                           tplName   = todo.tpl
                           if ( currentIsStr )  console.warn ( showError ('dataExpectObject', `Step "draw" with template "${tplName}"`) )
-                            
-                          if ( !libTemplates[tplName] ) {
-                                    console.error ( showError('missingTemplate', tplName)  )
-                                    return
-                               }
 
                           const
                                   missField = todo.missField       || false
@@ -180,20 +175,13 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                                   case 'process':
                                                   let newProcess = lib._parse ( current[0] )
                                                   if ( newProcess )   me.insertProcess ( newProcess, saveName )
-                                                  else                console.log (  showError('wrongExtProcess')   )
+                                                  else                console.log (  showError ( 'invalidJSON', current[0] )   )
                                                   break
                                   default:
                                                  console.log ( showError ('invalidStorageName', todo.as) )
                                                  return
                              }
                           break
-                default :
-                          if ( currentIsStr ) {
-                                console.error ( showError('dataExpectObject', [current])   )
-                                return
-                             }
-                          // data operations
-                          current = operation[step] ( todo, current )
             } // switch step
        }) // forEach step
        return current
