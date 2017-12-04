@@ -53,19 +53,23 @@ const lib = {
                     , spaceBefore = '' 
                     , spaceAfter = ''
                     ;
-                
+
                 if ( places['_attr'] ) {   // calculate html attributes only if '_attr' placeholder exists in template
                             const attrTarget = places['_attr'][0]
                             spaceBefore = ( spaces['_attr'] && spaces['_attr']%2 ) ? ' ' : '' 
                             spaceAfter  = ( spaces['_attr'] && spaces['_attr']>1 ) ? ' ' : ''
-                            tpl[attrTarget] = `${spaceBefore}${lib._createAttributes(obj, htmlAttributes )}${spaceAfter}`   // generate attributes string
+                            const attr = lib._createAttributes(obj, htmlAttributes ).trim()
+                            if ( attr )   tpl[attrTarget] = `${spaceBefore}${attr}${spaceAfter}`   // generate attributes string
+                            else          tpl[attrTarget] = ''
+                            delete places['_attr']
                    }
-
+                   
                 if ( places['_count'] ) {   // replace _count if  '_count' placeholder exists in template
-                        const countTarget = places['_count']
+                        const countTarget = places['_count'];
                         spaceBefore = ( spaces['_count'] && spaces['_count']%2 ) ? ' ' : '' 
                         spaceAfter  = ( spaces['_count'] && spaces['_count']>1 ) ? ' ' : ''
                         countTarget.forEach ( position => tpl[position] = `${spaceBefore}${_count + 1}${spaceAfter}` )
+                        delete places['_count']
                   }
 
                 keys.forEach ( k => {
@@ -81,7 +85,7 @@ const lib = {
                 let   neglected     =   Object.keys ( places )
                     , someNeglected = ( neglected.length > 0 )
                     ;                    
-                
+
                 if ( someNeglected && sharedData ) {  // find values in sharedData
                       for ( let placeholder of neglected ) {
                             if ( sharedData[placeholder] ) {
@@ -96,7 +100,6 @@ const lib = {
 
                 neglected = Object.keys ( places )
                 someNeglected = ( neglected.length > 0 )
-
                 if ( someNeglected && missField ) {   // miss field strategy
                             let missFieldUpdate;
                             if ( missField == '_fn' && typeof(hookFn) != 'function' ) missField = '_hide'
@@ -118,7 +121,7 @@ const lib = {
                                                 list.forEach ( el => tpl[el] = missFieldUpdate(position)     )
                                 }
                    } // if missField
-               
+                      
                 if ( someNeglected && missData ) {   // miss data strategy
                             let missDataUpdate;
                             if ( missData =='_fn'   &&   typeof(hookFn) != 'function' )    missData = '_hide'
@@ -213,10 +216,9 @@ const lib = {
 
 
 
-, block : function ( data ) {   //  ( string[] ) -> string[]
+, block : function ( data, space ) {   //  ( string[] ) -> string[]
   // * Concatinate strings from array. Returns new array with a single entry
-    const result = data.reduce ( (res, item) => res += item, '')
-    return [ result ]
+    return [ data.join( space )   ]
 } // block func.
 
 

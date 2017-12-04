@@ -132,8 +132,8 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                                  console.error ( showError ('blockExpectString', JSON.stringify(current))   )
                                  return
                              }
-                          
-                          current = operation[step] ( current )
+                          const blockSpace = todo.space || '';
+                          current = operation[step] ( current, blockSpace )
                           if ( todo.name ) {
                                         let newData = {};
                                         newData[`block/${todo.name}`] = current.join('')

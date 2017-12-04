@@ -62,7 +62,7 @@ describe ( 'Run', () => {
         const
                 tplEngine   = new CodeAssemblyLine()
               , templateLib = { 
-                                link: '<a{{_attr}}>{{text}}<a/>' 
+                                link: '<a {{_attr}}>{{text}}<a/>' 
                               }
               , processData =  [ 
                                       { do: 'draw', tpl: 'link' } 
@@ -708,10 +708,11 @@ describe ( 'Run', () => {
     it ( 'Whitespaces with external data', () => {
         const
                 tplEngine = new CodeAssemblyLine()
-              , simple = '{{_count}}{{~~name}}'
+              , simple = '{{_count~~}}{{~~combine~~}}{{~~name}}'
               , data = ['Peter', 'Ivan', 'Ivo', 'Stefan' ]
               , renderSimple = [
                                       { do: 'set', as: 'name' }
+                                    , { do: 'draw', tpl:'simple', as: 'combine', missField:'_hide' }
                                     , { do: 'draw', tpl:'simple'}
                                   ]
               ;
@@ -721,14 +722,66 @@ describe ( 'Run', () => {
 
         const result = tplEngine.run ( 'renderSimple', data );
 
-        expect ( result[0] ).to.be.equal ( '1 Peter'  )
-        expect ( result[1] ).to.be.equal ( '2 Ivan'   )
-        expect ( result[2] ).to.be.equal ( '3 Ivo'    )
-        expect ( result[3] ).to.be.equal ( '4 Stefan' )
+        expect ( result[0] ).to.be.equal ( '1  1  Peter  Peter'   )
+        expect ( result[1] ).to.be.equal ( '2  2  Ivan  Ivan'     )
+        expect ( result[2] ).to.be.equal ( '3  3  Ivo  Ivo'       )
+        expect ( result[3] ).to.be.equal ( '4  4  Stefan  Stefan' )
     }) // it whitespaces with external data
 
 
 
-    it ( 'Whitespaces with system placeholders' )
-    it ( 'Whitespaces with data' )
+    it ( 'Whitespaces with system placeholders', () => {
+        const
+                tplEngine = new CodeAssemblyLine()
+              , simple = '<div{{~~_attr~~}}>{{text}}{{~~_count}}</div>'
+              , data = [
+                            { text:'Peter', id:'first'}
+                          , { text:'Ivan', id: 'second'}
+                          , { text:'Stefan'} 
+                       ]
+              , renderSimple = [
+                                  { do: 'draw', tpl:'simple'}
+                               ]
+              ;
+        
+        tplEngine.insertTemplate ({simple})
+        tplEngine.insertProcess ( renderSimple, 'renderSimple' )
+
+        const result = tplEngine.run ( 'renderSimple', data );
+
+        expect ( result[0] ).to.be.equal ( '<div id="first" name="first" >Peter 1</div>'  )
+        expect ( result[1] ).to.be.equal ( '<div id="second" name="second" >Ivan 2</div>' )
+        expect ( result[2] ).to.be.equal ( '<div>Stefan 3</div>'                          )
+    }) // it Whitespaces with system placeholders
+
+
+
+    it ( 'Whitespaces with data', () => {
+        const
+                tplEngine = new CodeAssemblyLine()
+              , simple = '{{name}}:{{~~info~~}}.'
+              , data = [
+                            { name:'Peter', info: 'General info'}
+                          , { name:'Ivan'}
+                          , { name:'Stefan'} 
+                       ]
+              , info = 'Missing information'
+              , renderSimple = [
+                                  { do: 'draw', tpl:'simple'}
+                               ]
+              ;
+        
+        tplEngine.insertTemplate ({simple})
+        tplEngine.insertData ({info})
+        tplEngine.insertProcess ( renderSimple, 'renderSimple' )
+
+        const result = tplEngine.run ( 'renderSimple', data );
+
+        expect ( result[0] ).to.be.equal ( 'Peter: General info .'          )
+        expect ( result[1] ).to.be.equal ( 'Ivan: Missing information .'    )
+        expect ( result[2] ).to.be.equal ( 'Stefan: Missing information .'  )
+    }) // it Whitespaces with data
+    
+    
+    
 }) // describe Run

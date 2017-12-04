@@ -196,14 +196,17 @@ describe ( 'Process Operations', () => {
 
 
     it ( 'Block', () => {
-        const data = [
+        const 
+              data = [
                          'Hey Ivan!'
                         ,'Hey Ivo!'
-                    ]
-        const result = processOps.block ( data )
+                     ]
+            , space = ' '
+            ;
+        const result = processOps.block ( data, space )
         expect ( result ).to.be.an ('array')
         expect ( result ).to.have.length (1)
-        expect ( result[0] ).to.be.equal ( 'Hey Ivan!Hey Ivo!')
+        expect ( result[0] ).to.be.equal ( 'Hey Ivan! Hey Ivo!')
     }) // it Block
 
 
