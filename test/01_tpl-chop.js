@@ -2,8 +2,8 @@
 
 const chai = require ( 'chai' );
 const expect = chai.expect
-const chop = require ('../template-chop');
-const callError = require ('../errors');
+const chop = require ('../src/template-chop');
+const callError = require ('../src/errors');
 
 
 

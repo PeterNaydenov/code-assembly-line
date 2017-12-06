@@ -3,8 +3,8 @@
 const 
         chai             = require ('chai')
       , expect           = chai.expect
-      , CodeAssemblyLine = require ( '../index'  )
-      , errors           = require ( '../errors' )
+      , CodeAssemblyLine = require ( '../src/index'  )
+      , errors           = require ( '../src/errors' )
       ;
 
 

@@ -2,8 +2,8 @@
 
 const 
       chai          = require ('chai')
-    , showError     = require ( '../errors' )
-    , templateTools = require ('../template-tools' )
+    , showError     = require ( '../src/errors' )
+    , templateTools = require ('../src/template-tools' )
 
     , expect = chai.expect
     , str2intTemplate = templateTools.str2intTemplate

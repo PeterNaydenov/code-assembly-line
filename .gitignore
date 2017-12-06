@@ -1,7 +1,7 @@
 .DS_Store
-node_modules
 .npmignore
 .vscode
+node_modules
 types
 concept.md
 PLAY-test-samples.md

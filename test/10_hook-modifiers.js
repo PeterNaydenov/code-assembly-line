@@ -3,8 +3,8 @@
 const 
         chai       = require ('chai')
       , expect     = chai.expect
-      , processOps = require ( '../process-operations' )
-      , errors     = require ( '../errors' )
+      , processOps = require ( '../src/process-operations' )
+      , errors     = require ( '../src/errors' )
       ;
 
 
