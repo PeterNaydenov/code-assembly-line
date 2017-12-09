@@ -16,13 +16,12 @@ const str2intTemplate   = templateTools.str2intTemplate;
 const interpretTemplate = templateTools.load_interpretTemplate ( str2intTemplate );
 
 
-
 // Default config object applied to every codeAssembly object.
 const codeAssemblyConfig = { 
-      overwriteTemplates : false
-    , overwriteProcesses : false
-    , overwriteData      : false
-    , htmlAttributes     : [ 'id', 'name', 'href', 'src', 'value', 'data', 'alt', 'role', 'class' ]
+    overwriteTemplates : false
+  , overwriteProcesses : false
+  , overwriteData      : false
+  , htmlAttributes     : [ 'id', 'name', 'href', 'src', 'value', 'data', 'alt', 'role', 'class' ]
 } // config
 
 

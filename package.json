@@ -1,25 +1,31 @@
 {
-  "name": "code-assembly-line",
-  "version": "0.6.0",
-  "description": "Javascript template engine",
-  "main": "src/index.js",
-  "scripts": {
-          "test": "mocha test",
-          "cover": "istanbul cover _mocha"
-  },
-
-  "keywords": [
-                "template",
-                "engine",
-                "js",
-                "render"
-  ],
-  
-  "author": "Peter Naydenov",
-  "license": "MIT",
-  "devDependencies": {
-        "chai": "^4.1.2",
-        "istanbul": "^0.4.5",
-        "mocha": "^3.5.3"
-    }
+          "name": "code-assembly-line",
+          "version": "1.0.0",
+          "description": "Javascript template engine. Works server and client sides",
+          "main": "src/index.js",
+          "scripts": {
+                    "test": "NODE_ENV='test' mocha test",
+                    "cover": "istanbul cover _mocha",
+                    "build": "webpack",
+                    "prod": "NODE_ENV='production' webpack"
+          },
+          "keywords": [
+                    "template",
+                    "engine",
+                    "js",
+                    "render"
+          ],
+          "author": "Peter Naydenov",
+          "license": "MIT",
+          "devDependencies": {
+                    "babel-core": "^6.26.0",
+                    "babel-loader": "^7.1.2",
+                    "babel-preset-env": "^1.6.1",
+                    "chai": "^4.1.2",
+                    "istanbul": "^0.4.5",
+                    "mocha": "^4.0.1",
+                    "webpack": "^3.10.0",
+                    "webpack-bundle-analyzer": "^2.9.1"
+          },
+          "dependencies": {}
 }

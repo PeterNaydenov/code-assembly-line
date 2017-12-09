@@ -1,6 +1,8 @@
 .DS_Store
 .npmignore
 .vscode
+coverage/**/*
+package-lock.json
 node_modules
 types
 concept.md

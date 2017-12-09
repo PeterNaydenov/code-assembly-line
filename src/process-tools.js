@@ -1,7 +1,7 @@
 'use strict';
 
 const 
-        showError = require ('./errors')
+        showError = require ( './errors'            )
       , operation = require ( './process-operations')
       , validSteps = [ 'draw', 'alterTemplate', 'alter', 'set', 'add', 'copy', 'remove', 'hook', 'block', 'save' ]
       ;
@@ -173,10 +173,10 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                                   case 'process':
                                                   let newProcess = lib._parse ( current[0] )
                                                   if ( newProcess )   me.insertProcess ( newProcess, saveName )
-                                                  else                console.log (  showError ( 'invalidJSON', current[0] )   )
+                                                  else                console.error (  showError ( 'invalidJSON', current[0] )   )
                                                   break
                                   default:
-                                                 console.log ( showError ('invalidStorageName', todo.as) )
+                                                 console.error ( showError ('invalidStorageName', todo.as) )
                                                  return
                              }
                           break

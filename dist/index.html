@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Code Assembly Line</title>
+    <script src="code-assembly-line.min.js"></script>
+</head>
+<body>
+    <h1>Code Assembly Line</h1>
+    <p id="render"></p>
+<script>
+    const 
+          hookNode = document.getElementById('render')
+        , tplEngine = new CodeAssemblyLine ()
+        , render = [
+                         { do: 'draw', tpl: 'test' }
+                       , { do: 'block' }
+                   ]
+        ;
+
+    tplEngine.insertTemplate({test:'A simple {{text}} rendered by Code Assembly Line'})
+    tplEngine.insertProcess( render, 'render' )
+
+    hookNode.innerHTML = tplEngine.run ( 'render', {text: '"sample"'} )
+</script>
+</body>
+</html>
