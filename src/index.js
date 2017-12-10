@@ -462,17 +462,16 @@ const lib_Data = {
           ;
 
     list.forEach ( key => {
+                  if ( !me.data[key] )   return
                   const 
                         newKey = ops[key]
-                      , keyExists = (me.data[newKey]) ? true : false
+                      , keyAlreadyDefined = (me.data[newKey]) ? true : false
                       ;
 
-// TODO: If key doesn't exists should not be added. Check error msg for this specific case
-// error on key doesn't exists + !doOverwrite
-                  if ( keyExists && !doOverwrite ){
+                  if ( keyAlreadyDefined && !doOverwrite ) {
                         console.error ( showError('overwriteData', newKey) )
                         return
-                    }
+                      }
                   else {
                         me.data[newKey] = me.data[key]
                         delete me.data[key]
@@ -544,17 +543,17 @@ codeAssembly.prototype = {
     , getPlaceholders   : lib_Template.getPlaceholders    // Return placeholders per template;
       
     // Template Manipulation
-    , renameTemplate : lib_Template.rename    // Change name of template/templates
-    , removeTemplate : lib_Template.remove    // Remove template/templates
+    , renameTemplate : lib_Template.rename    // Change name of template/templates;
+    , removeTemplate : lib_Template.remove    // Remove template/templates;
 
     // Processes
-    , insertProcess    : lib_Process.insert     // Insert new process
-    , mixProcess       : lib_Process.mix        // Set new process as combination of existing processes
-    , insertProcessLib : 'NA'
+    , insertProcess    : lib_Process.insert     // Insert new process;
+    , mixProcess       : lib_Process.mix        // Set new process as combination of existing processes;
+    , insertProcessLib : 'NA'                   // Insert list of processes with a single operation. JSON required;
     , getProcess       : 'NA'
-    , getProcessLib    : 'NA'    
+    , getProcessLib    : 'NA'                   // Export processes from process-library as JSON;
     , getHooks         : lib_Process.getHooks   // Provide information about hooks available
-    , run              : lib_Process.run        // Execute process
+    , run              : lib_Process.run        // Execute process/processes
 
     // Data I/O
     , insertData    : lib_Data.insert      // Insert data. Save data. Word 'blocks'

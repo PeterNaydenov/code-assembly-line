@@ -27,21 +27,21 @@ It will install module in to the project. You can start using it by
 
 
 ### Installation for browsers
-Just go to folder 'dist' and get copy of 'code-assembly-line.min.js'. Put it inside your project and add in HTML file this script tag:
+Just go to folder 'dist' and get copy of '**code-assembly-line.min.js**'. Put the file inside your project folder and add a reference to it from HTML code by using this script tag:
 ```html
  <script src="code-assembly-line.min.js"></script>
 ```
-Global variable 'CodeAssemblyLine' is available and start using it.
+Library is avalable as '**CodeAssemblyLine**' and start using it.
 ```js
 const tplEngine = new CodeAssemblyLine();
 ```
-Find more detail sample about how to use the library in browsers by opening file '/dist/index.html'.
+Find working example in file '**/dist/index.html**'.
 
 
 
 
 
-## Motivation Factors for writing the 'Code Assembly Line'
+## Motivation Factors for creating the 'Code Assembly Line'
  - Decouple render-processes from templates;
  - Decouple templates from data;
  - All compnonents(templates,processes,and data) provisioning in a JSON compatible format;
@@ -71,7 +71,7 @@ _(Nothing yet)_
 
 ## Release History
 
-### 1.0.0 (2017-12-08)
+### 1.0.0 (2017-12-14)
 
 - [x] Node.js module;
 - [x] Browser module;

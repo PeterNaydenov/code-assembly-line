@@ -119,6 +119,46 @@ describe ( 'Data', () => {
     expect ( tplEngine.data ).to.not.have.property ( 'alt' )
     expect ( tplEngine.data ).to.have.property     ( 'test' )
   }) // it Rename data-record
+
+
+
+  it ( 'Rename a non-existing data-record', () => {
+    const 
+            tplEngine  = new CodeAssemblyLine()
+          , record     = { 'alt' : 'record text' }
+          ;
+
+    tplEngine.insertData ( record )
+    tplEngine.renameData ( {'alt':'test', 'missing' : 'fake' }  )
+    
+    const d = tplEngine.data;
+    expect (d).to.not.have.property ( 'missing' )
+    expect (d).to.not.have.property ( 'fake'    )
+    expect (d).to.not.have.property ( 'alt'     )
+
+    expect (d).to.have.property ( 'test')
+  }) // it rename a non-existing data-record
+
+
+  it ( 'Rename is not allowed', () => {
+    const 
+            tplEngine  = new CodeAssemblyLine()
+          , record     = { 
+                               'one' : 'first record'
+                             , 'two' : 'second record'
+                         }
+          ;
+
+    tplEngine.insertData ( record )
+    tplEngine.renameData ( {'two':'one'}  )
+
+    const d = tplEngine.data;
+    expect (d).to.have.property ( 'one' )
+    expect (d).to.have.property ( 'two' )
+
+    expect ( d.one ).to.be.equal ( record.one )
+    expect ( d.two ).to.be.equal ( record.two )
+  }) // it rename is not allowed
   
   
   

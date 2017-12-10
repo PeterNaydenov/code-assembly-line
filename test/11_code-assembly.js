@@ -133,7 +133,7 @@ describe ( 'Code Assembly', () => {
 
 
 
-    it ( 'Rename Template normal', () => {
+    it ( 'Template rename normal', () => {
       const
                  tplEngine = new CodeAssemblyLine ()
                , tpl = {
@@ -150,11 +150,11 @@ describe ( 'Code Assembly', () => {
       expect ( tplEngine.templates).to.have.property ( 'sayGoodbye' )
       expect ( tplEngine.templates).to.not.have.property ( 'hello'  )
       expect ( tplEngine.templates).to.not.have.property ( 'bye'    )
-    }) // it rename template normal
+    }) // it template rename normal
     
     
     
-    it ( 'Rename with overwrite', () => {
+    it ( 'Template rename with overwrite', () => {
         const
                   tplEngine = new CodeAssemblyLine ()
                 , tpl = {
@@ -172,8 +172,12 @@ describe ( 'Code Assembly', () => {
         expect ( tplEngine.templates).to.have.property ( 'sayHello'   )
         expect ( tplEngine.templates).to.have.property ( 'sayGoodbye' )
         expect ( tplEngine.templates).to.not.have.property ( 'bye'    )      
-    }) // it rename with overwrite
+    }) // it template rename with overwrite
     
+
+
+    it ( 'Rename a non existing template')
+
 
 
     it ( 'Remove Template', () => {
