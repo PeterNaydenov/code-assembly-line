@@ -355,17 +355,20 @@ describe ( 'Process Operations', () => {
 
     it ( 'Add', () => {
         const 
-               step = { do: 'add', select:'first', data: {'className': 'simple'} }
+               step = { do: 'add', select:['first',2], data: {'className': 'simple'} }
              , data = [
-                          { user: 'Peter', age: 43, className: 'test' }
-                        , { user: 'Ivo', age: 19, className: 'test' }
+                          { user: 'Peter' , age: 43, className: 'test' }
+                        , { user: 'Stefan', age: 42, className: ['test','second'] }
+                        , { user: 'Ivo'   , age: 19, className: 'test' }
                       ]
              ;
-
+// TODO: Check again is it fine to have array values inside object!! Sounds as a bad idea; - 2017.12.10
         const result = processOps.add ( step, data )
-        expect ( result ).to.have.length (2)
+
+        expect ( result ).to.have.length (3)
         expect ( result[0]['className'] ).to.be.an ( 'array' )
-        expect ( result[1]['className'] ).to.be.a  ( 'string')
+        expect ( result[1]['className'] ).to.be.an ( 'array' )
+        expect ( result[2]['className'] ).to.be.a  ( 'string')
     }) // it add
 
 

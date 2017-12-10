@@ -253,7 +253,7 @@ describe ( 'Code Assembly', () => {
       tplEngine.insertProcess ( liProcess, 'li')
       tplEngine.insertProcess ( ulProcess, 'ul')
       tplEngine.insertProcess ( ulTransition, 'ulTransition')
-      tplEngine.mixProcess ( ['li', 'ulTransition', 'ul'], 'navigation' )
+      tplEngine.mixProcess ( ['li', 'ulTransition', 'ul','fake'], 'navigation' )
       tplEngine.mixProcess ( ['li','fail'],'navigation' )
       const res = tplEngine.processes['navigation'];
 
