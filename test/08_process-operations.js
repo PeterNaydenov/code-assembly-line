@@ -474,15 +474,16 @@ describe ( 'Process Operations', () => {
                         , 'data-test' : 'yo'
                         , 'data-again': 'hey'
                         , 'id'        : 'top'
+                        , 'name'      : 'Ivan'
                      }
             ;
         
-        const result = createAttributes ( data, attributes );
+    const result = createAttributes ( data, attributes );
     expect ( result ).to.be.a ( 'string' )
     expect ( result ).to.not.include ( 'text' )
     expect ( result ).to.include ( 'data-test' )
     expect ( result ).to.not.include ( 'data-again' )
-
+    
     const altResult = createAttributes ( data, altAttributes );
     expect ( altResult ).to.be.a ( 'string' )
     expect ( altResult ).to.not.include ( 'text' )
@@ -490,8 +491,7 @@ describe ( 'Process Operations', () => {
     expect ( altResult ).to.include ( 'data-again' )
     expect ( altResult ).to.include ( 'class="fashion"' )
 
-
-        const 
+    const 
               placeId = result.indexOf('id')
             , placeHref = result.indexOf('href="')
             , placeClass = result.indexOf ('class="fashion"')

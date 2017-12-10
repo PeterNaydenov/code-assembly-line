@@ -95,4 +95,14 @@ describe ( 'Chop string templates', () => {
         expect ( result).to.include ( callError('brokenTemplate') )
   }) // it Closing tags before open ones
 
+
+
+  it ( 'Not a string template', () => {
+      const tpl = { a: 'something', b: 12 };
+      const result = chop ( tpl );
+
+      expect ( result ).to.be.an ( 'array' )
+      expect ( result[0] ).to.be.equal ( callError('brokenTemplate') )
+  }) // it not a string template
+
 }) // describe

@@ -32,8 +32,8 @@ function chopTemplate ( text ) {
                 checkPoint = text.indexOf ( '{{', start+2 )
                 end = text.indexOf("}}")
 
-                if ( end < start ) return [ showError('brokenTemplate') ] // Placeholder closing tags without starting ones
                 if ( end == -1   ) return [ showError('brokenTemplate') ] // Placeholder with missing closing tags
+                if ( end < start ) return [ showError('brokenTemplate') ] // Placeholder closing tags without starting ones
                 else               end += 2 
 
                 if ( checkPoint != -1 && checkPoint < end ) {
