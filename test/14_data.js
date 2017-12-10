@@ -104,6 +104,29 @@ describe ( 'Data', () => {
     expect ( r ).to.have.property ( 'special/settings/access')
     expect ( r['special/settings/users/0'] ).to.be.equal ( records.settings.users[0] )
   }) // it Insert data as a library
+
+
+
+  it ( 'Insert data as a library. Overwriting is forbidden', () => {
+      const
+               tplEngine  = new CodeAssemblyLine ()
+             , oldRecord  = { 'lib/alt' : 'old record' }
+             , record     = { 
+                                  'alt'     : 'new record' 
+                                , 'other'   : 'other record'
+                            }
+             ;
+      
+      tplEngine.insertData ( oldRecord )
+      tplEngine.insertDataLib ( record, 'lib' )
+      
+      const d = tplEngine.data;
+      expect (d).to.have.property ('lib/alt'  )
+      expect (d).to.have.property ('lib/other')
+
+      expect(d['lib/alt']).to.be.equal ( oldRecord['lib/alt'])
+      expect(d['lib/other']).to.be.equal ( record['other'] )
+  }) // it Insert data as a library. Overwriting is forbidden
   
 
 
