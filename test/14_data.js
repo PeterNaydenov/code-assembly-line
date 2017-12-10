@@ -196,6 +196,27 @@ describe ( 'Data', () => {
 
     expect ( tplEngine.data ).to.not.have.property ( 'alt' )
   }) // it Remove data-record
+  
+  
+  
+  it ( 'Remove data-records presented as array', () => {
+    const
+            tplEngine  = new CodeAssemblyLine()
+          , record = { 
+                          'one'   : 'record one'
+                        , 'two'   : 'record two'
+                        , 'three' : 'record three'
+                     }
+          ;
+
+    tplEngine.insertData ( record )
+    tplEngine.removeData ( ['one']  )
+
+    const d = tplEngine.data;
+    expect (d).to.not.have.property ( 'one' )
+    expect (d).to.have.property ( 'two'   )
+    expect (d).to.have.property ( 'three' )
+  }) // it Remove data-record presented as array
 
 
 
@@ -285,7 +306,55 @@ describe ( 'Data', () => {
     expect ( result ).to.be.a ( 'string' )
     expect ( result ).to.be.equal ( templates.one + templates.two )
   }) // it Get blocks in order
+  
+  
+  
+  it ( 'Get blocks in order as array', () => {
+    const
+            tplEngine = new CodeAssemblyLine ()
+          , templates = {
+                            'one' : 'First sentence.'
+                          , 'two' : 'Second sentence.'
+                        }
+          , pr1       = [
+                            { do:'draw', tpl: 'one' }
+                          , { do: 'save', as: 'block', name: 'first' }
+                        ]
+          , pr2       = [
+                            { do:'draw', tpl: 'two' }
+                          , { do: 'save', as: 'block', name: 'second' }
+                        ]
 
+    tplEngine.insertTemplate ( templates )
+    tplEngine.insertProcess ( pr1, 'doOne')
+    tplEngine.insertProcess ( pr2, 'doTwo')
+    tplEngine.run ( [ 'doTwo' , 'doOne'] )
+
+    const result = tplEngine.getBlock ( ['first', 'second'] )
+
+    expect ( result ).to.be.a ( 'string' )
+    expect ( result ).to.be.equal ( templates.one + templates.two )
+  }) // it Get blocks in order as array
+
+
+
+  it ( 'Try to insert function in data' , () => {
+    const 
+           tplEngine = new CodeAssemblyLine()
+         , data      = {
+                            'a'  : 'Some string information'
+                          , 'fx' : function () { console.log('Hey, I am in!') }
+                          , 'b'  : 12
+                        }
+         ;
+
+     tplEngine.insertData ( data )
+
+     const d = tplEngine.data;
+     expect (d).to.have.property('a')
+     expect (d).to.have.property('b')
+     expect (d).to.not.have.property('fx')
+  }) // it Try to insert function in data
 
 
     

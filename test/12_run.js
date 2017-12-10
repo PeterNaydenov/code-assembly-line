@@ -4,13 +4,47 @@ const
         chai             = require ('chai')
       , expect           = chai.expect
       , CodeAssemblyLine = require ( '../src/index'  )
-      , errors           = require ( '../src/errors' )
+      , showError        = require ( '../src/errors' )
       ;
 
 
 
 describe ( 'Run', () => {
     
+
+
+    it ( 'Process has error', () => {
+      const 
+             tplEngine = new CodeAssemblyLine()
+           , fakeProcess = [{tpl:'fake'}]
+           ;
+      
+      tplEngine.insertProcess ( fakeProcess, 'fake')
+      const result = tplEngine.run ( 'fake' )
+
+      expect ( result ).to.be.an('array')
+      expect ( result[0] ).to.be.equal( showError('missingOperation') )
+    }) // it Process has error
+
+
+
+    it ( 'Template has error', () => {
+      const
+            tplEngine = new CodeAssemblyLine()
+          , brokenTpl = { 'break' : 'Something}} {{broken'}
+          , drawBreak  = [ { do:'draw', tpl:'break'}   ]
+          ;
+      
+      tplEngine.insertTemplate ( brokenTpl )
+      tplEngine.insertProcess ( drawBreak, 'drawBreak' )
+      
+      const result = tplEngine.run ( 'drawBreak' );
+      expect ( result ).to.be.an('array')
+      expect ( result[0] ).to.be.equal ( showError('brokenTemplate') )
+    }) // it Template has error
+
+
+
     it ( 'Draw. Valid operation', () => {
         const
                 tplEngine   = new CodeAssemblyLine()

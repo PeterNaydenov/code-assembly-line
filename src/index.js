@@ -120,12 +120,12 @@ const help = {
   let result = res || {};
   
   keyIn = keyIn || ''
-  
+
   for ( let key in data ) {
           const value = data[key]
           let newKey = key
           if (keyIn) newKey = `${keyIn}/${key}`
-          if ( typeof value == 'function' )   return   //   Data can't contain functions
+          if ( typeof value == 'function' )   continue   //   Data can't contain functions
           if ( help._isPrimitive(value)   )   result[newKey] = value
           else                                return help._flatten ( value, result, newKey )
        }
