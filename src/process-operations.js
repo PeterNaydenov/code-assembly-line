@@ -201,7 +201,7 @@ const lib = {
 , alterTemplate : function ( step, sourcePlaceholders  ) {   // (step{}, internalTpl.placeholers) -> internalTpl.placeholders
   // * Rename of placeholders
   const 
-          changes = step.data 
+          changes = step.data   // { oldPlaceholderName : newPlaceholderName }
         , keysPh  = Object.keys ( sourcePlaceholders )
         , placeholders = {};
         ;

@@ -179,7 +179,7 @@ describe ( 'Process Operations', () => {
    it ( 'Alter Template', () => {
         const
                  step = { do: 'alterTemplate', data: { 'name':'user', 'age': 'alt'} }
-               , sourcePlaceholders = { name : 1 }
+               , sourcePlaceholders = { name : 1, fixed: 'will stay' }
                ;
         const result = processOps.alterTemplate ( step, sourcePlaceholders )
         expect ( sourcePlaceholders ).to.have.property ( 'name' )
