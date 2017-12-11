@@ -164,7 +164,6 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
                                   case 'data':
                                                   currentData[saveName] = current.join('')
                                                   me.insertData ( currentData )
-                                                  // TODO: check twice!!!
                                                   break
                                   case 'template':
                                                   currentData[saveName] = current[0]

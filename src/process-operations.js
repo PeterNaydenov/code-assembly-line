@@ -307,10 +307,10 @@ const lib = {
   const 
          changes = step.data
        , keys    = Object.keys ( changes )
-       , forUpdate = lib._normalizeSelection ( step.select, data.length )
+       , listForUpdate = lib._normalizeSelection ( step.select, data.length )
        ;
   let result = data.map ( dataRecord => Object.assign ({}, dataRecord)   );
-  forUpdate.forEach ( el => {
+  listForUpdate.forEach ( el => {
         const selected = result[el]
         const dataKeys = Object.keys(selected)
         let update = keys.reduce ( (res,k) => {
@@ -335,7 +335,7 @@ const lib = {
     if ( primitive )   result = [ existing ]
     else               result = existing
 
-    return result.concat ( update )
+    return result.concat ( update ).join ( ' ' )
 } // _combineValues func.
 
 

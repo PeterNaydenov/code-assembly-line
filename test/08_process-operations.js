@@ -362,13 +362,14 @@ describe ( 'Process Operations', () => {
                         , { user: 'Ivo'   , age: 19, className: 'test' }
                       ]
              ;
-// TODO: Check again is it fine to have array values inside object!! Sounds as a bad idea; - 2017.12.10
-        const result = processOps.add ( step, data )
-
+        const result = processOps.add ( step, data );
         expect ( result ).to.have.length (3)
-        expect ( result[0]['className'] ).to.be.an ( 'array' )
-        expect ( result[1]['className'] ).to.be.an ( 'array' )
-        expect ( result[2]['className'] ).to.be.a  ( 'string')
+        expect ( result[0]['className'] ).to.be.an ( 'string' )
+        expect ( result[0]['className'] ).to.be.equal ( 'test simple' )
+        expect ( result[1]['className'] ).to.be.an ( 'string' )
+        expect ( result[1]['className'] ).to.be.equal ( 'test second simple' )
+        expect ( result[2]['className'] ).to.be.a  ( 'string' )
+        expect ( result[2]['className'] ).to.be.equal ( 'test' )
     }) // it add
 
 
