@@ -68,6 +68,15 @@ const help = {
 
 
 
+, _normalizeExternalData ( data ) {
+   if ( !(data instanceof Array ))   data = [data] // temp...
+   // TODO: flatten data but save top level array
+   const result = data;
+   return result
+} // _normalizeExternalData func.
+
+
+
 , _validateProcess ( engine, processName ) {
   // * Find if process exists and no errors in it. Find if all templates needed are available.
   let errors = [];
@@ -161,7 +170,7 @@ const help = {
 
 const lib_Template = {
 
-insert ( extTemplate ) {   // (extTemplate: ExternalTemplate) -> void
+insert ( extTemplate ) {   // (extTemplate: ExternalTemplate) -> engine
     let 
         me = this
       , templateNames = Object.keys( extTemplate )
@@ -173,12 +182,13 @@ insert ( extTemplate ) {   // (extTemplate: ExternalTemplate) -> void
                   return
                 }
             me.templates [ name ] = interpretTemplate ( extTemplate[name] )
-        })        
+        })
+    return me       
 } //   insert func.   -- Template
 
 
 
-, insertLib ( extLib, libName ) {  //   ( extLib: ExternalTemplate,  name: string ) -> void
+, insertLib ( extLib, libName ) {  //   ( extLib: ExternalTemplate,  name: string ) -> engine
   let 
          me = this
       ,  simpleTemplates = Object.keys ( extLib )
@@ -196,11 +206,12 @@ insert ( extTemplate ) {   // (extTemplate: ExternalTemplate) -> void
                             newTpl[name] = extLib[extName]
                             lib_Template.insert.call ( me, newTpl )
                     })
+  return me
 } //   insertLib func.  -- Template
 
 
 
-, rename ( ops ) { //   ({oldName:newName}) -> void
+, rename ( ops ) { //   ({oldName:newName}) -> engine
 // * Change template names
 const 
           me = this
@@ -223,11 +234,12 @@ list.forEach ( key => {
                 delete me.templates[key]
           }
   })
+  return me
 } //   rename func.   -- Template
 
 
 
-, remove ( tplName ) {   //   ( tplName:string|string[]) -> void
+, remove ( tplName ) {   //   ( tplName:string|string[]) -> engine
   const me = this;
   let listDelete;
 
@@ -238,6 +250,7 @@ list.forEach ( key => {
        }
   
   listDelete.forEach ( item => delete me.templates[item])
+  return me
 } //   remove func.   -- Template
 
 
@@ -310,7 +323,7 @@ list.forEach ( key => {
 
 const lib_Process = {
 
-  insert ( ext, name ) { // (ext: extProcess, name: string) -> void
+  insert ( ext, name ) { // (ext: extProcess, name: string) -> engine
     const me = this;
 
     if ( help._isWritingForbidden(me,'processes',name) ) {
@@ -319,11 +332,12 @@ const lib_Process = {
         }
 
     me.processes[name] = processTools.interpret ( ext )
+    return me
 } //   insert func.   -- Process
 
 
 
-, mix ( mixList, newProcessName ) {   //   ( mixList:string[], processName:string ) -> void
+, mix ( mixList, newProcessName ) {   //   ( mixList:string[], processName:string ) -> engine
   // * Set new process as combination of existing processes
     const
             me            = this
@@ -357,6 +371,7 @@ const lib_Process = {
               mix['hooks'] = mix['hooks'].concat ( hookNames )
            })
     me.processes[newProcessName] = mix
+    return me
 } //   mix func.   -- Process
 
 
@@ -375,16 +390,18 @@ else      return {}
 
 
 
-, run ( processList, data, hooks ) {    
-  if ( !(data        instanceof Array ))   data        = [data]
+, run ( processList, data, hooks ) {   
   if ( !(processList instanceof Array ))   processList = [processList]
-  const error = processList.reduce ( (res, processName ) => {
+  const 
+        internalData = help._normalizeExternalData(data)
+      , error = processList.reduce ( (res, processName ) => {
                                   const errorUpdate = help._validateProcess(this, processName);
                                   return res.concat ( errorUpdate )
                       },[])
+      ;
 
   if ( error.length == 0 )  {
-        let current = data;
+        let current = internalData;
         processList.forEach ( processName => {
             current = processTools.run.call ( this, this.processes[processName], current, hooks )
         })
@@ -415,7 +432,7 @@ else      return {}
 
 
 const lib_Data = {  
- insert ( data ) {   //   ({}) -> void
+ insert ( data ) {   //   ({}) -> engine
         const 
               me        = this
             , flatData  = help._flatten ( data )
@@ -428,12 +445,13 @@ const lib_Data = {
                               return
                       }
                   me.data [ name ] = flatData[name]
-            })        
+            })
+        return me        
   } //   insert func.   -- Data
 
 
 
-  , insertLib ( data, libName ) {   //   ({}, string) -> void
+  , insertLib ( data, libName ) {   //   ({}, string) -> engine
         const 
                 me        = this
               , flatData  = help._flatten ( data )
@@ -449,11 +467,12 @@ const lib_Data = {
                           }
                       me.data [ newKey ] = flatData[name]
                 })
+        return me
   } // insertLib func.   -- Data
 
 
 
-  , rename ( ops ) {   //   ({oldName:newName}) -> void
+  , rename ( ops ) {   //   ({oldName:newName}) -> engine
     // * Change data-record names
     const 
             me = this
@@ -477,11 +496,12 @@ const lib_Data = {
                         delete me.data[key]
                     }
           })
+    return me
   } // rename func   --- Data
 
 
 
-  , remove ( dataName ) {   //   ( dataName:string|string[]) -> void
+  , remove ( dataName ) {   //   ( dataName:string|string[]) -> engine
           const me = this;
           let listDelete;
         
@@ -492,6 +512,7 @@ const lib_Data = {
               }
           
           listDelete.forEach ( item => delete me.data[item])
+          return me
   } //   remove func.   -- Data
 
 
@@ -548,12 +569,15 @@ codeAssembly.prototype = {
 
     // Processes
     , insertProcess    : lib_Process.insert     // Insert new process;
-    , mixProcess       : lib_Process.mix        // Set new process as combination of existing processes;
     , insertProcessLib : 'NA'                   // Insert list of processes with a single operation. JSON required;
-    , getProcess       : 'NA'
+    , mixProcess       : lib_Process.mix        // Set new process as combination of existing processes;
     , getProcessLib    : 'NA'                   // Export processes from process-library as JSON;
     , getHooks         : lib_Process.getHooks   // Provide information about hooks available
     , run              : lib_Process.run        // Execute process/processes
+
+    // Process Manipulation
+    , renameProcess : 'NA'
+    , removeProcess : 'NA'
 
     // Data I/O
     , insertData    : lib_Data.insert      // Insert data. Save data. Word 'blocks'

@@ -27,7 +27,7 @@ It will install module in to the project. You can start using it by
 
 
 ### Installation for browsers
-Just go to folder 'dist' and get copy of '**code-assembly-line.min.js**'. Put the file inside your project folder and add a reference to it from HTML code by using this script tag:
+Just go to '/dist' folder and get copy of '**code-assembly-line.min.js**'. Put the file inside your project folder and add a reference to it from HTML code by using this script tag:
 ```html
  <script src="code-assembly-line.min.js"></script>
 ```
@@ -78,6 +78,10 @@ _(Nothing yet)_
 - [x] Test package;
 
 
+
+## What's Next?
+ - Plugin: Reactive rendering
+ - Plugin: Cascase template delivery
 
 
 
