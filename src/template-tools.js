@@ -45,7 +45,7 @@ const lib = {
     */
 
     if ( !error ) {  
-            const t = lib._findPlaceholders ( r )
+            const t = lib._findPlaceholdersAndSpaces ( r )
             spaces = t.spaces
             placeholders = t.placeholders
         }
@@ -74,7 +74,7 @@ const lib = {
 
 
 
-, _findPlaceholders : function ( tplArray ) {
+, _findPlaceholdersAndSpaces : function ( tplArray ) {
     const 
               placeholders = {}
             , spaces = {}
