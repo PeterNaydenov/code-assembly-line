@@ -250,9 +250,10 @@ describe ( 'Data', () => {
                           ]
           ;
 
-    tplEngine.insertTemplate ( template )
-    tplEngine.insertProcess  ( testProcess, 'test' )
-    tplEngine.run ( 'test' )
+    tplEngine
+        .insertTemplate ( template )
+        .insertProcess  ( testProcess, 'test' )
+        .run ( 'test' )
 
     const result = tplEngine.getBlock ( )
     expect ( result ).to.be.equal ( '' )
@@ -296,10 +297,11 @@ describe ( 'Data', () => {
                           , { do: 'save', as: 'block', name: 'second' }
                         ]
 
-    tplEngine.insertTemplate ( templates )
-    tplEngine.insertProcess ( pr1, 'doOne')
-    tplEngine.insertProcess ( pr2, 'doTwo')
-    tplEngine.run ( [ 'doTwo' , 'doOne'] )
+    tplEngine
+            .insertTemplate ( templates )
+            .insertProcess ( pr1, 'doOne')
+            .insertProcess ( pr2, 'doTwo')
+            .run ( [ 'doTwo' , 'doOne'] )
 
     const result = tplEngine.getBlock ( 'first', 'second' )
 
@@ -325,10 +327,11 @@ describe ( 'Data', () => {
                           , { do: 'save', as: 'block', name: 'second' }
                         ]
 
-    tplEngine.insertTemplate ( templates )
-    tplEngine.insertProcess ( pr1, 'doOne')
-    tplEngine.insertProcess ( pr2, 'doTwo')
-    tplEngine.run ( [ 'doTwo' , 'doOne'] )
+    tplEngine
+          .insertTemplate ( templates )
+          .insertProcess ( pr1, 'doOne')
+          .insertProcess ( pr2, 'doTwo')
+          .run ( [ 'doTwo' , 'doOne'] )
 
     const result = tplEngine.getBlock ( ['first', 'second'] )
 
