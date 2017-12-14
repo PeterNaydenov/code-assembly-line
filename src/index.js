@@ -61,7 +61,7 @@ const help = {
   if      ( type == 'templates' ) configProperty = 'overwriteTemplates'
   else if ( type == 'processes' ) configProperty = 'overwriteProcesses'
   else                            configProperty = 'overwriteData'
-  const  entryExists = engine[type].hasOwnProperty ( name ); // 'true' if process with this name already exists
+  const  entryExists = engine[type].hasOwnProperty ( name ); // 'true' if template/process/data with this name already exists
   const  entryForbidden = entryExists && !engine.config[configProperty]
   return entryForbidden
 } // _isWritingForbidden func.
@@ -102,6 +102,26 @@ const help = {
       }
   return errors
 } // _validateProcess func.
+
+
+
+, _validateProcessLib ( ext ) {   //   (JSON) -> { processName : intProcess } | false
+  // * Find if JSON is valid, find if every process is an array.
+  try {
+        const 
+                  list = JSON.parse ( ext )
+                , processNames = Object.keys(list)
+                ;
+        return processNames.reduce ( (res,name) => {
+                            if ( list[name] instanceof Array )   res[name] = [].concat(list[name])
+                            return res
+                        },{})
+      } // try
+  catch ( e ) {
+                                      return false
+      }
+} // _validateProcessLib func.
+
 
 
 , _extractLib ( tpl, libRequst ) { //   (tpl:inTemplates[], libRequest:string[]) -> ExternalTemplate
@@ -337,6 +357,23 @@ const lib_Process = {
 
 
 
+, insertLib ( extLib, libName ) {  //   ( processLib: JSON,  name: string ) -> engine
+  let 
+        me = this
+      , listOfProcesses = help._validateProcessLib ( extLib )
+      , processNames = Object.keys ( listOfProcesses )
+      ;
+  if ( listOfProcesses ) {
+            processNames.forEach ( extName => {
+                              const name = ( libName ) ? `${libName}/${extName}` : extName;
+                              lib_Process.insert.call ( me, listOfProcesses[extName], name )
+                        })
+     }
+  return me
+} //   insertLib func.  -- Process
+
+
+
 , mix ( mixList, newProcessName ) {   //   ( mixList:string[], processName:string ) -> engine
   // * Set new process as combination of existing processes
     const
@@ -373,6 +410,75 @@ const lib_Process = {
     me.processes[newProcessName] = mix
     return me
 } //   mix func.   -- Process
+
+
+
+, getLib ( name ) {
+  // * Extract process library as JSON
+  const 
+          me = this
+        , allKeys = Object.keys ( me.processes )
+        , takeEverything = (name) ? false : true
+        ;
+  const result = allKeys.reduce ( (res,key) => {
+                              if ( !takeEverything ) {
+                                      if ( key.includes(name) ) {
+                                                const t = key.split('/');
+                                                t.shift()
+                                                const newKey = t.join('/');
+                                                res[newKey] = me.processes[key]
+                                         }
+                                  }
+                              else res[key] = me.processes[key]
+                              return res
+                      }, {})
+  return JSON.stringify ( result )
+} // getLib func.   -- Process
+
+
+
+, rename ( ops ) {   //   ({oldName:newName}) -> engine
+    // * Change process names
+    const 
+            me = this
+          , list = Object.keys (ops)
+          , doOverwrite = me.config.overwriteProcesses
+          ;
+
+    list.forEach ( key => {
+                  if ( !me.processes[key] )   return
+                  const 
+                        newKey = ops[key]
+                      , keyAlreadyDefined = (me.processes[newKey]) ? true : false
+                      ;
+
+                  if ( keyAlreadyDefined && !doOverwrite ) {
+                        console.error ( showError('overwriteProcess', newKey) )
+                        return
+                      }
+                  else {
+                        me.processes[newKey] = me.processes[key]
+                        delete me.processes[key]
+                    }
+          })
+    return me
+} // rename func.   -- Process
+
+
+
+, remove (  processName ) {   //   ( processName:string|string[]) -> engine
+    const me = this;
+    let listDelete;
+  
+    if ( processName instanceof Array ) listDelete = processName
+    else {
+            const t = Object.keys ( arguments );
+            listDelete = t.map ( k => arguments[k] )
+        }
+    
+    listDelete.forEach ( item => delete me.processes[item])
+    return me
+} // remove func.   -- Process
 
 
 
@@ -569,15 +675,15 @@ codeAssembly.prototype = {
 
     // Processes
     , insertProcess    : lib_Process.insert     // Insert new process;
-    , insertProcessLib : 'NA'                   // Insert list of processes with a single operation. JSON required;
+    , insertProcessLib : lib_Process.insertLib  // Insert list of processes with a single operation. JSON required;
     , mixProcess       : lib_Process.mix        // Set new process as combination of existing processes;
-    , getProcessLib    : 'NA'                   // Export processes from process-library as JSON;
+    , getProcessLib    : lib_Process.getLib     // Export processes from process-library as JSON;
     , getHooks         : lib_Process.getHooks   // Provide information about hooks available
     , run              : lib_Process.run        // Execute process/processes
 
     // Process Manipulation
-    , renameProcess : 'NA'
-    , removeProcess : 'NA'
+    , renameProcess : lib_Process.rename  // Renames a process
+    , removeProcess : lib_Process.remove  // Remove process/processes
 
     // Data I/O
     , insertData    : lib_Data.insert      // Insert data. Save data. Word 'blocks'

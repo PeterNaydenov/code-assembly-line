@@ -231,7 +231,66 @@ describe ( 'Code Assembly', () => {
         expect ( tplEngine.processes['test']['arguments'][0]['tpl']).to.be.equal('some')
         expect ( tplEngine.processes['test']['arguments'][0]['tpl']).to.not.be.equal('alt')
     }) // it insert process 
+ 
+ 
+ 
+    it ( 'Insert Process Lib', () => {
+        const
+                tplEngine = new CodeAssemblyLine ()
+              , processLib = JSON.stringify ({
+                                      one : [{ do: 'draw' , tpl: 'some'}]
+                                    , two : [{do:'draw', tpl: 'alt'    }]
+                                    , broken : {do:'draw', tpl: 'broken' }
+                              })
+              ;
+        
+        tplEngine.insertProcessLib ( processLib , 'ext' )
+        const pr = tplEngine.processes;
+        expect ( pr ).to.have.property ('ext/one')
+        expect ( pr ).to.have.property ( 'ext/two' )
+        expect ( pr ).to.not.have.property ( 'two' )
+        expect ( pr ).to.not.have.property ( 'ext/broken' )
+        
+        // insert lib without specify libName
+        tplEngine.insertProcessLib ( processLib )
+        expect ( pr ).to.have.property ( 'two' )
+        expect ( pr ).to.not.have.property ( 'broken' )
+        
+        // Try to insert a non valid JSON
+        tplEngine.insertProcessLib ( 'fakeLib', 'fake')
+        const count = Object.keys ( pr )
+        expect ( count.length ).to.be.equal ( 4 )
+    }) // it insert process lib
     
+
+
+    it ( 'Get process library', () =>  {
+        const
+                tplEngine = new CodeAssemblyLine()
+              , first    = [{do: 'draw', tpl: 'first'}]
+              , second   = [{do: 'draw', tpl: 'second'}]
+              , third    = [{do:'draw', tpl: 'third'}]
+              ;
+
+        tplEngine
+          .insertProcess ( first, 'first')        
+          .insertProcess ( second, 'test/second')
+          .insertProcess ( third, 'test/third')
+        
+        const jsonResult = tplEngine.getProcessLib ( 'test' );
+        const r = JSON.parse ( jsonResult );
+
+        expect ( r ).to.have.property ( 'second' )
+        expect ( r ).to.have.property ( 'third'  )
+        expect ( r ).to.not.have.property ( 'first'  )
+
+        const jsonEverything = tplEngine.getProcessLib ( );
+        const allR = JSON.parse ( jsonEverything );
+
+        expect ( allR ).to.have.property ( 'first' )
+        expect ( allR ).to.have.property ( 'test/second' )
+        expect ( allR ).to.have.property ( 'test/third'  )
+    }) // get process library
 
 
     it ( 'Mix Process', () => {
@@ -265,6 +324,52 @@ describe ( 'Code Assembly', () => {
 
       expect ( tplEngine.processes['li']['hooks'][0] ).to.be.equal('navButtons')
     }) // it mix process
+
+
+
+    it ( 'Rename Process', () => {
+        const
+                tplEngine = new CodeAssemblyLine()
+              , action = [  { do: 'draw', tpl:'random'} ]
+              , willStay = [ {do:'draw', tpl:'nothing'} ]
+              ;
+        tplEngine
+            .insertProcess ( action, 'action' )
+            .insertProcess ( willStay, 'willStay' )
+            .renameProcess ({
+                                'action'   : 'activity'
+                              , 'willStay' : 'activity'
+                              , 'empty'    : 'fake'
+                            })
+        const pr = tplEngine.processes;
+        expect ( pr ).to.have.property ( 'activity' )
+        expect ( pr ).to.not.have.property ( 'action' )
+        expect ( pr ).to.not.have.property ( 'fake' )
+        expect ( pr ).to.not.have.property ( 'empty' )
+    }) // it rename process
+ 
+ 
+ 
+    it ( 'Remove Process', () => {
+        const
+                tplEngine = new CodeAssemblyLine()
+              , action = [  { do: 'draw', tpl:'random'} ]
+              , willStay = [ {do:'draw', tpl:'nothing'} ]
+              ;
+        tplEngine
+            .insertProcess ( action, 'action' )
+            .insertProcess ( action, 'duplicate' )
+            .insertProcess ( action, 'again' )
+            .insertProcess ( willStay, 'willStay' )
+            .removeProcess ( 'action' )
+            .removeProcess ( [ 'duplicate', 'again'] )
+        
+        const pr = tplEngine.processes;
+        expect ( pr ).to.have.property ( 'willStay' )
+        expect ( pr ).to.not.have.property ( 'action'    )
+        expect ( pr ).to.not.have.property ( 'duplicate' )
+        expect ( pr ).to.not.have.property ( 'again'     )
+    }) // it remove process
     
     
     
