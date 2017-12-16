@@ -1,9 +1,11 @@
 'use strict';
 
-const chai = require ( 'chai' );
+const chai   = require ( 'chai' );
 const expect = chai.expect
-const chop = require ('../src/template-chop');
+const chop   = require ('../src/template-chop');
 const callError = require ('../src/errors');
+
+
 
 
 

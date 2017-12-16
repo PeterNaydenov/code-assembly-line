@@ -232,19 +232,20 @@ insert ( extTemplate ) {   // (extTemplate: ExternalTemplate) -> engine
 
 
 , rename ( ops ) { //   ({oldName:newName}) -> engine
-// * Change template names
-const 
+  // * Change template names
+  const 
           me = this
         , list = Object.keys (ops)
         , doOverwrite = me.config.overwriteTemplates
         ;
 
-list.forEach ( key => {
+  list.forEach ( key => {
+        if ( !me.templates[key] ) return
         const 
                 newKey = ops[key]
               , keyExists = (me.templates[newKey]) ? true : false
               ;
-
+        
         if ( keyExists && !doOverwrite ){
                 console.error ( showError('overwriteTemplate') )
                 return
@@ -253,7 +254,7 @@ list.forEach ( key => {
                 me.templates[newKey] = me.templates[key]
                 delete me.templates[key]
           }
-  })
+    })
   return me
 } //   rename func.   -- Template
 

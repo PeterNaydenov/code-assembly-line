@@ -9,7 +9,8 @@ const
 
 
 const lib = {
-interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
+
+interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
   const internal = {};
   
   internal.steps = []
@@ -34,7 +35,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
 
 
 
-, _validate : function (ext) {
+, _validate (ext) {
       const 
                log = []
              , validType = ext instanceof Array
@@ -61,7 +62,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
 
 
 
-, _copyList : function ( source ) { // (string[]) -> string[]
+, _copyList ( source ) { // (string[]) -> string[]
     let 
           size = source.length
         , result = []
@@ -79,7 +80,7 @@ interpret : function ( ext ) { //   (ext: extProcess) -> int: intProcess
 
 
 
-, run : function ( proccessItems, data, hooks ) {
+, run ( proccessItems, data, hooks ) {
   // * Executes process/processes
     let 
           me = this

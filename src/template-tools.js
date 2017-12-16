@@ -29,7 +29,7 @@ const showError = require ('./errors' );
 
 const lib = {
  
- str2intTemplate : function (str) {
+ str2intTemplate (str) {
     const r = chop ( str );
     const error = r.includes ( showError('brokenTemplate') );
     let 
@@ -61,7 +61,7 @@ const lib = {
 
 
 
-, load_interpretTemplate : function ( convert2intTemplate ) {
+, load_interpretTemplate ( convert2intTemplate ) {
   return ( tplItem ) => {
       let intTemplate = {}; // internal template
       const type = (typeof tplItem == 'string')  ? 'string' : 'error';
@@ -74,7 +74,7 @@ const lib = {
 
 
 
-, _findPlaceholdersAndSpaces : function ( tplArray ) {
+, _findPlaceholdersAndSpaces ( tplArray ) {
     const 
               placeholders = {}
             , spaces = {}

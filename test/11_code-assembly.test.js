@@ -164,7 +164,7 @@ describe ( 'Code Assembly', () => {
                         }
                 , instructions = { 'hello':'sayHello', 'bye': 'sayGoodbye'}
                 ;
-        const tt = new CodeAssemblyLine()
+
         tplEngine.insertTemplate ( tpl )
         tplEngine.renameTemplate ( instructions )
 
@@ -176,7 +176,22 @@ describe ( 'Code Assembly', () => {
     
 
 
-    it ( 'Rename a non existing template')
+    it ( 'Rename a non existing template', () => {
+        const 
+                tplEngine = new CodeAssemblyLine ()
+              , t = { 'bye' : 'Good bye {{user}}' }
+              ;
+
+        tplEngine
+          .insertTemplate ( t )
+          .renameTemplate ( { 'fake': 'hello', 'bye' : 'goodBye'} )
+
+        const tpl = tplEngine.templates;
+        expect ( tpl ).to.not.have.property ( 'hello'   )
+        expect ( tpl ).to.not.have.property ( 'fake'    )
+        expect ( tpl ).to.not.have.property ( 'bye'     )
+        expect ( tpl ).to.have.property     ( 'goodBye' )
+    }) // it rename a non existing template
 
 
 
@@ -338,10 +353,11 @@ describe ( 'Code Assembly', () => {
             .insertProcess ( willStay, 'willStay' )
             .renameProcess ({
                                 'action'   : 'activity'
-                              , 'willStay' : 'activity'
                               , 'empty'    : 'fake'
+                              , 'willStay' : 'activity'
                             })
         const pr = tplEngine.processes;
+
         expect ( pr ).to.have.property ( 'activity' )
         expect ( pr ).to.not.have.property ( 'action' )
         expect ( pr ).to.not.have.property ( 'fake' )

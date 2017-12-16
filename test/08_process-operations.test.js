@@ -208,7 +208,7 @@ describe ( 'Process Operations', () => {
         expect ( result ).to.have.length (1)
         expect ( result[0] ).to.be.equal ( 'Hey Ivan! Hey Ivo!')
     }) // it Block
-
+  
 
 
     it ( 'Set', () => {

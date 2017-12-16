@@ -17,7 +17,7 @@
 
 const lib = {
 
-  draw : function ( params ) {   // ( {params} ) -> string[]
+  draw ( params ) {   // ( {params} ) -> string[]
     // * Render template.
     /*
         Params:
@@ -147,7 +147,7 @@ const lib = {
 
 
 
-, _createAttributes : function ( data, attributes ) {   //   ({}, string[]) -> string
+, _createAttributes ( data, attributes ) {   //   ({}, string[]) -> string
 // *** 'attr' placeholder calculation
   const 
         attr      = {}
@@ -187,7 +187,7 @@ const lib = {
 
 
 
-, _copyList : function ( source ) { // (string[]) -> string[]
+, _copyList ( source ) { // (string[]) -> string[]
     let 
           size = source.length
         , result = []
@@ -198,7 +198,7 @@ const lib = {
 
 
 
-, alterTemplate : function ( step, sourcePlaceholders  ) {   // (step{}, internalTpl.placeholers) -> internalTpl.placeholders
+, alterTemplate ( step, sourcePlaceholders  ) {   // (step{}, internalTpl.placeholers) -> internalTpl.placeholders
   // * Rename of placeholders
   const 
           changes = step.data   // { oldPlaceholderName : newPlaceholderName }
@@ -216,14 +216,14 @@ const lib = {
 
 
 
-, block : function ( data, space ) {   //  ( string[] ) -> string[]
+, block ( data, space ) {   //  ( string[] ) -> string[]
   // * Concatinate strings from array. Returns new array with a single entry
     return [ data.join( space )   ]
 } // block func.
 
 
 
-, set : function ( step, data) {   //  ( step{}, string[] ) -> {}[]
+, set ( step, data) {   //  ( step{}, string[] ) -> {}[]
   // * Converts renders and blocks in object
     const 
           name = step.as
@@ -238,7 +238,7 @@ const lib = {
 
 
 
-, alter : function ( step, data ) {   // ( step{}, {}[] ) -> {}[]
+, alter ( step, data ) {   // ( step{}, {}[] ) -> {}[]
   // * Change property names. 
   const 
          changes = step.data
@@ -263,7 +263,7 @@ const lib = {
 
 
 
-, _normalizeSelection: function ( list, length ) { 
+, _normalizeSelection ( list, length ) { 
     let result = [];
     if ( !list ) {
          result = lib._generateList ( length )
@@ -294,7 +294,7 @@ const lib = {
 
 
 
-, _generateList: function ( size ) {
+, _generateList ( size ) {
     let result = [];
     for ( let i=0; i < size; i++ ) result.push(i)
     return result
@@ -302,7 +302,7 @@ const lib = {
 
 
 
-, add : function ( step, data ) {   // ( step{}, {}[] ) -> {}[]
+, add ( step, data ) {   // ( step{}, {}[] ) -> {}[]
   // * Add property names
   const 
          changes = step.data
@@ -325,7 +325,7 @@ const lib = {
 
 
 
-, _combineValues: function ( existing, update ) {
+, _combineValues ( existing, update ) {
     let 
           primitive = false
         , result
@@ -340,7 +340,7 @@ const lib = {
 
 
 
-, copy : function ( step, data ) {   //   ( step{}, {}[] ) -> {}[]
+, copy ( step, data ) {   //   ( step{}, {}[] ) -> {}[]
   // * Create new property copy the value.
     const 
          changes = step.data
@@ -362,7 +362,7 @@ const lib = {
 
 
 
-, remove : function ( step, data ) {   // ( step{}, {}[] ) -> {}[]
+, remove ( step, data ) {   // ( step{}, {}[] ) -> {}[]
   // * Remove existing property
     const 
          keys = step.keys
@@ -380,7 +380,7 @@ const lib = {
 
 
 
-, hook : function ( data, cb ) {   // ( {}[], Function ) -> {}[]
+, hook ( data, cb ) {   // ( {}[], Function ) -> {}[]
   // * Function placeholder within render process
     if ( !cb ) return data
     return cb ( data , lib.modify )
@@ -392,7 +392,7 @@ const lib = {
 
 
 
-, modify : function ( data, step ) {   // ( {}[], step{} ) -> {}[]
+, modify ( data, step ) {   // ( {}[], step{} ) -> {}[]
   // * Access step-operations inside hook callbacks.
     let 
         act = step.do
