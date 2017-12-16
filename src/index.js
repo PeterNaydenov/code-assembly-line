@@ -69,9 +69,14 @@ const help = {
 
 
 , _normalizeExternalData ( data ) {
-   if ( !(data instanceof Array ))   data = [data] // temp...
-   // TODO: flatten data but save top level array
-   const result = data;
+   let result;
+   if ( !(data instanceof Array ))   result = [data]
+   else {
+                                    result = data.map ( el => {
+                                                          if ( typeof el == 'object' )   return help._flatten(el)
+                                                          else                           return el
+                                                   })
+        } // else no array
    return result
 } // _normalizeExternalData func.
 

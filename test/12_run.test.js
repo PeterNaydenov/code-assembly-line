@@ -636,6 +636,31 @@ describe ( 'Run', () => {
         expect ( result[0] ).to.be.equal ( 'Find Peter!' )
         expect ( result[1] ).to.be.equal ( 'Find Ivan!' )
     }) // it set
+    
+    
+    
+    it ( 'Set with high depth objects', () => {
+        const
+                  tplEngine = new CodeAssemblyLine()
+                , tpl = { test: '{{who}} has a {{profile/eyes}} eyes!' }
+                , data = [ 
+                              { who: 'Peter', profile: { age: 43, eyes: 'blue' }   }
+                            , { who: 'Ivan', profile: { age: 42, eyes: 'brown' }   } 
+                         ]
+                , processData = [                                    
+                                     { do: 'draw', tpl: 'test' }
+                                ]
+                ;
+        tplEngine.insertTemplate ( tpl )
+        tplEngine.insertProcess ( processData, 'findList' )
+
+        const result = tplEngine.run ( 'findList', data )
+
+        expect ( result ).to.be.an('array')
+        expect ( result ).to.have.length (2)
+        expect ( result[0] ).to.be.equal ( 'Peter has a blue eyes!' )
+        expect ( result[1] ).to.be.equal ( 'Ivan has a brown eyes!' )
+    }) // it set with high depth objects
 
 
 

@@ -4,6 +4,6 @@
 coverage/**/*
 package-lock.json
 node_modules
-types
+types/
 concept.md
 PLAY-test-samples.md
