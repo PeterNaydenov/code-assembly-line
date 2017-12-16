@@ -15,6 +15,10 @@
                     "js",
                     "render"
           ],
+          "repository" : { 
+                            "type" : "git"
+                          , "url" : "https://github.com/PeterNaydenov/code-assembly-line.git"
+                    },
           "author": "Peter Naydenov",
           "license": "MIT",
           "devDependencies": {
