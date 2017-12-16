@@ -71,17 +71,13 @@ _(Nothing yet)_
 
 ## Release History
 
-### 1.0.0 (2017-12-14)
+### 1.0.0 (2017-12-17)
 
 - [x] Node.js module;
 - [x] Browser module;
 - [x] Test package;
 
 
-
-## What's Next?
- - Plugin: Reactive rendering
- - Plugin: Cascase template delivery
 
 
 

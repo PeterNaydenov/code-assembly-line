@@ -1,7 +1,7 @@
 {
           "name": "code-assembly-line",
           "version": "1.0.0",
-          "description": "Javascript template engine. Works server and client sides",
+          "description": "Javascript template engine. Works server and client side",
           "main": "src/index.js",
           "scripts": {
                     "test": "NODE_ENV='test' mocha test",
