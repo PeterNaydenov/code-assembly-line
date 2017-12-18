@@ -44,7 +44,7 @@ Find working example in file '**/dist/index.html**'.
 ## Motivation Factors for creating the 'Code Assembly Line'
  - Decouple render-processes from templates;
  - Decouple templates from data;
- - All compnonents(templates,processes,and data) provisioning in a JSON compatible format;
+ - All components (templates, processes, and data) provisioning in a JSON compatible format;
  - Built-in hooks for modifying render process if needed;
  - Posible default value for missing data;
  - Strategies on missing data: Hide a field, hide the record or provide alternative content;
