@@ -4,8 +4,10 @@
 Engine works with templates, data and processes. All items are described in JSON compatible format, in a way to exchange resources via standard AJAX calls. Templates are logicless and are fully decoupled from the data. Partial rendering nature of this engine will give you an opportunity to balance rendering between server and client and you will be able to separate localization, design and data rendering processes. Choose a strategy on missing property values and have fine control on data during rendering process by using hook functions. In brief - **Code-Assembly-Line**.
 
 
-[Documentation](https://github.com/PeterNaydenov/code-assembly-line/wiki)
-[Getting started](https://github.com/PeterNaydenov/code-assembly-line/wiki/Getting-started)
+
+## Links
+* [Documentation](https://github.com/PeterNaydenov/code-assembly-line/wiki)
+* [Getting started](https://github.com/PeterNaydenov/code-assembly-line/wiki/Getting-started)
 
 
 ## Installation
