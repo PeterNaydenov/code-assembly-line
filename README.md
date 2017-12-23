@@ -42,39 +42,14 @@ Find working example in file '**/dist/index.html**'.
 
 
 
-
-
-## Motivation Factors for creating the 'Code Assembly Line'
- - Decouple render-processes from templates;
- - Decouple templates from data;
- - All components (templates, processes, and data) provisioning in a JSON compatible format;
- - Built-in hooks for modifying render process if needed;
- - Posible default value for missing data;
- - Strategies on missing data: Hide a field, hide the record or provide alternative content;
- - Chaining render-processes;
- - Alternate template's placeholder names;
- - Enrich data by render new data-fields;
- - Partial rendering. Create new templates by render part of the available placeholders;
- - Optional spaces;
-
-
-
-
-
-## Examples
-
-### Example name
-
 ## Known bugs
 _(Nothing yet)_
 
 
 
-
-
 ## Release History
 
-### 1.0.1 (2017-12-23)
+### 1.0.2 (2017-12-23)
 - [x] Process-step 'add' was switched on;
 - [x] Readme has link to documentation wiki;
 
