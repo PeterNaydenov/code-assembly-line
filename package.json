@@ -1,6 +1,6 @@
 {
           "name": "code-assembly-line",
-          "version": "1.0.0",
+          "version": "1.0.1",
           "description": "Javascript template engine. Works server and client side",
           "main": "src/index.js",
           "scripts": {
@@ -15,10 +15,10 @@
                     "js",
                     "render"
           ],
-          "repository" : { 
-                            "type" : "git"
-                          , "url" : "https://github.com/PeterNaydenov/code-assembly-line.git"
-                    },
+          "repository": {
+                    "type": "git",
+                    "url": "https://github.com/PeterNaydenov/code-assembly-line.git"
+          },
           "author": "Peter Naydenov",
           "license": "MIT",
           "devDependencies": {
