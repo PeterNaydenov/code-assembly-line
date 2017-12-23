@@ -141,6 +141,9 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
                                         me.insertData ( newData )
                               }
                           break
+            case 'add':
+                          current = operation[step] ( todo, current )
+                          break
             case 'alterTemplate' :
                           tplName = todo.tpl
                           const intTemplate = libTemplates[tplName];

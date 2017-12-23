@@ -815,6 +815,47 @@ describe ( 'Run', () => {
 
 
 
+    it ( 'Process is using add process step', () => {
+      const tplEngine = new CodeAssemblyLine ();
+      const templateLib = {
+                               'a' : '<a href="{{href}}">{{text}}</a>'
+                             , 'li': '<li{{~~_attr}}>{{text}}</li>'
+                             , 'ul': '<ul>{{text}}</ul>'
+                           };
+     
+      const doNav = [
+                         { do: 'alterTemplate', tpl: 'a', data: { 'href': 'link'}   }
+                       , { do: 'draw', tpl: 'a' }
+                       , { do: 'set', as: 'text' }
+                       , { do: 'add', select:'first', data: { 'className': 'first'}  }
+                       , { do: 'draw', tpl: 'li' }
+                       , { do: 'block',  }
+                       , { do: 'set', as: 'text' }
+                       , { do: 'draw', tpl: 'ul' }                       
+                    ];
+      const saveNav = [{do:'block', name: 'nav' }];
+      
+      
+      tplEngine
+            .insertTemplate ( templateLib )
+            .insertProcess ( doNav, 'nav' )      
+            .insertProcess ( saveNav, 'saveNav')
+            
+      const myNavData = [
+                              { text: 'Home', link: 'home.html' }
+                            , { text: 'Services', link: 'services.html' }
+                            , { text: 'About', link: 'about.html' }                      
+                            , { text: 'Contact', link: 'contact.html' }
+                       ];
+      
+      tplEngine.run (['nav', 'saveNav'], myNavData )
+      const  result = tplEngine.getBlock ( 'nav' )
+        
+      expect ( result.indexOf('class="first"') ).to.be.equal(8)
+    }) // it Process is using add process step
+
+
+
     it ( 'Whitespaces with data', () => {
         const
                 tplEngine = new CodeAssemblyLine()
