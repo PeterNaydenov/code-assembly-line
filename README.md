@@ -59,6 +59,9 @@ _(Nothing yet)_
 
 ## Release History
 
+### 1.0.3 (2017-12-31)
+- [x] Run throws console error if any errors
+
 ### 1.0.2 (2017-12-23)
 - [x] Process-step 'add' was switched on;
 - [x] Readme has link to documentation wiki;
