@@ -91,12 +91,13 @@ describe ( 'Code Assembly', () => {
                           }
             ;
 
-      tplEngine.insertTemplate ( tpl )
+      tplEngine.insertTemplate ( tpl, 'hi' )
       tplEngine.insertTemplateLib ( tplLib, 'test' )
       
       const 
           result = tplEngine.getTemplateLib ('test')
         , alt    = tplEngine.getTemplateLib (['test'])
+        , all    = tplEngine.getTemplateLib ()
         ;
 
       expect ( result ).to.have.property ( 'hello' )
@@ -107,6 +108,10 @@ describe ( 'Code Assembly', () => {
 
       expect ( alt ).to.have.property ( 'hello' )
       expect ( alt ).to.have.property ( 'bye' )
+
+      expect ( all ).to.have.property ( 'hi' )
+      expect ( all ).to.have.property ( 'test/hello' )
+      expect ( all ).to.have.property ( 'test/bye'   )      
     }) // it getTemplateLib
     
 

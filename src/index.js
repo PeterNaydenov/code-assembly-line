@@ -132,20 +132,26 @@ const help = {
 , _extractLib ( tpl, libRequst ) { //   (tpl:inTemplates[], libRequest:string[]) -> ExternalTemplate
   // * Creates new ExternalTemplate by removing libName from template name 
   const tplNames = Object.keys ( tpl ).filter ( name => name.includes('/')   );
+  let result = {};
 
-  return libRequst.reduce ( (res, libItem ) => {
-                tplNames
-                    .filter  ( name => name.indexOf(libItem) == 0   )
-                    .forEach ( name => {
-                              const 
-                                    sliceIndex = name.indexOf('/')
-                                  , prop = name.slice ( sliceIndex+1 )
-                                  ;
-                              
-                              res [prop] = tpl[name].tpl.join('')
-                        })
-                return res
-            },{})
+  if ( libRequst )   result = libRequst.reduce ( (res, libItem ) => {
+                                          tplNames
+                                              .filter  ( name => name.indexOf(libItem) == 0   )
+                                              .forEach ( name => {
+                                                        const 
+                                                              sliceIndex = name.indexOf('/')
+                                                            , prop = name.slice ( sliceIndex+1 )
+                                                            ;
+                                                        
+                                                        res [prop] = tpl[name].tpl.join('')
+                                                  })
+                                          return res
+                                    },{})
+  else {                    
+                    const allNames = Object.keys ( tpl );
+                    allNames.forEach ( name => result[name] = tpl[name].tpl.join('')   )
+    }
+  return result
 } // _extractLib func.
 
 
@@ -304,11 +310,15 @@ insert ( extTemplate ) {   // (extTemplate: ExternalTemplate) -> engine
 
 
 
-, getLib ( libName ) { //   (libName:string|string[]) -> ExternalTemplate
- const me = this;
+, getLib ( libName ) { //   (libName:string|string[]|undefind) -> ExternalTemplate
+ const 
+          me = this
+        , takeEverything = libName ? false : true
+        ;
  let libRequst;
 
- if ( libName instanceof Array )   libRequst = libName
+ if      ( libName == null )            libRequst = null
+ else if ( libName instanceof Array )   libRequst = libName
  else {
          const t = Object.keys ( arguments );
          libRequst = t.map ( k => arguments[k] )

@@ -61,8 +61,9 @@ _(Nothing yet)_
 
 
 
-### 1.0.4 (2017-12-31)
+### 1.0.4 (2018-01-01)
 - [x] Fix: method getProcessLib returns intProcess type. Should be extProcessLib type;
+- [x] Method 'getTemplateLib' without arguments will return all templates without modification;
 
 
 
