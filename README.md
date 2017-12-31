@@ -59,18 +59,28 @@ _(Nothing yet)_
 
 ## Release History
 
+
+
+### 1.0.4 (2017-12-31)
+- [x] Fix: method getProcessLib returns intProcess type. Should be extProcessLib type;
+
+
+
 ### 1.0.3 (2017-12-31)
 - [x] Run throws console error if any errors
+- [ ] Bug: method getProcessLib returns intProcess type. Should be extProcessLib type;
 
 ### 1.0.2 (2017-12-23)
 - [x] Process-step 'add' was switched on;
 - [x] Readme has link to documentation wiki;
+- [ ] Bug: method getProcessLib returns intProcess type. Should be extProcessLib type;
 
 ### 1.0.0 (2017-12-17)
 - [ ] Process-step 'add' is not active.
 - [x] Node.js module;
 - [x] Browser module;
 - [x] Test package;
+- [ ] Bug: method getProcessLib returns intProcess type. Should be extProcessLib type;
 
 
 

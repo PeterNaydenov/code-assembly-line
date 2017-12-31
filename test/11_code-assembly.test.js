@@ -255,7 +255,7 @@ describe ( 'Code Assembly', () => {
               , processLib = JSON.stringify ({
                                       one : [{ do: 'draw' , tpl: 'some'}]
                                     , two : [{do:'draw', tpl: 'alt'    }]
-                                    , broken : {do:'draw', tpl: 'broken' }
+                                    , broken : {do:'draw', tpl: 'broken' }   // should be an array
                               })
               ;
         
@@ -272,9 +272,10 @@ describe ( 'Code Assembly', () => {
         expect ( pr ).to.not.have.property ( 'broken' )
         
         // Try to insert a non valid JSON
+        const countBefore = Object.keys ( pr ).length;
         tplEngine.insertProcessLib ( 'fakeLib', 'fake')
-        const count = Object.keys ( pr )
-        expect ( count.length ).to.be.equal ( 4 )
+        const countAfter = Object.keys ( pr ).length
+        expect ( countAfter ).to.be.equal ( countBefore )
     }) // it insert process lib
     
 
@@ -296,6 +297,8 @@ describe ( 'Code Assembly', () => {
         const r = JSON.parse ( jsonResult );
 
         expect ( r ).to.have.property ( 'second' )
+        expect ( r.second ).to.be.an ( 'array' )
+        expect ( r.second ).to.be.deep.equal ( second )
         expect ( r ).to.have.property ( 'third'  )
         expect ( r ).to.not.have.property ( 'first'  )
 
@@ -303,6 +306,8 @@ describe ( 'Code Assembly', () => {
         const allR = JSON.parse ( jsonEverything );
 
         expect ( allR ).to.have.property ( 'first' )
+        expect ( allR.first ).to.be.an ( 'array' )
+        expect ( allR.first ).to.be.deep.equal ( first )        
         expect ( allR ).to.have.property ( 'test/second' )
         expect ( allR ).to.have.property ( 'test/third'  )
     }) // get process library

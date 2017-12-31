@@ -432,10 +432,10 @@ const lib_Process = {
                                                 const t = key.split('/');
                                                 t.shift()
                                                 const newKey = t.join('/');
-                                                res[newKey] = me.processes[key]
+                                                res[newKey] = me.processes[key]['arguments']
                                          }
                                   }
-                              else res[key] = me.processes[key]
+                              else res[key] = me.processes[key]['arguments']
                               return res
                       }, {})
   return JSON.stringify ( result )
