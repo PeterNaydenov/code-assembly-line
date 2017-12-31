@@ -513,13 +513,16 @@ else      return {}
       ;
 
   if ( error.length == 0 )  {
-        let current = internalData;
-        processList.forEach ( processName => {
-            current = processTools.run.call ( this, this.processes[processName], current, hooks )
-        })
-        return current
+          let current = internalData;
+          processList.forEach ( processName => {
+              current = processTools.run.call ( this, this.processes[processName], current, hooks )
+          })
+          return current
     }
-  else  return error
+  else {
+          console.error ( error )
+          return error
+    }
 } //   run func.   -- Process
 
 }   // lib_Process lib

@@ -45,6 +45,24 @@ describe ( 'Run', () => {
 
 
 
+    it ( 'Processes are missing', () => {
+      const
+            tplEngine  = new CodeAssemblyLine ()
+          , tpl        = { 'hi' : 'Hi {{name}}!'}
+          , drawHi  = [ { do:'draw', tpl:'hi'}   ]
+          ;
+      
+      tplEngine.insertTemplate ( tpl )
+      tplEngine.insertProcess ( drawHi, 'drawHi' )
+      
+      const result = tplEngine.run ( ['drawHi', 'yo', 'fake'] , {name:'Peter'} );
+      expect ( result ).to.be.an ( 'array' )
+      expect ( result[0] ).to.be.equal ( 'Error: Process "yo" does not exist.')
+      expect ( result[1] ).to.be.equal ( 'Error: Process "fake" does not exist.')
+    }) // it Processes are missing
+    
+
+
     it ( 'Draw. Valid operation', () => {
         const
                 tplEngine   = new CodeAssemblyLine()
