@@ -58,8 +58,11 @@ _(Nothing yet)_
 
 ### 1.x.x - 2.x.x
 Breaking change in `.insertProcessLib` method. In version 1.x method expects JSON argument. Version 2.x require object from type `extProcessLib` where key is processName and value is `extProcess` type. 
+
 Breaking change in `.getProcessLib` method. In version 1.x method returns JSON. Version 2.x returns object from type `extProcessLib`.
+
 Code change required:
+
 ```js
 // v.1.x.x
 tplEngine.insertProcessLib ( libData, libName );
