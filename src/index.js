@@ -83,7 +83,7 @@ const help = {
 
 
 , _validateProcess ( engine, processName ) {
-  // * Find if process exists and no errors in it. Find if all templates needed are available.
+  // * Validate process before run. Find if process exists and all templates needed are available.
   let errors = [];
   const 
           processExists   = engine.processes.hasOwnProperty ( processName )
@@ -107,25 +107,6 @@ const help = {
       }
   return errors
 } // _validateProcess func.
-
-
-
-, _validateProcessLib ( ext ) {   //   (JSON) -> { processName : intProcess } | false
-  // * Find if JSON is valid, find if every process is an array.
-  try {
-        const 
-                  list = JSON.parse ( ext )
-                , processNames = Object.keys(list)
-                ;
-        return processNames.reduce ( (res,name) => {
-                            if ( list[name] instanceof Array )   res[name] = [].concat(list[name])
-                            return res
-                        },{})
-      } // try
-  catch ( e ) {
-                                      return false
-      }
-} // _validateProcessLib func.
 
 
 
@@ -366,26 +347,24 @@ const lib_Process = {
           console.error ( showError('overwriteProcess',name) )
           return
         }
-
     me.processes[name] = processTools.interpret ( ext )
     return me
 } //   insert func.   -- Process
 
 
 
-, insertLib ( extLib, libName ) {  //   ( processLib: JSON,  name: string ) -> engine
-  let 
-        me = this
-      , listOfProcesses = help._validateProcessLib ( extLib )
-      , processNames = Object.keys ( listOfProcesses )
-      ;
-  if ( listOfProcesses ) {
-            processNames.forEach ( extName => {
-                              const name = ( libName ) ? `${libName}/${extName}` : extName;
-                              lib_Process.insert.call ( me, listOfProcesses[extName], name )
-                        })
-     }
-  return me
+, insertLib ( extLib, libName ) {   // ( extProcessLib, string ) -> engine
+  const processNames = Object.keys ( extLib );
+      
+  processNames.forEach ( extName => {
+          const name = ( libName ) ? `${libName}/${extName}` : extName;
+          let actionSteps;          
+          if ( extLib[extName] instanceof Array ) {
+                      actionSteps = [].concat(extLib[extName])
+                      lib_Process.insert.call ( this, actionSteps, name )
+              }  
+    })
+  return this
 } //   insertLib func.  -- Process
 
 
@@ -430,7 +409,7 @@ const lib_Process = {
 
 
 , getLib ( name ) {
-  // * Extract process library as JSON
+  // * Extract process library
   const 
           me = this
         , allKeys = Object.keys ( me.processes )
@@ -448,7 +427,7 @@ const lib_Process = {
                               else res[key] = me.processes[key]['arguments']
                               return res
                       }, {})
-  return JSON.stringify ( result )
+  return result
 } // getLib func.   -- Process
 
 
@@ -694,11 +673,11 @@ codeAssembly.prototype = {
 
     // Processes
     , insertProcess    : lib_Process.insert     // Insert new process;
-    , insertProcessLib : lib_Process.insertLib  // Insert list of processes with a single operation. JSON required;
+    , insertProcessLib : lib_Process.insertLib  // Insert list of processes with a single operation;
     , mixProcess       : lib_Process.mix        // Set new process as combination of existing processes;
-    , getProcessLib    : lib_Process.getLib     // Export processes from process-library as JSON;
-    , getHooks         : lib_Process.getHooks   // Provide information about hooks available
-    , run              : lib_Process.run        // Execute process/processes
+    , getProcessLib    : lib_Process.getLib     // Export processes from process-library;
+    , getHooks         : lib_Process.getHooks   // Provide information about hooks available;
+    , run              : lib_Process.run        // Execute process/processes;
 
     // Process Manipulation
     , renameProcess : lib_Process.rename  // Renames a process

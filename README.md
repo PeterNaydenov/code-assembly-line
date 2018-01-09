@@ -54,34 +54,52 @@ Find working example in file '**/dist/index.html**'.
 _(Nothing yet)_
 
 
+## Upgrade Notes
 
+### 1.x.x - 2.x.x
+Breaking change in `.insertProcessLib` method. In version 1.x method expects JSON argument. Version 2.x require object from type `extProcessLib` where key is processName and value is `extProcess` type. 
+Breaking change in `.getProcessLib` method. In version 1.x method returns JSON. Version 2.x returns object from type `extProcessLib`.
+Code change required:
+```js
+// v.1.x.x
+tplEngine.insertProcessLib ( libData, libName );
+// libData:string. JSON representation of extProcessLib
+const libJSON = tplEngine.getProcessLib ()
+
+// convert to version 2.x.x
+tplEngine.insertProcessLib ( JSON.parse(libData), libName )
+const libJSON = JSON.stringify ( tplEngine.getProcessLib ())
+```
+No more code changes required.
 
 
 ## Release History
 
 
 
-### 1.0.4 (2018-01-01)
-- [x] Fix: method getProcessLib returns intProcess type. Should be extProcessLib type;
+### 2.0.0 (2018-01-09)
+- [x] Fix: method getProcessLib returns JSON representation of intProcess type object. Should be JSON representation of extProcessLib type;
 - [x] Method 'getTemplateLib' without arguments will return all templates without modification;
+- [x] Breaking change: Method 'getProcessLib' returns 'extProcessLib'. Was JSON representation of 'extProcessLib';
+- [x] Breaking change: Argument extLib for method 'insertProcessLib' was changed. Was JSON, now is extProcessLib object;
 
 
 
 ### 1.0.3 (2017-12-31)
 - [x] Run throws console error if any errors
-- [ ] Bug: method getProcessLib returns intProcess type. Should be extProcessLib type;
+- [ ] Bug: method getProcessLib returns JSON representation of intProcess type object. Should be JSON representation of extProcessLib type;
 
 ### 1.0.2 (2017-12-23)
 - [x] Process-step 'add' was switched on;
 - [x] Readme has link to documentation wiki;
-- [ ] Bug: method getProcessLib returns intProcess type. Should be extProcessLib type;
+- [ ] Bug: method getProcessLib returns JSON representation of intProcess type object. Should be JSON representation of extProcessLib type;
 
 ### 1.0.0 (2017-12-17)
 - [ ] Process-step 'add' is not active.
 - [x] Node.js module;
 - [x] Browser module;
 - [x] Test package;
-- [ ] Bug: method getProcessLib returns intProcess type. Should be extProcessLib type;
+- [ ] Bug: method getProcessLib returns JSON representation of intProcess type object. Should be JSON representation of extProcessLib type;
 
 
 

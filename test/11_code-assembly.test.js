@@ -257,11 +257,11 @@ describe ( 'Code Assembly', () => {
     it ( 'Insert Process Lib', () => {
         const
                 tplEngine = new CodeAssemblyLine ()
-              , processLib = JSON.stringify ({
+              , processLib = {
                                       one : [{ do: 'draw' , tpl: 'some'}]
                                     , two : [{do:'draw', tpl: 'alt'    }]
-                                    , broken : {do:'draw', tpl: 'broken' }   // should be an array
-                              })
+                                    , broken : {do:'draw', tpl: 'broken' }   // should be an array. Explicit error.
+                              }
               ;
         
         tplEngine.insertProcessLib ( processLib , 'ext' )
@@ -298,18 +298,14 @@ describe ( 'Code Assembly', () => {
           .insertProcess ( second, 'test/second')
           .insertProcess ( third, 'test/third')
         
-        const jsonResult = tplEngine.getProcessLib ( 'test' );
-        const r = JSON.parse ( jsonResult );
-
+        const r = tplEngine.getProcessLib ( 'test' );
         expect ( r ).to.have.property ( 'second' )
         expect ( r.second ).to.be.an ( 'array' )
         expect ( r.second ).to.be.deep.equal ( second )
         expect ( r ).to.have.property ( 'third'  )
         expect ( r ).to.not.have.property ( 'first'  )
 
-        const jsonEverything = tplEngine.getProcessLib ( );
-        const allR = JSON.parse ( jsonEverything );
-
+        const allR = tplEngine.getProcessLib ( );
         expect ( allR ).to.have.property ( 'first' )
         expect ( allR.first ).to.be.an ( 'array' )
         expect ( allR.first ).to.be.deep.equal ( first )        
