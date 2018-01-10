@@ -81,7 +81,7 @@ No more code changes required.
 
 
 ### 2.0.0 (2018-01-09)
-- [x] Fix: method getProcessLib returns JSON representation of intProcess type object. Should be JSON representation of extProcessLib type;
+- [x] Fix: method getProcessLib returns JSON representation of intProcess type object. Should be object of extProcessLib type;
 - [x] Method 'getTemplateLib' without arguments will return all templates without modification;
 - [x] Breaking change: Method 'getProcessLib' returns 'extProcessLib'. Was JSON representation of 'extProcessLib';
 - [x] Breaking change: Argument extLib for method 'insertProcessLib' was changed. Was JSON, now is extProcessLib object;
