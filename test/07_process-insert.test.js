@@ -3,7 +3,9 @@
 const 
         chai         = require ('chai')
       , expect       = chai.expect
-      , processTools = require ( '../src/process-tools' )
+      , help         = require ( '../src/help' )
+      , showError    = require ( '../src/errors' )
+      , processTools = require ( '../src/process-tools' )({help,showError})
       , errors       = require ( '../src/errors' )
       ;
 

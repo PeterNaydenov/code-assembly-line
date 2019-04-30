@@ -15,6 +15,9 @@
 */
 
 
+
+function getProcessOperations ({help }) {
+
 const lib = {
 
   draw ( params ) {   // ( {params} ) -> string[]
@@ -43,22 +46,23 @@ const lib = {
           { template, data, sharedData, htmlAttributes, missField, missData, hookFn } = params
         , result = []
         ;
-
     data.forEach ( (obj, _count) => {
-                const keys = obj ? Object.keys(obj) : [];
+                const 
+                      current = help._flatten ( obj )
+                    , keys = current ? Object.keys(current) : []
+                    ;
                 let 
                       tpl = lib._copyList ( template.tpl )
                     , places = Object.assign ( {}, template.placeholders )
-                    , spaces = template.spaces
+                    , spaces = template.spaces // enumerable: 1-space before, 2-space after, 3-space before and after
                     , spaceBefore = '' 
                     , spaceAfter = ''
                     ;
-
                 if ( places['_attr'] ) {   // calculate html attributes only if '_attr' placeholder exists in template
                             const attrTarget = places['_attr'][0]
                             spaceBefore = ( spaces['_attr'] && spaces['_attr']%2 ) ? ' ' : '' 
                             spaceAfter  = ( spaces['_attr'] && spaces['_attr']>1 ) ? ' ' : ''
-                            const attr = lib._createAttributes(obj, htmlAttributes ).trim()
+                            const attr = lib._createAttributes(current, htmlAttributes ).trim()
                             if ( attr )   tpl[attrTarget] = `${spaceBefore}${attr}${spaceAfter}`   // generate attributes string
                             else          tpl[attrTarget] = ''
                             delete places['_attr']
@@ -77,7 +81,7 @@ const lib = {
                             spaceBefore = ( spaces[k] && spaces[k]%2 ) ? ' ' : '' 
                             spaceAfter  = ( spaces[k] && spaces[k]>1 ) ? ' ' : ''    
                             if ( positions ) {
-                                    for (let position of positions ) tpl[position] = `${spaceBefore}${obj[k]}${spaceAfter}`
+                                    for (let position of positions ) tpl[position] = `${spaceBefore}${current[k]}${spaceAfter}`
                                     delete places[k]
                                }
                      })
@@ -188,12 +192,7 @@ const lib = {
 
 
 , _copyList ( source ) { // (string[]) -> string[]
-    let 
-          size = source.length
-        , result = []
-        ;
-    while (size--) result[size] = source[size]
-    return result
+    return source.map ( x => x )
 } // _copyList func.
 
 
@@ -223,17 +222,17 @@ const lib = {
 
 
 
-, set ( step, data) {   //  ( step{}, string[] ) -> {}[]
+, set ( step, data ) {   //  ( step{}, string[] ) -> {}[]
   // * Converts renders and blocks in object
     const 
           name = step.as
         , result = data.reduce ( (res,item) => {
                                 let obj = {};
-                                obj[name] = item;
+                                obj[name] = item
                                 res.push ( obj )
                                 return res
                         },[])
-    return result;
+    return result
 } // set func.
 
 
@@ -408,8 +407,11 @@ const lib = {
 
 } // lib
 
+return lib
+}  // getProcessOperations func.
 
 
-module.exports = lib
+
+module.exports = getProcessOperations
 
 

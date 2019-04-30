@@ -95,7 +95,7 @@ describe ( 'Templates', () => {
          const tpl2 = { 'hello': 'Changes are allowed, {{name}}!'};
          
          tplEngine.insertTemplate( tpl )
-         tplEngine.insertTemplate( tpl2 )
+         tplEngine.insertTemplate( tpl2, 'overwrite' )
 
          expect ( tplEngine.templates ).to.have.property ('hello')
          expect ( tplEngine.templates.hello.tpl ).to.contain ('Changes are allowed, ')

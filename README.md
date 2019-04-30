@@ -50,10 +50,6 @@ Find working example in file '**/dist/index.html**'.
 
 
 
-## Known bugs
-_(Nothing yet)_
-
-
 ## Upgrade Notes
 
 ### 1.x.x - 2.x.x
@@ -78,13 +74,19 @@ No more code changes required.
 
 ## Release History
 
-
+### 2.1.0 (2019-04-30)
+- [x] Watch-hooks introduction
+- [x] Process-step 'save' with `methods`: add/update/heap/overwrite
+- [x] Process-step 'block' with methods;
+- [x] Upgrade webpack to version 4.30;
+- [x] Fix: Correct flatten of deep objects;
 
 ### 2.0.0 (2018-01-09)
 - [x] Fix: method getProcessLib returns JSON representation of intProcess type object. Should be object of extProcessLib type;
 - [x] Method 'getTemplateLib' without arguments will return all templates without modification;
 - [x] Breaking change: Method 'getProcessLib' returns 'extProcessLib'. Was JSON representation of 'extProcessLib';
 - [x] Breaking change: Argument extLib for method 'insertProcessLib' was changed. Was JSON, now is extProcessLib object;
+- [ ] Bug: Flatten of deep objects is not working as should.
 
 
 
@@ -97,12 +99,14 @@ No more code changes required.
 - [x] Readme has link to documentation wiki;
 - [ ] Bug: method getProcessLib returns JSON representation of intProcess type object. Should be JSON representation of extProcessLib type;
 
+
 ### 1.0.0 (2017-12-17)
 - [ ] Process-step 'add' is not active.
 - [x] Node.js module;
 - [x] Browser module;
 - [x] Test package;
 - [ ] Bug: method getProcessLib returns JSON representation of intProcess type object. Should be JSON representation of extProcessLib type;
+
 
 
 

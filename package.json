@@ -4,10 +4,10 @@
           "description": "Javascript template engine. Works server and client side",
           "main": "src/index.js",
           "scripts": {
-                    "test": "NODE_ENV='test' mocha test",
+                    "test" : "NODE_ENV='test' mocha test",
                     "cover": "istanbul cover _mocha",
-                    "build": "webpack",
-                    "prod": "NODE_ENV='production' webpack"
+                    "build": "webpack --mode=development",
+                    "prod" : "webpack --mode=production"
           },
           "keywords": [
                     "template",
@@ -22,14 +22,15 @@
           "author": "Peter Naydenov",
           "license": "MIT",
           "devDependencies": {
-                    "babel-core": "^6.26.0",
-                    "babel-loader": "^7.1.2",
-                    "babel-preset-env": "^1.6.1",
-                    "chai": "^4.1.2",
-                    "istanbul": "^0.4.5",
-                    "mocha": "^4.0.1",
-                    "webpack": "^3.10.0",
-                    "webpack-bundle-analyzer": "^2.9.1"
+                    "@babel/core": "7.4.4",
+                    "@babel/preset-env": "7.4.4",
+                    "babel-loader": "8.0.5",
+                    "chai": "4.2.0",
+                    "istanbul": "0.4.5",
+                    "mocha": "6.1.4",
+                    "webpack": "4.30.0",
+                    "webpack-bundle-analyzer": "3.3.2",
+                    "webpack-cli": "3.3.1"
           },
           "dependencies": {}
 }

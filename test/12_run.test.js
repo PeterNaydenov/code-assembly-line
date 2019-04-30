@@ -136,6 +136,31 @@ describe ( 'Run', () => {
 
 
 
+    it ( 'Draw a complex data', () => {
+        const
+              tplEngine   = new CodeAssemblyLine ()
+            , templateLib = {
+                                sample: `{{other/greet}},{{name}}. {{other/slack}} {{laugh/2}}`
+                            }
+            , data = [{
+                            name : 'Peter'
+                          , laugh : [ 'ho-ho', 'ha-ha', 'he he' ]
+                          , other : { greet: 'Hi', slack: 'I am back' }
+                    }]
+            , processData = [
+                                 { do: 'draw' , tpl: 'sample' }
+                               , { do: 'block', name: 'result' }
+                            ]
+            ;
+        tplEngine.insertTemplate ( templateLib )
+        tplEngine.insertProcess ( processData, 'step' )
+
+        const x = tplEngine.run ( 'step', data )
+        expect ( x[0] ).to.be.equal ( 'Hi,Peter. I am back he he' )
+    })  // it Draw a complex data
+
+
+
     it ( 'Draw with missField: string', () => {
         const
                 tplEngine   = new CodeAssemblyLine()
@@ -600,9 +625,9 @@ describe ( 'Run', () => {
         tplEngine.insertProcess ( renderMyBlock, 'renderMyBlock' )
         
         tplEngine.run ( 'setData', { who: 'Peter' } )
-        tplEngine.run ( 'renderMyBlock' )
+        tplEngine.run ( 'renderMyBlock', null )
 
-        const result = tplEngine.data;
+        const result = tplEngine.data
         expect ( result ).to.have.property ( 'findWho'       )
         expect ( result ).to.have.property ( 'block/myBlock' )
         expect ( result['findWho']).to.be.equal ( result['block/myBlock'])
@@ -725,28 +750,33 @@ describe ( 'Run', () => {
     }) // it consume "data" for missing fields
 
 
-    it ( 'Hook', () => {
+
+    it ( 'Hook after draw process', () => {
       const
-              tplEngine = new CodeAssemblyLine ({ overwriteData: true})
+              tplEngine = new CodeAssemblyLine ()
             , simple = 'Just simple text, {{name}}!'
+            , other  = 'Second template string. Got it, {{name}}!'
             , processWithHook = [
                                       { do: 'draw', tpl: 'simple' }
                                     , { do: 'hook', name: 'afterSimple' }
-                                    , { do: 'block', name: 'result' }
+                                    , { do: 'block', name: 'result', method: 'overwrite' }
                                  ]
             ;
       
-      const hookFn  = function ( ) { return 'ala-bala' };
-      const hookAlt = function ( ) { return ['brum-brum']};
+      const hookFn  = function ( current ) { return 'ala-bala'   };
+      const hookAlt = function ( current ) { return ['brum-brum']};
       
       tplEngine.insertProcess  ( processWithHook, 'withHook' )
-      tplEngine.insertTemplate ( {simple} )
+      tplEngine.insertTemplate ( {simple, other } )
+      
+
 
       const hookObject = tplEngine.getHooks ( 'withHook' );
-      hookObject['afterSimple'] = hookFn
-      tplEngine.run ( 'withHook', {name:'Johny'}, hookObject )
+      hookObject [ 'afterSimple'] = hookFn
+      tplEngine.run ( 'withHook', [{name:'Johny'}], hookObject )
       
-      const  D = tplEngine.data;
+      
+      const D = tplEngine.data;
       expect ( D ).to.have.property ( 'block/result' )
       expect ( D['block/result'] ).to.be.equal ('ala-bala')
 
@@ -754,6 +784,89 @@ describe ( 'Run', () => {
       tplEngine.run ( 'withHook', {name:'Johny'}, hookObject )
       expect ( D['block/result'] ).to.be.equal ('brum-brum')
     }) // it hook
+
+
+
+
+    it ( 'Watch Hook', () => {
+      const
+              tplEngine = new CodeAssemblyLine ({ overwriteData: true})
+            , simple = 'Just simple text, {{name}}!'
+            , other  = 'Second template string. Got it, {{name}}!'
+            , processWithHook = [
+                                      { do: 'draw', tpl: 'simple', watchHook: 'checkNames' }
+                                    , { do: 'block', name: 'result' }
+                                 ]
+            ;
+      
+      const hookOnName = function ( data, template ) {   // alternate templates
+                                  if ( data.name == 'Peter' )   return [ data, 'other' ]
+                                  return [ data, template ]
+                          };
+      
+      tplEngine.insertProcess  ( processWithHook, 'withHook' )
+      tplEngine.insertTemplate ( {simple, other } )
+
+      const hookObject = tplEngine.getHooks ( 'withHook' );
+      hookObject [ 'checkNames'      ] = hookOnName
+      tplEngine.run ( 'withHook', [{name:'Johny'},{name: 'Peter'}], hookObject )
+      
+      
+      const  D = tplEngine.data;
+      expect ( D ).to.have.property ( 'block/result' )
+      expect ( D['block/result'] ).to.be.equal ('Just simple text, Johny! Second template string. Got it, Peter!')
+    }) // it watch hook
+
+
+    
+  it ( 'Watch hook extends the data', () => {
+        const
+                  tplEngine = new CodeAssemblyLine ()
+                , tpl  = { test: 'Find {{name}}!' }
+                , data = { age: 45, names: [ 'Peter', 'Ivan']}
+                , processData = [{ do: 'draw', tpl:'test', as: 'list', watchHook: 'names' }]
+                , namesFn = function ( data, template ) {   // my watchHook
+                                        const fnData = data.names.map ( x => ({name:x}))
+                                        return [ fnData, template ]
+                                  }
+                ;
+        tplEngine.insertTemplate ( tpl )
+        tplEngine.insertProcess ( processData, 'doFindingList' )
+
+        const result = tplEngine.run ( 'doFindingList', data, {names: namesFn} )[0]
+        expect ( result ).to.have.property ( 'list' )
+        expect ( result.list ).to.be.equal ( 'Find Peter! Find Ivan!' )
+    }) // it Watch hook extends the data
+
+
+
+    it ( 'Watch Hook was not provided', () => {
+      const
+              tplEngine = new CodeAssemblyLine ({ overwriteData: true})
+            , simple = 'Just simple text, {{name}}!'
+            , other  = 'Second template string. Got it, {{name}}!'
+            , processWithHook = [
+                                      { do: 'draw', tpl: 'simple', watchHook: 'checkNames' }
+                                    , { do: 'block', name: 'result' }
+                                 ]
+            ;
+      
+      const hookOnName = function ( data, template ) {   // alternate templates
+                                  if ( data.name == 'Peter' )   return [ data, 'other' ]
+                                  return [ data, template ]
+                          };
+      
+      tplEngine.insertProcess  ( processWithHook, 'withHook' )
+      tplEngine.insertTemplate ( {simple, other } )
+
+      const hookObject = tplEngine.getHooks ( 'withHook' );
+      tplEngine.run ( 'withHook', [{name:'Johny'},{name: 'Peter'}], hookObject )
+      
+      
+      const  D = tplEngine.data;
+      expect ( D ).to.have.property ( 'block/result' )
+      expect ( D['block/result'] ).to.be.equal ('Just simple text, Johny!Just simple text, Peter!')
+    }) // it watch hook was not provided
 
 
 

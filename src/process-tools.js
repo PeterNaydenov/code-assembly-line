@@ -1,12 +1,12 @@
 'use strict';
 
-const 
-        showError = require ( './errors'            )
-      , operation = require ( './process-operations')
-      , validSteps = [ 'draw', 'alterTemplate', 'alter', 'set', 'add', 'copy', 'remove', 'hook', 'block', 'save' ]
-      ;
+const validSteps = [ 'draw', 'alterTemplate', 'alter', 'set', 'add', 'copy', 'remove', 'hook', 'block', 'save' ];
 
 
+
+
+
+function getProcessTools ({ showError, operation }) {
 
 const lib = {
 
@@ -80,6 +80,47 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
 
 
 
+
+, _setupDrawDependencies ( me, todo, template, data, hookFn ) {
+  // *** Setup 'draw' dependenices
+    const 
+            sharedData     = me.data
+          , htmlAttributes = me.config.htmlAttributes
+          , missField      = todo.missField  || false
+          , missData       = todo.missData   || false
+          ;
+    return  { 
+                  template
+                , data
+                , sharedData
+                , htmlAttributes
+                , missField
+                , missData
+                , hookFn
+            }
+} // _setupDrawDependencies func.
+
+
+
+, _getTemplate ( tplName, library, contextPlaceholders ) {
+  // *** Returns a copy of template
+      let 
+            template = {}
+          , tpl      = library [ tplName ]
+          , localPlaceholders = contextPlaceholders[tplName] || library [tplName].placeholders
+          , holderKeys = Object.keys ( localPlaceholders )
+          ;
+      template.tpl = tpl.tpl.map ( x => x )
+      template.spaces = Object.assign ( {}, tpl.spaces )
+      template.placeholders = {}
+      holderKeys.forEach ( key => {
+                  template.placeholders [ key ] = localPlaceholders[key].map ( x => x )
+            })
+      return template
+} // _getTemplate func.
+
+
+
 , run ( proccessItems, data, hooks ) {
   // * Executes process/processes
     let 
@@ -87,58 +128,76 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
         , libTemplates = me.templates
         , current      = data
         , currentIsStr = lib._findIfString(current) // current is array of strings or array of objects
+        , getTemplate  = lib._getTemplate  // Creates a copy of requested template
+        , setupDrawDependencies = lib._setupDrawDependencies // Sets draw dependency object
         , contextPlaceholders = {}
-        , answer
         ;
-
     proccessItems.steps.forEach ( (step,id) => {
           const todo = proccessItems.arguments[id];    //   Get full step instruction
-          let tplName;
+          let 
+                tplName
+              , watchHook = todo.watchHook ? hooks[todo.watchHook] || false : false
+              , update    = []  // draw result buffer
+              ;
 
           switch ( step ) {
             case 'draw' :
-                          tplName   = todo.tpl
+                          tplName = todo.tpl
                           if ( currentIsStr )  console.warn ( showError ('dataExpectObject', `Step "draw" with template "${tplName}"`) )
-
-                          const
-                                  missField = todo.missField       || false
-                                , missData  = todo.missData        || false
-                                , hookFn    = hooks ? hooks[todo.hook] || false : false
-                                , tpl       = libTemplates[tplName]['tpl']
-                                , spaces    = libTemplates[tplName]['spaces']
-                                , originalPlaceholders = libTemplates[tplName]['placeholders']
+                           const
+                                  hookFn    = hooks ? hooks[todo.hook] || false : false
                                 , holdData  = !(todo.as == null)
+                                , space     = todo.space || ' '
                                 ;
-                          
-                          let localTemplate = {};
-                          localTemplate.tpl = tpl
-                          localTemplate.placeholders = contextPlaceholders[tplName] || originalPlaceholders
-                          localTemplate.spaces       = spaces
+                          if ( watchHook ) {
+                                  data.forEach ( dataSegment => { 
+                                            let 
+                                                  [ watchData, watchTplName ] = watchHook ( dataSegment, tplName )
+                                                , watchTemplate    = getTemplate ( watchTplName, libTemplates, contextPlaceholders )
+                                                , drawDependencies = {}
+                                                ;
+                                            if ( !(watchData instanceof Array) )   watchData = [ watchData ]
+                                            drawDependencies = setupDrawDependencies ( me, todo, watchTemplate, watchData, hookFn )  
+                                            update = update.concat ( operation[step] ( drawDependencies )  )
+                                        })
+                                  update = [ update.join ( space ) ]
+                              }
+                          else {
+                                            const 
+                                                  localTemplate = getTemplate ( tplName, libTemplates, contextPlaceholders )
+                                                , dependenices  = setupDrawDependencies ( me, todo, localTemplate, current, hookFn )
+                                                ;
+                                            update = operation[step] ( dependenices );
 
-                          const update = operation[step] ( { template:localTemplate, data:current, sharedData:me.data, htmlAttributes:me.config.htmlAttributes, missField, missData, hookFn} );
+                              } // else watchHook
+                          
                           if ( holdData ) {
                                     current = current.reduce ( (res,el,i) => {
                                                                 el[todo.as] = update[i]
                                                                 res.push(el)
                                                                 return res
                                                         }, [])
-                               }
+                              }
                           else {
-                                  current      = update
-                                  currentIsStr = true
-                             }
+                                    current      = update
+                                    currentIsStr = true
+                              }
                           break
             case 'block':
                           if ( !currentIsStr ) {
                                  console.error ( showError ('blockExpectString', JSON.stringify(current))   )
                                  return
                              }
-                          const blockSpace = todo.space || '';
+                          const 
+                                blockSpace = todo.space || '';
                           current = operation[step] ( current, blockSpace )
                           if ( todo.name ) {
-                                        let newData = {};
+                                        let 
+                                              newData = {}
+                                            , method = todo.method || 'add'
+                                            ;
                                         newData[`block/${todo.name}`] = current.join('')
-                                        me.insertData ( newData )
+                                        me.insertData ( newData, method )
                               }
                           break
             case 'add':
@@ -161,17 +220,25 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
                           break
             case 'save' :
                           const saveName = (todo.as != 'block') ? todo.name : `block/${todo.name}`;
-                          let currentData = {};
+                          let 
+                              currentData = {}
+                            , method = todo.method || 'add'   // Add method is default
+                            ;
+                          // Method: add | update | heap | overwrite
 
                           switch ( todo.as ) {
                                   case 'block':
                                   case 'data':
+                                                  // if ( !currentIsStr ) {  
+                                                  //           console.log ( showError ( 'blockExpectString', JSON.stringify(current)   ))
+                                                  //           break
+                                                  //     }
                                                   currentData[saveName] = current.join('')
-                                                  me.insertData ( currentData )
+                                                  me.insertData ( currentData, method )
                                                   break
                                   case 'template':
                                                   currentData[saveName] = current[0]
-                                                  me.insertTemplate ( currentData )
+                                                  me.insertTemplate ( currentData, method )
                                                   break
                                   case 'process':
                                                   let newProcess = lib._parse ( current[0] )
@@ -188,9 +255,11 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
        return current
 } // run func.
 } // lib
+  return lib
+} // getProcessTools func.
 
 
 
-module.exports = lib
+module.exports = getProcessTools
 
 

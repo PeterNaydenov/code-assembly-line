@@ -222,15 +222,15 @@ describe ( 'Data', () => {
 
   it ( 'Get missing block', () => {
     const
-            tplEngine = new CodeAssemblyLine()
-          , template  = { 'dummy' : 'image description is missing'}
-          , pr        =  [
+            tplEngine    = new CodeAssemblyLine ()
+          , templateLib  = { 'dummy' : 'image description is missing'}
+          , pr           =  [
                               { do:'draw', tpl: 'dummy' }
                             , { do: 'save', as: 'block', name: 'dummy' }
                          ]
           ;
 
-    tplEngine.insertTemplate ( template )
+    tplEngine.insertTemplate ( templateLib )
     tplEngine.insertProcess ( pr, 'test' )
     tplEngine.run ( 'test' )
 

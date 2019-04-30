@@ -4,7 +4,9 @@
 const 
         chai       = require ('chai')
       , expect     = chai.expect
-      , processOps = require ( '../src/process-tools' )
+      , help         = require ( '../src/help' )
+      , showError         = require ( '../src/errors' )
+      , processTools = require ( '../src/process-tools' )({ help, showError })
       , callErrors     = require ( '../src/errors' )
       ;
 
@@ -17,7 +19,7 @@ describe ( 'Process Tools', () => {
                                 , { do: 'block' }
                                 , { do: 'set', as: 'text' }
                             ]
-        const result = processOps.interpret ( linkProcess )
+        const result = processTools.interpret ( linkProcess )
 
         expect ( result ).to.have.property     ( 'steps'     )
         expect ( result ).to.have.property     ( 'arguments' )
@@ -42,7 +44,7 @@ describe ( 'Process Tools', () => {
                             ]
             ;
 
-        const result = processOps.interpret ( processChain )
+        const result = processTools.interpret ( processChain )
 
         expect ( result ).to.have.property ( 'steps'     )
         expect ( result ).to.have.property ( 'arguments' )
@@ -54,7 +56,7 @@ describe ( 'Process Tools', () => {
 
     it ( 'Interpret: Missing operation', () => {
         const processChain = [ { name: 'something' } ]
-        const result = processOps.interpret ( processChain )
+        const result = processTools.interpret ( processChain )
 
         expect ( result ).to.have.property ( 'errors' )
         expect ( result.errors[0] ).to.be.equal ( callErrors('missingOperation') )
@@ -64,7 +66,7 @@ describe ( 'Process Tools', () => {
 
     it ( 'Interpret: Not a valid arguments', () => {
        const processFake = { name: 'fakeProcess' };
-       const result = processOps.interpret ( processFake );
+       const result = processTools.interpret ( processFake );
 
        expect ( result ).to.have.property ( 'errors' )
        expect ( result.errors[0] ).to.be.equal ( callErrors('wrongExtProcess') )
@@ -74,7 +76,7 @@ describe ( 'Process Tools', () => {
 
     it ( 'Interpret: Empty process', () => {
       const emptyProcess = [];
-      const result = processOps.interpret ( emptyProcess );
+      const result = processTools.interpret ( emptyProcess );
 
       expect ( result ).to.have.property ( 'errors' )
       expect ( result.errors[0] ).to.be.equal ( callErrors('emptyExtProcess') )
@@ -84,7 +86,7 @@ describe ( 'Process Tools', () => {
 
     it ( 'string helper: string', () => {
         const a = 'ala-bala';
-        const result = processOps._findIfString ( a )
+        const result = processTools._findIfString ( a )
 
         expect ( result ).to.be.equal ( true )
     }) // it string helper: string
@@ -93,7 +95,7 @@ describe ( 'Process Tools', () => {
 
     it ( 'string helper: not a string', () => {
         const a = 4;
-        const result = processOps._findIfString ( a )
+        const result = processTools._findIfString ( a )
 
         expect ( result ).to.be.equal ( false )
     }) // it string helper: not a string
@@ -102,7 +104,7 @@ describe ( 'Process Tools', () => {
 
     it ( 'List copier', () => {
         const a = [ 'one', 'two' ];
-        const result = processOps._copyList ( a )        
+        const result = processTools._copyList ( a )        
         a[0] = 'update'
 
         expect ( result[0] ).to.not.be.equal ( a[0] )

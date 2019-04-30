@@ -1,8 +1,5 @@
 'use strict';
 
-const chop = require ('./template-chop');
-const showError = require ('./errors' );
-
 /*
     Converts ExtTempalteString to InternalTpl.
 
@@ -26,7 +23,7 @@ const showError = require ('./errors' );
           placeholderName: person    
 */
 
-
+function getTemplateTools ({ chop, showError }) {
 const lib = {
  
  str2intTemplate (str) {
@@ -99,8 +96,11 @@ const lib = {
 
 } // lib
 
+ return lib
+} // getTemplateTools func.
 
 
-module.exports = lib
+
+module.exports = getTemplateTools
 
 
