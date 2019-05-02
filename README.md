@@ -86,12 +86,17 @@ No more code changes required.
 
 ## Release History
 
+### 2.1.1 ( 2019-05-03 )
+- [x] Fix: WatchHook data after 'set' process-step 
+
 ### 2.1.0 (2019-04-30)
+Read **upgrade notes** for version 2.1.x.
 - [x] Watch-hooks introduction
 - [x] Process-step 'save' with `methods`: add/update/heap/overwrite
 - [x] Process-step 'block' with methods;
 - [x] Upgrade webpack to version 4.30;
 - [x] Fix: Correct flatten of deep objects;
+- [ ] Bug: WatchHook data after 'set' process-step 
 
 ### 2.0.0 (2018-01-09)
 - [x] Fix: method getProcessLib returns JSON representation of intProcess type object. Should be object of extProcessLib type;

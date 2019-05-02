@@ -150,7 +150,7 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
                                 , space     = todo.space || ' '
                                 ;
                           if ( watchHook ) {
-                                  data.forEach ( dataSegment => { 
+                                  current.forEach ( dataSegment => { 
                                             let 
                                                   [ watchData, watchTplName ] = watchHook ( dataSegment, tplName )
                                                 , watchTemplate    = getTemplate ( watchTplName, libTemplates, contextPlaceholders )

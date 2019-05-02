@@ -819,7 +819,7 @@ describe ( 'Run', () => {
 
 
     
-  it ( 'Watch hook extends the data', () => {
+  it ( 'Watchhook extends the data', () => {
         const
                   tplEngine = new CodeAssemblyLine ()
                 , tpl  = { test: 'Find {{name}}!' }
@@ -836,37 +836,69 @@ describe ( 'Run', () => {
         const result = tplEngine.run ( 'doFindingList', data, {names: namesFn} )[0]
         expect ( result ).to.have.property ( 'list' )
         expect ( result.list ).to.be.equal ( 'Find Peter! Find Ivan!' )
-    }) // it Watch hook extends the data
+    }) // it Watchhook extends the data
 
 
 
-    it ( 'Watch Hook was not provided', () => {
-      const
-              tplEngine = new CodeAssemblyLine ({ overwriteData: true})
-            , simple = 'Just simple text, {{name}}!'
-            , other  = 'Second template string. Got it, {{name}}!'
-            , processWithHook = [
-                                      { do: 'draw', tpl: 'simple', watchHook: 'checkNames' }
-                                    , { do: 'block', name: 'result' }
-                                 ]
+    it ( 'WatchHook was not provided', () => {
+            const
+                    tplEngine = new CodeAssemblyLine ({ overwriteData: true})
+                  , simple = 'Just simple text, {{name}}!'
+                  , other  = 'Second template string. Got it, {{name}}!'
+                  , processWithHook = [
+                                            { do: 'draw', tpl: 'simple', watchHook: 'checkNames' }
+                                          , { do: 'block', name: 'result' }
+                                      ]
+                  ;
+            
+            const hookOnName = function ( data, template ) {   // alternate templates
+                                        if ( data.name == 'Peter' )   return [ data, 'other' ]
+                                        return [ data, template ]
+                                };
+            
+            tplEngine.insertProcess  ( processWithHook, 'withHook' )
+            tplEngine.insertTemplate ( {simple, other } )
+
+            const hookObject = tplEngine.getHooks ( 'withHook' );
+            tplEngine.run ( 'withHook', [{name:'Johny'},{name: 'Peter'}], hookObject )
+            
+            
+            const  D = tplEngine.data;
+            expect ( D ).to.have.property ( 'block/result' )
+            expect ( D['block/result'] ).to.be.equal ('Just simple text, Johny!Just simple text, Peter!')
+        }) // it watchhook was not provided
+
+
+
+
+    it ( 'WatchHook after set process-step ', () => {
+          const 
+              tplEngine = new CodeAssemblyLine ()
+            , people = [ 'John', 'Jose', 'Philip', 'Peter' ]
+            , templateLib = { hi : 'Hi, {{name}}!', hello: 'Hello, dear {{name}}!' }
+            , processData = [
+                            { do: 'set', as: 'name' }
+                          , { do: 'draw', tpl: 'hi', watchHook: 'findFriend' }
+                          , { do: 'block', name: 'greetings' }
+                      ]
             ;
-      
-      const hookOnName = function ( data, template ) {   // alternate templates
-                                  if ( data.name == 'Peter' )   return [ data, 'other' ]
-                                  return [ data, template ]
-                          };
-      
-      tplEngine.insertProcess  ( processWithHook, 'withHook' )
-      tplEngine.insertTemplate ( {simple, other } )
 
-      const hookObject = tplEngine.getHooks ( 'withHook' );
-      tplEngine.run ( 'withHook', [{name:'Johny'},{name: 'Peter'}], hookObject )
-      
-      
-      const  D = tplEngine.data;
-      expect ( D ).to.have.property ( 'block/result' )
-      expect ( D['block/result'] ).to.be.equal ('Just simple text, Johny!Just simple text, Peter!')
-    }) // it watch hook was not provided
+          function findFriend ( data, templateName ) {
+                  switch ( data.name ) {
+                        case 'Jose' :
+                                   return [ data, 'hello' ]
+                        default : 
+                                    return [ data, templateName ]
+                      }
+              }
+
+          tplEngine.insertTemplate ( templateLib )
+          tplEngine.insertProcess ( processData, 'hi' )
+
+          tplEngine.run ( 'hi', people, { findFriend }   )
+          const r = tplEngine.getBlock ( 'greetings' );
+          expect ( r ).to.be.equal ( 'Hi, John! Hello, dear Jose! Hi, Philip! Hi, Peter!' )
+       }) // it WatchHook after set process-step
 
 
 
