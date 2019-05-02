@@ -52,6 +52,15 @@ Find working example in file '**/dist/index.html**'.
 
 ## Upgrade Notes
 
+### 2.0.0 - 2.1.x
+If you want to overwrite existing data/template/process, use process-step 'block' and 'save' with field `method`. 
+```js
+ { do: 'block', name: 'profile', method: 'overwrite' }
+```
+No more code changes required.
+
+
+
 ### 1.x.x - 2.x.x
 Breaking change in `.insertProcessLib` method. In version 1.x method expects JSON argument. Version 2.x require object from type `extProcessLib` where key is processName and value is `extProcess` type. 
 
@@ -70,6 +79,9 @@ tplEngine.insertProcessLib ( JSON.parse(libData), libName )
 const libJSON = JSON.stringify ( tplEngine.getProcessLib ())
 ```
 No more code changes required.
+
+
+
 
 
 ## Release History
