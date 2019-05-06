@@ -35,6 +35,73 @@ describe ( 'Templates', () => {
 
 
 
+    it ( 'Insert ExternalTemplate, method="update" on existing field', () => {
+         const 
+               tplEngine = new codeAssemblyLine ()
+             , tpl  = { 'hello' : 'Hello, {{name}}!'}
+             , tpl1 = { 'hello' : 'Hi, {{name}}!'   }
+             ;
+         
+         tplEngine
+            .insertTemplate ( tpl )
+            .insertTemplate ( tpl1, 'update')
+
+          const tlib = tplEngine.templates
+
+         expect ( tlib ).to.have.property ( 'hello' )
+         expect ( tlib.hello ).to.have.property ('tpl')
+
+         expect ( tlib.hello.tpl[0]).to.be.equal ( 'Hi, ' )
+
+         expect ( tlib.hello ).to.have.property ('placeholders')
+         expect ( tlib.hello.tpl ).to.be.an ('array')
+    }) // it insert  ExternalTemplate, method="update" on existing field
+
+
+
+    it ( 'Insert ExternalTemplate, method="update" on non-existing field', () => {
+         const 
+               tplEngine = new codeAssemblyLine ()
+             , tpl  = { 'hello' : 'Hello, {{name}}!'}
+             , tpl1 = { 'hi' : 'Hi, {{name}}!'   }
+             ;
+         
+         tplEngine
+            .insertTemplate ( tpl )
+            .insertTemplate ( tpl1, 'update')
+
+         const tlib = tplEngine.templates
+
+         expect ( tlib ).to.have.property ( 'hello' )
+         expect ( tlib ).to.not.have.property ( 'hi' )
+         expect ( tlib.hello ).to.have.property ('tpl')
+         
+         expect ( tlib.hello.tpl[0]).to.be.equal ( 'Hello, ' )
+
+         expect ( tlib.hello ).to.have.property ('placeholders')
+         expect ( tlib.hello.tpl ).to.be.an ('array')
+    }) // it insert  ExternalTemplate, method="update" on non-existing field
+
+
+
+    it ( 'Insert ExternalTemplate, method="heap" on existing field', () => {
+         const 
+               tplEngine = new codeAssemblyLine ()
+             , tpl  = { 'hello' : 'Hello, {{name}}!'}
+             , tpl1 = { 'hello' : 'Hi, {{name}}!'   }
+             ;
+         
+         tplEngine
+            .insertTemplate ( tpl )
+            .insertTemplate ( tpl1, 'heap')
+
+          const namePositions = tplEngine.templates.hello.placeholders.name.join(',')
+         
+          expect ( namePositions ).to.be.equal ( '1,3' )
+    }) // it insert  ExternalTemplate, method="heap" on existing field
+
+
+
     it ( 'Insert template as a library member', () => {
          const tplEngine = new codeAssemblyLine ();
          const tpl = { 'simple/ah': 'Hello, {{name}}!'};
@@ -76,7 +143,7 @@ describe ( 'Templates', () => {
 
 
     it ( 'Overwrite templates is forbidden', () => {
-         const tplEngine = new codeAssemblyLine ({overwriteTemplates : false});
+         const tplEngine = new codeAssemblyLine ();
          const tpl = { 'hello': 'Hello, {{name}}!'};
          const tpl2 = { 'hello': 'Changes are allowed, {{name}}!'};
          
@@ -90,7 +157,7 @@ describe ( 'Templates', () => {
 
 
     it ( 'Overwrite templates is allowed', () => {
-         const tplEngine = new codeAssemblyLine ({overwriteTemplates : true});
+         const tplEngine = new codeAssemblyLine ();
          const tpl = { 'hello': 'Hello, {{name}}!'};
          const tpl2 = { 'hello': 'Changes are allowed, {{name}}!'};
          

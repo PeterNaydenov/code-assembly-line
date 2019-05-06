@@ -49,7 +49,7 @@ const lib = {
     data.forEach ( (obj, _count) => {
                 const 
                       current = help._flatten ( obj )
-                    , keys = current ? Object.keys(current) : []
+                    , keys = Object.keys ( current )
                     ;
                 let 
                       tpl = lib._copyList ( template.tpl )
@@ -379,10 +379,11 @@ const lib = {
 
 
 
-, hook ( data, cb ) {   // ( {}[], Function ) -> {}[]
+, hook ( data, cb, engine ) {   // ( {}[], Function ) -> {}[]
   // * Function placeholder within render process
+    const operation = this; // access to process-tools
     if ( !cb ) return data
-    return cb ( data , lib.modify )
+    return cb ( data , lib.modify(operation,engine) )   // 'operation' and 'engine' are dependencies for function 'modify'
 } // hook func.
 
 
@@ -391,19 +392,48 @@ const lib = {
 
 
 
-, modify ( data, step ) {   // ( {}[], step{} ) -> {}[]
+, modify ( operations, engine ) {   // ...required dependencies for 'draw'
   // * Access step-operations inside hook callbacks.
+  return function ( data, step ) {   // ( {}[], step{} ) -> {}[]
     let 
-        act = step.do
-      , dataIsStr = lib._findIfString ( data )
-      ;
-
-    if ( dataIsStr ) {
-            console.error (`Data operations require objects but have strings. Data: ${data}`)
-            return data
-      }
-    return lib[act] ( step, data )
-} // modify func.
+          act = step.do
+        , dataIsStr = lib._findIfString ( data )
+        , space = step.space || ' '
+        ;
+    switch ( act ) {
+            case 'draw' :
+                          const 
+                               template   = operations._getTemplate ( step.tpl, engine.templates, {})
+                             , sharedData = engine.data
+                             , missField  = step.missField
+                             , missData   = step.missData
+                             , hookFn     = false
+                             ;
+                           if ( dataIsStr ) {
+                                      console.error ( `Hook-modifier require an 'object' data-segment but has a 'string'. {do:'draw', tpl: '${step.tpl}'}` )
+                                      return data
+                              }
+                          return lib [act] ({ template, data, sharedData, missField, missData, hookFn })
+            case 'set'  :
+                            if ( !dataIsStr ) {
+                                      console.error (`Hook-modifier require a 'string' data-segment but has an 'object'. { do:'${step.do}', as:'${step.as}' }`)
+                                      return data
+                              }
+                            return lib[act] ( step, data )
+            case 'block' :
+                            if ( !dataIsStr ) {
+                                      console.error (`Hook-modifier require a 'string' data-segment but have an 'object'. { do:'block' }`)
+                                      return data
+                              }
+                            return lib[act] ( data, space )
+            default:
+                            if ( dataIsStr ) {
+                                      console.error (`Data operations require objects but have strings. Data: ${data}`)
+                                      return data
+                              }
+                            return lib[act] ( step, data )
+          } // switch act
+ }} // modify func.
 
 } // lib
 

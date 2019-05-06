@@ -251,6 +251,36 @@ describe ( 'Code Assembly', () => {
         expect ( tplEngine.processes['test']['arguments'][0]['tpl']).to.be.equal('some')
         expect ( tplEngine.processes['test']['arguments'][0]['tpl']).to.not.be.equal('alt')
     }) // it insert process 
+
+
+
+    it ( 'Insert Process, method "update" on existing field', () => {
+        const
+                tplEngine  = new CodeAssemblyLine ()
+              , pr         = [ { do: 'draw' , tpl: 'some'} ]
+              , altProcess = [ { do: 'draw' , tpl: 'alt' } ]
+              ;
+        
+        tplEngine.insertProcess ( pr, 'test' )
+        tplEngine.insertProcess ( altProcess, 'test', 'update' )
+
+        expect ( tplEngine.processes ).to.have.property ('test')
+        expect ( tplEngine.processes['test']['arguments'][0]['tpl']).to.be.equal('alt')
+    }) // it Insert Process, method "update" on existing field
+
+
+
+    it ( 'Insert Process, method "update" on existing field', () => {
+        const
+                tplEngine  = new CodeAssemblyLine ()
+              , pr         = [ { do: 'draw' , tpl: 'some'} ]
+              , altProcess = [ { do: 'draw' , tpl: 'alt' } ]
+              ;
+        
+        tplEngine.insertProcess ( pr, 'test', 'update' )
+
+        expect ( tplEngine.processes ).to.not.have.property ('test')
+    }) // it Insert Process, method "update" on existing field
  
  
  
@@ -345,6 +375,73 @@ describe ( 'Code Assembly', () => {
 
       expect ( tplEngine.processes['li']['hooks'][0] ).to.be.equal('navButtons')
     }) // it mix process
+
+
+
+    it ( 'Mix Process with method "update"', () => {
+      const
+              tplEngine = new CodeAssemblyLine ()
+            , liProcess = [ 
+                                { do: 'draw', tpl: 'link'}
+                              , { do: 'set', as: 'text'}
+                              , { do: 'draw' , tpl: 'li'  } 
+                              , { do: 'hook' , name: 'navButtons'}                       
+                          ]
+            , ulProcess = [ {do:'draw', tpl: 'ul'} ]
+            , ulTransition = [ 
+                                  { do: 'set', as: 'text'}
+                                , { do: 'block' } 
+                             ]
+            ;
+
+      tplEngine
+              .insertProcess ( liProcess, 'li')
+              .insertProcess ( ulProcess, 'ul')
+              .insertProcess ( ulTransition, 'ulTransition')
+
+      tplEngine
+            .mixProcess ( ['li', 'ulTransition', 'ul','fake'], 'navigation' )
+            .mixProcess ( ['li','fail'],'navigation', 'update' )
+
+      const res = tplEngine.processes [ 'navigation' ];
+      expect ( res['steps'] ).to.have.length (4)
+      /**
+       *  MixProcess with method 'update' will overwrite existing record
+       */
+    }) // it Mix Process with method "update"
+
+
+
+    it ( 'Mix Process with method "update" on non-existing record', () => {
+      const
+              tplEngine = new CodeAssemblyLine ()
+            , liProcess = [ 
+                                { do: 'draw', tpl: 'link'}
+                              , { do: 'set', as: 'text'}
+                              , { do: 'draw' , tpl: 'li'  } 
+                              , { do: 'hook' , name: 'navButtons'}                       
+                          ]
+            , ulProcess = [ {do:'draw', tpl: 'ul'} ]
+            , ulTransition = [ 
+                                  { do: 'set', as: 'text'}
+                                , { do: 'block' } 
+                             ]
+            ;
+
+      tplEngine
+              .insertProcess ( liProcess, 'li')
+              .insertProcess ( ulProcess, 'ul')
+              .insertProcess ( ulTransition, 'ulTransition')
+
+      tplEngine.mixProcess ( ['li', 'ulTransition', 'ul','fake'], 'navigation', 'update' )
+            
+
+      const res = tplEngine.processes;
+      expect ( res ).to.not.have.property ( 'navigation' )
+      /**
+       *  MixProcess with method 'update' will not write a new record
+       */
+    }) // it Mix Process with method "update" on non-existing record
 
 
 

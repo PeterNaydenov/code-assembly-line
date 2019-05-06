@@ -45,6 +45,74 @@ describe ( 'Data', () => {
 
 
 
+  it ( 'Insert with method "update"', () => {
+        const
+                tplEngine  = new CodeAssemblyLine()
+              , records = {
+                              'alt'  : 'image description is missing'
+                            , 'home' : 'Sweet home'
+
+                          }
+              , nextRecord = {
+                                'home' : 'Bulgaria'
+                          }
+              ;
+
+        tplEngine
+            .insertData ( records )
+            .insertData ( nextRecord, 'update')
+
+        expect ( tplEngine.data ).to.have.property ( 'alt' )
+        expect ( tplEngine.data ).to.have.property ( 'home' )
+        expect ( tplEngine.data.alt ).to.be.equal ( records.alt )
+        expect ( tplEngine.data.home ).to.be.equal ( nextRecord.home )
+    }) // it Insert with method "update"
+  
+  
+  
+  it ( 'Insert with method "update"', () => {
+        const
+                tplEngine  = new CodeAssemblyLine()
+              , records    = { 'alt'  : 'image description is missing' }
+              , nextRecord = { 'home' : 'Bulgaria' }
+              ;
+
+        tplEngine
+            .insertData ( records )
+            .insertData ( nextRecord, 'update')
+
+        expect ( tplEngine.data ).to.have.property ( 'alt' )
+        expect ( tplEngine.data ).to.not.have.property ( 'home' )
+        expect ( tplEngine.data.alt ).to.be.equal ( records.alt )
+    }) // it Insert with method "update"
+
+
+
+  it ( 'Insert with method "heap"', () => {
+        const
+                tplEngine  = new CodeAssemblyLine()
+              , records = {
+                              'alt'  : 'image description is missing'
+                            , 'home' : 'Sweet home'
+
+                          }
+              , nextRecord = {
+                                'home' : 'Bulgaria'
+                          }
+              ;
+
+        tplEngine
+              .insertData ( records )
+              .insertData ( nextRecord, 'heap')
+
+        expect ( tplEngine.data ).to.have.property ( 'alt' )
+        expect ( tplEngine.data ).to.have.property ( 'home' )
+        expect ( tplEngine.data.alt ).to.be.equal ( records.alt )
+        expect ( tplEngine.data.home ).to.be.equal ( 'Sweet home Bulgaria' )
+    }) // it Insert with method "update"
+
+
+
   it ( 'Insert deep nestled objects', () => {
     const
             tplEngine  = new CodeAssemblyLine()
@@ -54,6 +122,7 @@ describe ( 'Data', () => {
                                               'access' : 'admin'
                                             , 'users'  : [ 'Peter', 'Ivan', 'Stefan' ]
                                         }
+                          , 'extra' : { 'text': 'success'}
                       }
           ;
 
@@ -63,6 +132,8 @@ describe ( 'Data', () => {
     expect ( tplEngine.data ).to.have.property ( 'settings/access' )
     expect ( tplEngine.data ).to.have.property ( 'settings/users/0' )
     expect ( tplEngine.data ).to.not.have.property ( 'settings/users' )
+    expect ( tplEngine.data ).to.have.property ( 'extra/text' )
+
   }) // it Insert deep nestled objects
 
 
@@ -103,6 +174,94 @@ describe ( 'Data', () => {
     expect ( r ).to.have.property ( 'special/settings/users/0')
     expect ( r ).to.have.property ( 'special/settings/access')
     expect ( r['special/settings/users/0'] ).to.be.equal ( records.settings.users[0] )
+  }) // it Insert data as a library
+  
+  
+  
+  it ( 'Insert data as a library, method="update" and existing record', () => {
+    const
+            tplEngine  = new CodeAssemblyLine()
+            , records = {
+                              'alt'    : 'image description is missing'
+                            , 'settings' : {
+                                                'access' : 'admin'
+                                              , 'users'  : [ 'Peter', 'Ivan', 'Stefan' ]
+                                          }
+                        }
+            , extra = { 'alt' : 'no data available' }
+            ;
+
+    tplEngine
+        .insertDataLib ( records, 'special' )
+        .insertDataLib ( extra, 'special', 'update')
+    const r = tplEngine.data;
+
+    expect ( r ).to.not.have.property ( 'alt' )
+    expect ( r ).to.have.property ( 'special/alt' )
+    expect ( r ).to.have.property ( 'special/settings/users/0')
+    expect ( r ).to.have.property ( 'special/settings/access')
+    expect ( r['special/settings/users/0'] ).to.be.equal ( records.settings.users[0] )
+
+    expect ( r['special/alt']).to.be.equal ( extra.alt )
+  }) // it Insert data as a library
+
+
+
+  it ( 'Insert data as a library, method="update" and non-existing record', () => {
+    const
+            tplEngine  = new CodeAssemblyLine()
+            , records = {
+                              'alt'    : 'image description is missing'
+                            , 'settings' : {
+                                                'access' : 'admin'
+                                              , 'users'  : [ 'Peter', 'Ivan', 'Stefan' ]
+                                          }
+                        }
+            , extra = { 'update' : 'no data available' }
+            ;
+
+    tplEngine
+        .insertDataLib ( records, 'special' )
+        .insertDataLib ( extra, 'special', 'update')
+    const r = tplEngine.data;
+
+    expect ( r ).to.not.have.property ( 'alt' )
+    expect ( r ).to.have.property ( 'special/alt' )
+    expect ( r ).to.have.property ( 'special/settings/users/0')
+    expect ( r ).to.have.property ( 'special/settings/access')
+    expect ( r['special/settings/users/0'] ).to.be.equal ( records.settings.users[0] )
+
+    expect ( r['special/alt']).to.be.equal ( records.alt )
+    expect ( r['special/alt']).to.not.have.property ( 'special/update' )
+  }) // it Insert data as a library, method="update" and non-existing record
+
+
+
+  it ( 'Insert data as a library, method="heap" and existing record', () => {
+    const
+            tplEngine  = new CodeAssemblyLine()
+            , records = {
+                              'alt'    : 'image description is missing'
+                            , 'settings' : {
+                                                'access' : 'admin'
+                                              , 'users'  : [ 'Peter', 'Ivan', 'Stefan' ]
+                                          }
+                        }
+            , extra = { 'alt' : 'no data available' }
+            ;
+
+    tplEngine
+        .insertDataLib ( records, 'special' )
+        .insertDataLib ( extra, 'special', 'heap')
+    const r = tplEngine.data;
+
+    expect ( r ).to.not.have.property ( 'alt' )
+    expect ( r ).to.have.property ( 'special/alt' )
+    expect ( r ).to.have.property ( 'special/settings/users/0')
+    expect ( r ).to.have.property ( 'special/settings/access')
+    expect ( r['special/settings/users/0'] ).to.be.equal ( records.settings.users[0] )
+
+    expect ( r['special/alt']).to.be.equal ( 'image description is missing no data available' )
   }) // it Insert data as a library
 
 

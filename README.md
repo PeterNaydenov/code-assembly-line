@@ -52,6 +52,13 @@ Find working example in file '**/dist/index.html**'.
 
 ## Upgrade Notes
 
+### 2.x.x - 3.x.x
+Hook functions receive different arguments and also require different result response. Hook functions will definitely need a refactoring.
+Configuration setting were removed. Take a look on your code and if you need to overwrite existing value, add step field 'method' with appropriate value - update/overwrite/heap. 
+
+If you don't use hooks or never have change configuration settings - your software will work without any changes.
+
+
 ### 2.0.0 - 2.1.x
 If you want to overwrite existing data/template/process, use process-step 'block' and 'save' with field `method`. 
 ```js
@@ -85,6 +92,21 @@ No more code changes required.
 
 
 ## Release History
+
+### 3.0.0 ( 2019-05-06 )
+Version 2.1.x was step in right direction but changes were not enough and software starts to looks incomplete and buggy. Hook functions work on inconsistency way. Hook modifiers were very limited.  Manipulation of data is also problematic. Using a configuration for overwrite data/templates/processes is heavy and not flexible enough.
+So... the new version have:
+- [x] Overwrite configuration is completly removed. Now writing methods have attribute **method**
+      Process-steps have equivalent field **method**. Method has 4 possible values:
+       - **add**(default): Add only a non-existing values. Do not change fields that already exist;
+       - **update**: Overwrite only existing fields. Do not add new records;
+       - **overwrite** : Overwrite existing record or create new ones;
+       - **heap** : Combine the old and the new value;
+- [x] Hook function execution is per every data-segment. In version 2.0 we have single hook-function execution with all current-data. 
+- [x] Hook function should always return an array with single element. Data-segment argument is also an array with single element. On this way, you can apply 'modify' function directly on incoming data-segment.
+- [x] Hook functions modifiers can execute process-steps [ 'draw', 'block','set', 'alter', 'add', 'copy', 'remove' ]. Don't forget that scope of hook is now only a single data-segment. Hook functions have no access to templates and step **alterTemplate** is not available. Don't try to use '**hook**' inside the hook. We want to keep logic flat as possible. Should be human readable.
+- [x] Version 3.0.0 is coming with more than 190 unit tests.
+
 
 ### 2.1.1 ( 2019-05-03 )
 - [x] Fix: WatchHook data after 'set' process-step 

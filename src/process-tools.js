@@ -128,7 +128,7 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
         , libTemplates = me.templates
         , current      = data
         , currentIsStr = lib._findIfString(current) // current is array of strings or array of objects
-        , getTemplate  = lib._getTemplate  // Creates a copy of requested template
+        , getTemplate  = lib._getTemplate          // Creates a copy of requested template
         , setupDrawDependencies = lib._setupDrawDependencies // Sets draw dependency object
         , contextPlaceholders = {}
         ;
@@ -138,6 +138,9 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
                 tplName
               , watchHook = todo.watchHook ? hooks[todo.watchHook] || false : false
               , update    = []  // draw result buffer
+              , space     = (todo.space != null ) ? todo.space : ' '
+              , method    = todo.method || 'add'   // Add method is default
+              // Method possible values: < add | update | heap | overwrite >
               ;
 
           switch ( step ) {
@@ -147,7 +150,6 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
                            const
                                   hookFn    = hooks ? hooks[todo.hook] || false : false
                                 , holdData  = !(todo.as == null)
-                                , space     = todo.space || ' '
                                 ;
                           if ( watchHook ) {
                                   current.forEach ( dataSegment => { 
@@ -173,7 +175,20 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
                           
                           if ( holdData ) {
                                     current = current.reduce ( (res,el,i) => {
-                                                                el[todo.as] = update[i]
+                                                                switch ( method ) { 
+                                                                      case 'add': // write only if key doesn't exist
+                                                                            if ( !el[todo.as] )   el[todo.as] = update[i]
+                                                                            break
+                                                                      case 'update': // overwrite only if key exists
+                                                                            if ( el[todo.as] )   el[todo.as] = update[i]
+                                                                            break
+                                                                      case 'overwrite': // always write
+                                                                            el[todo.as] = update[i]
+                                                                            break
+                                                                      case 'heap': // Add update to the heap. Accumulate value.
+                                                                            el [todo.as] += space + update[i]
+                                                                            break
+                                                                   } // switch method
                                                                 res.push(el)
                                                                 return res
                                                         }, [])
@@ -192,10 +207,7 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
                                 blockSpace = todo.space || '';
                           current = operation[step] ( current, blockSpace )
                           if ( todo.name ) {
-                                        let 
-                                              newData = {}
-                                            , method = todo.method || 'add'
-                                            ;
+                                        let newData = {};
                                         newData[`block/${todo.name}`] = current.join('')
                                         me.insertData ( newData, method )
                               }
@@ -213,26 +225,71 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
                           currentIsStr = false
                           break
             case 'hook' :  
-                          let hooked = operation[step] ( current, hooks[todo.name] )
-                          if ( hooked instanceof Array ) current = hooked
-                          else                           current = [hooked]
+                          let 
+                               extend = todo.as || false
+                             , hooked = []  // storage for hook results
+                             ;
+                          current.forEach ( dataSegment => {
+                                    const dt = [dataSegment];
+                                    hooked.push ( operation[step].call( lib, dt, hooks[todo.name], me )[0])
+                              })
+                          if ( extend ) {
+                                current = current.map ( (dataSegment,i) => {
+                                                        const 
+                                                              hk = hooked[i]
+                                                            , res = ( hk instanceof Array ) ? hk.join ( space ) : hk
+                                                            ;
+                                                        switch ( method ) { 
+                                                                      case 'add': // write only if key doesn't exist
+                                                                            if ( !dataSegment [ extend ] )   dataSegment [ extend ] = res
+                                                                            break
+                                                                      case 'update': // overwrite only if key exists
+                                                                            if ( dataSegment [ extend ] )   dataSegment [ extend ] = res
+                                                                            break
+                                                                      case 'overwrite': // always write
+                                                                            dataSegment [ extend ] = res
+                                                                            break
+                                                                      case 'heap': // Add update to the heap. Accumulate value.
+                                                                            dataSegment [ extend ] += space + res
+                                                                            break
+                                                                   } // switch method
+                                                        return dataSegment
+                                                })
+                                break
+                              }
+                          current = hooked.reduce ( (acc,item) => {
+                                          const 
+                                                isArray = item instanceof Array
+                                              , isStr = lib._findIfString (item)
+                                              ;
+                                          
+                                          if ( isArray && isStr ) { // Array of strings
+                                                      item = item.join ( space )
+                                                      acc.push ( item )
+                                                      return acc
+                                                  }
+
+                                          if ( isArray ) {  // Array of objects
+                                                       acc = acc.concat(item)
+                                                       return acc
+                                                    }
+                                          acc.push ( item )
+                                          return acc
+                                        },[])
                           currentIsStr = lib._findIfString ( current )
                           break
             case 'save' :
                           const saveName = (todo.as != 'block') ? todo.name : `block/${todo.name}`;
-                          let 
-                              currentData = {}
-                            , method = todo.method || 'add'   // Add method is default
-                            ;
-                          // Method: add | update | heap | overwrite
+                          let currentData = {};
+                          
 
                           switch ( todo.as ) {
                                   case 'block':
                                   case 'data':
-                                                  // if ( !currentIsStr ) {  
-                                                  //           console.log ( showError ( 'blockExpectString', JSON.stringify(current)   ))
-                                                  //           break
-                                                  //     }
+                                                  if ( !currentIsStr ) {  
+                                                            console.log ( showError ( 'blockExpectString', JSON.stringify(current)   ))
+                                                            break
+                                                      }
                                                   currentData[saveName] = current.join('')
                                                   me.insertData ( currentData, method )
                                                   break

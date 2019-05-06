@@ -7,22 +7,10 @@
 function getHelpLib ({ showError }) {
 
 const help = {
-
-    _isWritingForbidden ( engine , type, name ) {
-          let configProperty;
-          if      ( type == 'templates' ) configProperty = 'overwriteTemplates'
-          else if ( type == 'processes' ) configProperty = 'overwriteProcesses'
-          else                            configProperty = 'overwriteData'
-          const  entryExists = engine[type].hasOwnProperty ( name ); // 'true' if template/process/data with this name already exists
-          const  entryForbidden = entryExists && !engine.config[configProperty]
-          return entryForbidden
-      } // _isWritingForbidden func.
-   
-   
    
 
 
-   , _validateProcess ( engine, processName ) {
+    _validateProcess ( engine, processName ) {
       // * Validate process before run. Find if process exists and all templates needed are available.
               let errors = [];
               const 

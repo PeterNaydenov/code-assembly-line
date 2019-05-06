@@ -8,7 +8,7 @@
      - Project was started on September 23th, 2017.
      - Published on GitHub for first time: November 16th, 2017
      - Version 2.0. January 9th, 2018
-     - WatchHooks. April 30th, 2019
+     - Version 3.0. May 6th, 2019
 */
 
 const 
@@ -28,10 +28,7 @@ const
 
 // Default config object applied to every codeAssembly object.
 const codeAssemblyConfig = { 
-    overwriteTemplates : false
-  , overwriteProcesses : false
-  , overwriteData      : false
-  , htmlAttributes     : [ 'id', 'name', 'href', 'src', 'value', 'data', 'alt', 'role', 'class' ]
+   htmlAttributes     : [ 'id', 'name', 'href', 'src', 'value', 'data', 'alt', 'role', 'class' ]
 } // config
 
 

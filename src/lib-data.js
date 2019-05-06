@@ -15,7 +15,7 @@ const lib_Data = {
                      if (  hasField && method == 'add'    )   return
                      if ( !hasField && method == 'update' )   return
                      if (  hasField && method == 'heap'   ) { 
-                                                             me.data[name] += flatData[name]
+                                                             me.data[name] += ' ' + flatData[name]
                                                              return
                          }
                      me.data [ name ] = flatData[name]
@@ -40,7 +40,7 @@ const lib_Data = {
                              if (  hasField && method == 'add'    )   return
                              if ( !hasField && method == 'update' )   return
                              if (  hasField && method == 'heap'   ) { 
-                                                                     me.data[newKey] += flatData[name]
+                                                                     me.data[newKey] += ' ' + flatData[name]
                                                                      return
                                  }
                              me.data [ newKey ] = flatData[name]

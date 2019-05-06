@@ -20,12 +20,16 @@ function getLibTemplate ({ help, templateTools, showError }) {
           ;
     
         templateNames.forEach ( name => {
-                const hasField = me.templates [name] ? true : false;
+                const hasField = (me.templates [name] != null) ? true : false;
                       
                 if (  hasField && method == 'add'    )   return
                 if ( !hasField && method == 'update' )   return
                 if (  hasField && method == 'heap'   ) { 
-                                                        me.templates[name] += interpretTemplate ( extTemplate[name] )
+                                                        let 
+                                                              existingTpl = me.templates[name].tpl.join('')
+                                                            , newTemplate = existingTpl + ' ' + extTemplate[name]
+                                                            ;
+                                                        me.templates [ name ] = interpretTemplate ( newTemplate )
                                                         return
                     }
                 me.templates [ name ] = interpretTemplate ( extTemplate[name] )
@@ -46,10 +50,6 @@ function getLibTemplate ({ help, templateTools, showError }) {
                                         newTpl = {}
                                       , name = `${libName}/${extName}`
                                       ;
-                                if ( help._isWritingForbidden(me,'templates',name) ) {
-                                        console.error ( showError('overwriteTemplate')   )
-                                        return
-                                   }
                                 newTpl[name] = extLib[extName]
                                 lib_Template.insert.call ( me, newTpl, method )
                         })

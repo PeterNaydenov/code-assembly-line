@@ -63,6 +63,27 @@ describe ( 'Run', () => {
     
 
 
+    it ( 'Save data', () => {
+        const
+                tplEngine   = new CodeAssemblyLine()
+              , processData =  [ { do: 'save', as: 'data', name: 'res' }]                                                       
+              , renderData  = [{ place: 'test string'}]
+              ;
+        
+        tplEngine
+            .insertProcess ( processData, 'test')
+            .run ( 'test', renderData )
+        
+        const result = tplEngine.data;
+        
+        expect ( result ).to.not.have.property ('res')
+        /**
+         *  Write in 'data' only strings
+         */
+    }) // it Save data
+
+
+
     it ( 'Draw. Valid operation', () => {
         const
                 tplEngine   = new CodeAssemblyLine()
@@ -82,6 +103,51 @@ describe ( 'Run', () => {
         expect ( result ).to.be.an ('array')
         expect ( result[0] ).to.be.equal ( 'Some text with test string.' )
     }) // it Draw. Valid operation
+
+
+
+    it ( 'Draw with attributes', () => {
+        const
+                attributes = [ 'id', 'name', 'class' ]
+              , tplEngine   = new CodeAssemblyLine ({ htmlAttributes: attributes})
+              , templateLib = { random: '<h1{{~~_attr}}>{{title}}</h1>' }
+              , processData = [ 
+                                      { do: 'copy', data: {'id':'name'} } 
+                                    , { do: 'draw', tpl: 'random' } 
+                                    , { do: 'block' }
+                               ]                                                       
+              , renderData  = [{ title: 'test string', id:'special'}]
+              ;
+        
+        tplEngine
+            .insertProcess ( processData, 'test')
+            .insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData )[0];
+        expect ( result ).to.be.equal ( '<h1 id="special" name="special">test string</h1>' )
+    }) // it Draw with attributes.
+
+
+
+    it ( 'Draw. No data', () => {
+        const
+                tplEngine   = new CodeAssemblyLine ()
+              , templateLib = { random: 'Some text with {{place}}.' }
+              , processData =  [ 
+                                      { do: 'draw', tpl: 'random' } 
+                                    , { do: 'block' }
+                               ]                                                       
+              ;
+        
+        tplEngine
+            .insertProcess ( processData, 'test')
+            .insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test' )
+
+        expect ( result ).to.be.an ('array')
+        expect ( result[0] ).to.be.equal ( 'Some text with {{place}}.' )
+    }) // it Draw. No data
 
 
 
@@ -763,8 +829,8 @@ describe ( 'Run', () => {
                                  ]
             ;
       
-      const hookFn  = function ( current ) { return 'ala-bala'   };
-      const hookAlt = function ( current ) { return ['brum-brum']};
+      const hookFn  = () => ['ala-bala'];
+      const hookAlt = () => ['brum-brum'];
       
       tplEngine.insertProcess  ( processWithHook, 'withHook' )
       tplEngine.insertTemplate ( {simple, other } )
@@ -783,14 +849,45 @@ describe ( 'Run', () => {
       hookObject['afterSimple'] = hookAlt
       tplEngine.run ( 'withHook', {name:'Johny'}, hookObject )
       expect ( D['block/result'] ).to.be.equal ('brum-brum')
-    }) // it hook
+    }) // it Hook after draw process
+
+
+
+    it ( 'Hook extends current-data', () => {
+            const
+                  tplEngine = new CodeAssemblyLine ()
+                , data = {
+                              title : 'Welcome List:'
+                            , list  : [ 'Ivan', 'Kris', 'Vasil' ]
+                          }
+                , hi = 'Hi,{{name}}!'
+                , welcome = `{{title}} {{welcomeList}}`
+                , process = [
+                                  { do: 'hook', name: 'renderWelcomeList', as: 'welcomeList', method:'overwrite' }
+                                , { do: 'draw', tpl: 'welcome' }
+                                , { do: 'block', name: 'result' }
+                            ]
+                ;
+            
+            function renderWelcomeList ( data, modify ) {
+                      let userList = modify ( data[0].list, { do: 'set', as: 'name'});
+                      const result = modify ( userList, { do:'draw', tpl:'hi' } );
+                      return [result]   // results of hook-functions always should come as an array with single element
+                } // renderWelcomeList func.
+
+
+
+            tplEngine.insertTemplate ( { hi, welcome })
+            tplEngine.insertProcess ( process, 'greetUsers' )
+            tplEngine.run ( 'greetUsers', data, { renderWelcomeList} )
+      }) // it Hook extends current-data
 
 
 
 
     it ( 'Watch Hook', () => {
       const
-              tplEngine = new CodeAssemblyLine ({ overwriteData: true})
+              tplEngine = new CodeAssemblyLine ()
             , simple = 'Just simple text, {{name}}!'
             , other  = 'Second template string. Got it, {{name}}!'
             , processWithHook = [
@@ -799,18 +896,15 @@ describe ( 'Run', () => {
                                  ]
             ;
       
-      const hookOnName = function ( data, template ) {   // alternate templates
-                                  if ( data.name == 'Peter' )   return [ data, 'other' ]
-                                  return [ data, template ]
-                          };
+      function hookOnName ( data, template ) {   // alternate templates
+                if ( data.name == 'Peter' )   return [ data, 'other' ]
+                return [ data, template ]
+          }
       
-      tplEngine.insertProcess  ( processWithHook, 'withHook' )
       tplEngine.insertTemplate ( {simple, other } )
+      tplEngine.insertProcess  ( processWithHook, 'withHook' )
 
-      const hookObject = tplEngine.getHooks ( 'withHook' );
-      hookObject [ 'checkNames'      ] = hookOnName
-      tplEngine.run ( 'withHook', [{name:'Johny'},{name: 'Peter'}], hookObject )
-      
+      tplEngine.run ( 'withHook', [{name:'Johny'},{name: 'Peter'}], { checkNames : hookOnName} )
       
       const  D = tplEngine.data;
       expect ( D ).to.have.property ( 'block/result' )
@@ -825,24 +919,146 @@ describe ( 'Run', () => {
                 , tpl  = { test: 'Find {{name}}!' }
                 , data = { age: 45, names: [ 'Peter', 'Ivan']}
                 , processData = [{ do: 'draw', tpl:'test', as: 'list', watchHook: 'names' }]
-                , namesFn = function ( data, template ) {   // my watchHook
-                                        const fnData = data.names.map ( x => ({name:x}))
-                                        return [ fnData, template ]
-                                  }
                 ;
+
+        function namesFn ( data, template ) {   // my watchHook
+                  const fnData = data.names.map ( x => ({name:x}))
+                  return [ fnData, template ]
+            }
+
         tplEngine.insertTemplate ( tpl )
         tplEngine.insertProcess ( processData, 'doFindingList' )
 
-        const result = tplEngine.run ( 'doFindingList', data, {names: namesFn} )[0]
+        const result = tplEngine.run ( 'doFindingList', data, { names : namesFn} )[0]
         expect ( result ).to.have.property ( 'list' )
         expect ( result.list ).to.be.equal ( 'Find Peter! Find Ivan!' )
     }) // it Watchhook extends the data
 
 
 
+  it ( 'Watchhook extends existing field. Method: "add"', () => {
+        const
+                  tplEngine = new CodeAssemblyLine ()
+                , tpl  = { test: 'Find {{name}}!' }
+                , data = { age: 45, names: [ 'Peter', 'Ivan'], list:'Old value.' }
+                , processData = [{ do: 'draw', tpl:'test', as: 'list', watchHook: 'names', method: 'add' }]
+                ;
+                
+        function namesFn ( data, template ) {   // my watchHook
+                    const fnData = data.names.map ( x => ({name:x}))
+                    return [ fnData, template ]
+              }
+
+        tplEngine.insertTemplate ( tpl )
+        tplEngine.insertProcess ( processData, 'doFindingList' )
+
+        const result = tplEngine.run ( 'doFindingList', data, {names: namesFn} )[0]
+        expect ( result ).to.have.property ( 'list' )
+        expect ( result.list ).to.be.equal ( 'Old value.' )
+    }) // it Watchhook extends existing field. Method: "add"
+  
+
+
+  it ( 'Watchhook extends existing field. Method: "update"', () => {
+        const
+                  tplEngine = new CodeAssemblyLine ()
+                , tpl  = { test: 'Find {{name}}!' }
+                , data = { age: 45, names: [ 'Peter', 'Ivan'], list:'Old value.' }
+                , processData = [{ do: 'draw', tpl:'test', as: 'list', watchHook: 'names', method: 'update' }]
+                ;
+                
+        function namesFn ( data, template ) {   // my watchHook
+                    const fnData = data.names.map ( x => ({name:x}))
+                    return [ fnData, template ]
+              }
+
+        tplEngine.insertTemplate ( tpl )
+        tplEngine.insertProcess ( processData, 'doFindingList' )
+
+        const result = tplEngine.run ( 'doFindingList', data, {names: namesFn} )[0]
+        expect ( result ).to.have.property ( 'list' )
+        expect ( result.list ).to.be.equal ( 'Find Peter! Find Ivan!' )
+    }) // it Watchhook extends existing field. Method: "update"
+
+
+
+  it ( 'Watchhook extends existing field. Method: "update" but field does not exist', () => {
+        const
+                  tplEngine = new CodeAssemblyLine ()
+                , tpl  = { test: 'Find {{name}}!' }
+                , data = { age: 45, names: [ 'Peter', 'Ivan'], list:'Old value.' }
+                , processData = [{ do: 'draw', tpl:'test', as: 'alt', watchHook: 'names', method: 'update' }]
+                ;
+                
+        function namesFn ( data, template ) {   // my watchHook
+                    const fnData = data.names.map ( x => ({name:x}))
+                    return [ fnData, template ]
+              }
+
+        tplEngine.insertTemplate ( tpl )
+        tplEngine.insertProcess ( processData, 'doFindingList' )
+
+        const result = tplEngine.run ( 'doFindingList', data, {names: namesFn} )[0]
+        expect ( result ).to.have.property ( 'list' )
+        expect ( result.list ).to.be.equal ( 'Old value.' )
+        expect ( result ).to.not.have.property ( 'alt' )
+        /**
+         *  Field doesn't exist. As a result this render will be ignored
+         */
+    }) // it Watchhook extends existing field. Method: "update" but field does not exist
+
+
+
+  it ( 'Watchhook extends existing field. Method: "overwrite"', () => {
+        const
+                tplEngine = new CodeAssemblyLine ()
+              , tpl  = { test: 'Find {{name}}!' }
+              , data = { age: 45, names: [ 'Peter', 'Ivan'], list:'Old value.' }
+              , processData = [{ do: 'draw', tpl:'test', as: 'list', watchHook: 'names', method: 'overwrite' }]
+              ;
+                
+        function namesFn ( data, template ) {   // my watchHook
+                    const fnData = data.names.map ( x => ({name:x}))
+                    return [ fnData, template ]
+              }
+
+        tplEngine.insertTemplate ( tpl )
+        tplEngine.insertProcess ( processData, 'doFindingList' )
+
+        const result = tplEngine.run ( 'doFindingList', data, {names: namesFn} )[0]
+        expect ( result ).to.have.property ( 'list' )
+        expect ( result.list ).to.be.equal ( 'Find Peter! Find Ivan!' )
+    }) // it Watchhook extends existing field. Method: "overwrite"
+
+
+
+  it ( 'Watchhook extends existing field. Method: "heap"', () => {
+        const
+                  tplEngine = new CodeAssemblyLine ()
+                , test = 'Find {{name}}!'
+                , data = { age: 45, names: [ 'Peter', 'Ivan'], list:'Old value.' }
+                , processData = [{ do: 'draw', tpl:'test', as: 'list', watchHook: 'names', method: 'heap', space: '' }]
+                ;
+                
+        function namesFn ( data, template ) {   // my watchHook
+                    const fnData = data.names.map ( x => ({name:x}))
+                    return [ fnData, template ]
+              }
+
+        tplEngine.insertTemplate ({ test })
+        tplEngine.insertProcess ( processData, 'doFindingList' )
+
+        const result = tplEngine.run ( 'doFindingList', data, {names: namesFn} )[0]
+        
+        expect ( result ).to.have.property ( 'list' )
+        expect ( result.list ).to.be.equal ( 'Old value.Find Peter!Find Ivan!' )
+    }) // it Watchhook extends existing field. Method: "heap"
+
+
+
     it ( 'WatchHook was not provided', () => {
             const
-                    tplEngine = new CodeAssemblyLine ({ overwriteData: true})
+                    tplEngine = new CodeAssemblyLine ()
                   , simple = 'Just simple text, {{name}}!'
                   , other  = 'Second template string. Got it, {{name}}!'
                   , processWithHook = [

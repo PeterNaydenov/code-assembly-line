@@ -6,15 +6,32 @@
 
 function getLibProcess ({ help, showError, processTools }) {
 
+
+
 const lib_Process = {
 
-    insert ( ext, name ) { // (ext: extProcess, name: string) -> engine
-            const me = this;
-        
-            if ( help._isWritingForbidden(me,'processes',name) ) {
-                    console.error ( showError('overwriteProcess',name) )
-                    return
+    
+
+    insert ( ext, name, method='add' ) { // (ext: extProcess, name: string) -> engine
+            const 
+                  me = this
+                , wasRegistered = me.processes[name] || false
+                ;
+            switch ( method ) {
+                    case 'add':
+                                if ( wasRegistered ) { 
+                                        console.error ( showError('overwriteProcess',name) )
+                                        return
+                                    }
+                                break
+                    case 'update':
+                                if ( !wasRegistered ) {
+                                        console.error ( `Can not update process "${name}". It is still not defined.` )
+                                        return
+                                    }
+                                break
                 }
+                
             me.processes[name] = processTools.interpret ( ext )
             return me
         } //   insert func.   -- Process
@@ -41,18 +58,29 @@ const lib_Process = {
 
 
   
-  , mix ( mixList, newProcessName ) {   //   ( mixList:string[], processName:string ) -> engine
+  , mix ( mixList, newProcessName, method='add' ) {   //   ( mixList:string[], processName:string ) -> engine
             // * Set new process as combination of existing processes
             const
-                    me            = this
+                      me            = this
                     , processes     = me.processes
+                    , wasRegistered = me.processes[newProcessName] || false     
                     ;
-                    
             let mix = {};   // new process container
-            
-            if ( help._isWritingForbidden(me,'processes',newProcessName) ) {
-                    console.error ( showError('overwriteProcess', newProcessName)  )
-                    return
+
+
+            switch ( method ) {
+                    case 'add':
+                                if ( wasRegistered ) { 
+                                        console.error ( showError('overwriteProcess',newProcessName) )
+                                        return me
+                                    }
+                                break
+                    case 'update':
+                                if ( !wasRegistered ) {
+                                        console.error ( showError('overwriteProcess',newProcessName) )
+                                        return me
+                                    }
+                                break
                 }
         
             mix.steps = []
@@ -62,7 +90,7 @@ const lib_Process = {
             mixList.forEach ( requestedName => {
                         if ( !processes[requestedName] ) return
                         const 
-                                source = processes[requestedName]
+                              source = processes[requestedName]
                             , hookNames = source.hooks.map ( name => `${requestedName}/${name}` )
                             , newArguments = source.arguments.map ( arg => { 
                                                         if ( arg.do != 'hook' ) return arg
