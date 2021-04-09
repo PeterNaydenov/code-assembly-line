@@ -5,7 +5,7 @@
           "main": "src/index.js",
           "scripts": {
                     "test": "NODE_ENV='test' mocha test",
-                    "cover": "istanbul cover _mocha",
+                    "cover": "nyc mocha",
                     "build": "webpack --mode=development",
                     "prod": "webpack --mode=production"
           },
@@ -22,15 +22,15 @@
           "author": "Peter Naydenov",
           "license": "MIT",
           "devDependencies": {
-                    "@babel/core": "7.9.6",
-                    "@babel/preset-env": "7.9.6",
-                    "babel-loader": "8.1.0",
-                    "chai": "4.2.0",
-                    "istanbul": "0.4.5",
-                    "mocha": "7.1.2",
-                    "webpack": "4.43.0",
-                    "webpack-bundle-analyzer": "3.7.0",
-                    "webpack-cli": "3.3.11"
+                    "@babel/core": "7.13.15",
+                    "@babel/preset-env": "7.13.15",
+                    "babel-loader": "8.2.2",
+                    "chai": "4.3.4",
+                    "mocha": "8.3.2",
+                    "nyc": "^15.1.0",
+                    "webpack": "5.31.0",
+                    "webpack-bundle-analyzer": "4.4.0",
+                    "webpack-cli": "4.6.0"
           },
           "dependencies": {}
 }
