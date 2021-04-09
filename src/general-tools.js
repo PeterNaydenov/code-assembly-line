@@ -6,7 +6,7 @@ renameTemplate : function ( extLib, mod ) {  //   (externalTemplate, mod{}) -> e
 // * Change-name tool for externalTemplate object
 // mod - { existingTemplateName: newTemplateName }
     const 
-            updateKeys   = Object.keys ( mod )
+            updateKeys = Object.keys ( mod )
         , existingKeys = Object.keys ( extLib )
         ;
     
@@ -19,4 +19,8 @@ renameTemplate : function ( extLib, mod ) {  //   (externalTemplate, mod{}) -> e
 
 } // tools
 
+
+
 module.exports = tools
+
+
