@@ -22,15 +22,14 @@
           "author": "Peter Naydenov",
           "license": "MIT",
           "devDependencies": {
-                    "@babel/core": "7.13.15",
-                    "@babel/preset-env": "7.13.15",
+                    "@babel/core": "7.14.0",
+                    "@babel/preset-env": "7.14.1",
                     "babel-loader": "8.2.2",
                     "chai": "4.3.4",
                     "mocha": "8.3.2",
                     "nyc": "15.1.0",
-                    "webpack": "5.31.0",
-                    "webpack-bundle-analyzer": "4.4.0",
-                    "webpack-cli": "4.6.0"
-          },
-          "dependencies": {}
+                    "webpack": "5.36.2",
+                    "webpack-bundle-analyzer": "4.4.1",
+                    "webpack-cli": "4.7.0"
+          }
 }

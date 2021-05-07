@@ -888,7 +888,7 @@ describe ( 'Run', () => {
     it ( 'Watch Hook', () => {
       const
               tplEngine = new CodeAssemblyLine ()
-            , simple = 'Just simple text, {{name}}!'
+            , simple = 'Just simple text, {{name}}! '
             , other  = 'Second template string. Got it, {{name}}!'
             , processWithHook = [
                                       { do: 'draw', tpl: 'simple', watchHook: 'checkNames' }
@@ -1095,7 +1095,7 @@ describe ( 'Run', () => {
             , processData = [
                             { do: 'set', as: 'name' }
                           , { do: 'draw', tpl: 'hi', watchHook: 'findFriend' }
-                          , { do: 'block', name: 'greetings' }
+                          , { do: 'block', name: 'greetings', space: ' ' }
                       ]
             ;
 

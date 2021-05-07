@@ -93,7 +93,12 @@ No more code changes required.
 
 ## Release History
 
-### 3.0.0 ( 2019-05-06 )
+### 3.0.2 ( 2021-05-07 )
+- [x] Fix: WatchHook combines results even they are not for extending data record
+
+
+
+### 3.0.1 ( 2019-05-06 )
 Version 2.1.x was step in right direction but changes were not enough and software starts to looks incomplete and buggy. Hook functions work on inconsistency way. Hook modifiers were very limited.  Manipulation of data is also problematic. Using a configuration for overwrite data/templates/processes is heavy and not flexible enough.
 So... the new version have:
 - [x] Overwrite configuration is completly removed. Now writing methods have attribute **method**
@@ -106,6 +111,7 @@ So... the new version have:
 - [x] Hook function should always return an array with single element. Data-segment argument is also an array with single element. On this way, you can apply 'modify' function directly on incoming data-segment.
 - [x] Hook functions modifiers can execute process-steps [ 'draw', 'block','set', 'alter', 'add', 'copy', 'remove' ]. Don't forget that scope of hook is now only a single data-segment. Hook functions have no access to templates and step **alterTemplate** is not available. Don't try to use '**hook**' inside the hook. We want to keep logic flat as possible. Should be human readable.
 - [x] Version 3.0.0 is coming with more than 190 unit tests.
+- [ ] Bug: WatchHook combines results even they are not for extending data record
 
 
 ### 2.1.1 ( 2019-05-03 )

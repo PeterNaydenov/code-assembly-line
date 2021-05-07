@@ -159,10 +159,10 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
                                                 , drawDependencies = {}
                                                 ;
                                             if ( !(watchData instanceof Array) )   watchData = [ watchData ]
-                                            drawDependencies = setupDrawDependencies ( me, todo, watchTemplate, watchData, hookFn )  
+                                            drawDependencies = setupDrawDependencies ( me, todo, watchTemplate, watchData, hookFn )
                                             update = update.concat ( operation[step] ( drawDependencies )  )
                                         })
-                                  update = [ update.join ( space ) ]
+                                  if ( holdData )   update = [ update.join ( space ) ]
                               }
                           else {
                                             const 
