@@ -9,7 +9,32 @@ const
 
 
 describe ( 'Hooks', () => {
+
+    it ( 'Hook with index', () => {
+            const
+                  tplEngine = new CodeAssemblyLine ()
+                , data = [{name:'Peter'}, {name:'Ivan'}]
+                , hi = '<div{{~~_attr}}>Hi, {{name}}</div>'
+                , process = [ 
+                                  { do: 'hook', name: 'testFn'}
+                                , { do: 'draw', tpl: 'hi'}
+                            ]
+                ;
+            tplEngine.insertTemplate ({hi})
+            tplEngine.insertProcess ( process, 'doit' )
+
+            let testFn = ([data, id], modify ) => {
+                                            if ( id == 0 )   data.class='first'
+                                            return [ data ]
+                                     };
+            
+            const result = tplEngine.run ( 'doit', data, {testFn});
+            expect ( result[0]).to.be.equal    ( '<div class="first">Hi, Peter</div>' )
+            expect ( result[1]).to.be.be.equal ( '<div>Hi, Ivan</div>' )                            
+    }) // hook with index
     
+
+
     it ( 'Hook with "draw" modifier', () => {
                 const 
                       tplEngine = new CodeAssemblyLine ()
@@ -22,7 +47,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                let testFn = ( data, modify ) => modify ( data, { do: 'draw', tpl: 'hi' })
+                let testFn = ( [data], modify ) => modify ( [data], { do: 'draw', tpl: 'hi' })
 
                 const result = tplEngine.run ( 'doit', data, {testFn} )
                 expect ( result[0] ).to.be.equal ( 'Hi, Peter' )
@@ -42,7 +67,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                let testFn = ( data, modify ) => modify ( data, { do: 'set', as: 'name' })
+                let testFn = ( [data], modify ) => modify ( [data], { do: 'set', as: 'name' })
 
                 const result = tplEngine.run ( 'doit', data, {testFn} )
                 expect ( result[0].name ).to.be.equal ( 'Peter' )
@@ -62,8 +87,8 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                function testFn ( data, modify ) {
-                                const res = modify ( data[0].list, { do: 'set', as: 'name' })
+                function testFn ( [data], modify ) {
+                                const res = modify ( data.list, { do: 'set', as: 'name' })
                                 return [res]
                     }
 
@@ -87,8 +112,8 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                function testFn ( data, modify ) {
-                                const res = modify ( [data[0].list], { do: 'set', as: 'name' })
+                function testFn ( [data], modify ) {
+                                const res = modify ( [data.list], { do: 'set', as: 'name' })
                                 return [res]
                     }
 
@@ -109,9 +134,9 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                function testFn ( data, modify ) {
+                function testFn ( [data], modify ) {
                         let tmp;
-                        tmp = modify ( data, { do: 'set', as: 'name' })
+                        tmp = modify ( [data], { do: 'set', as: 'name' })
                         tmp = modify ( tmp, { do:'draw', tpl: 'hi' })
                         return tmp
                    }
@@ -138,7 +163,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                function testFn ( data, modify ) {
+                function testFn ( [data], modify ) {
                         /**
                          *  Execution of hook is for every single data-segment but the segment always 
                          *  come as an array with a single member because modifiers require data as array. 
@@ -147,7 +172,7 @@ describe ( 'Hooks', () => {
                          *  Remember that hook-function should return always an array with signle element!
                          */
                         let 
-                              guestList = data[0].guestList
+                              guestList = data.guestList
                             , tmp
                             ;
                         tmp = modify ( guestList, { do: 'set', as: 'name' })
@@ -173,7 +198,7 @@ describe ( 'Hooks', () => {
                     ;
                 tplEngine.insertProcess ( process, 'doit' )
                 
-                const testFn = ( data, modify ) =>  modify ( data, { do:'block' });
+                const testFn = ( [data], modify ) =>  modify ( [data], { do:'block' });
                 const result = tplEngine.run ( 'doit', data, {testFn} );
                 /**
                  *  Using 'block' modifier inside hook function has no effect
@@ -197,7 +222,7 @@ describe ( 'Hooks', () => {
                     ;
                 tplEngine.insertProcess ( process, 'doit' )
                 
-                const testFn = ( data, modify ) =>  modify ( data, { do:'alter', data: { 'user' : 'name'} });
+                const testFn = ( [data], modify ) =>  modify ( [data], { do:'alter', data: { 'user' : 'name'} });
                 const result = tplEngine.run ( 'doit', data, {testFn} );
 
                 expect ( result             ).to.be.an ( 'array' )
@@ -224,7 +249,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ({ hi })
                 tplEngine.insertProcess ( process, 'doit' )
                 
-                const testFn = ( data, modify ) =>  modify ( data, { do:'add', select:'first', data: { 'user' : 'text...'} });
+                const testFn = ( [data], modify ) =>  modify ( [data], { do:'add', select:'first', data: { 'user' : 'text...'} });
                 tplEngine.run ( 'doit', data, {testFn} )
                 const result = tplEngine.getBlock ( 'result');
 
@@ -261,7 +286,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ({ hi })
                 tplEngine.insertProcess ( process, 'doit' )
                 
-                const testFn = ( data, modify ) =>  modify ( data, { do:'copy', data: { 'user' : 'name'} });
+                const testFn = ( [data], modify ) =>  modify ( [data], { do:'copy', data: { 'user' : 'name'} });
                 tplEngine.run ( 'doit', data, {testFn} )
                 const result = tplEngine.getBlock ( 'result');
 
@@ -287,7 +312,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ({ hi })
                 tplEngine.insertProcess ( process, 'doit' )
                 
-                const testFn = ( data, modify ) =>  modify ( data, { do:'remove', keys: ['user'] });
+                const testFn = ( [data], modify ) =>  modify ( [data], { do:'remove', keys: ['user'] });
                 tplEngine.run ( 'doit', data, {testFn} )
                 const result = tplEngine.getBlock ( 'result');
 
@@ -309,7 +334,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                let testFn = ( data, modify ) => modify ( data, { do: 'draw', tpl: 'hi' })
+                let testFn = ( [data], modify ) => modify ( [data], { do: 'draw', tpl: 'hi' })
 
                 const result = tplEngine.run ( 'doit', data, {testFn} )
                 expect ( result[0].name ).to.be.equal ( 'Peter' )
@@ -329,7 +354,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                let testFn = ( data, modify ) => modify ( data, { do: 'draw', tpl: 'hi' })
+                let testFn = ( [data], modify ) => modify ( [data], { do: 'draw', tpl: 'hi' })
 
                 const result = tplEngine.run ( 'doit', data, {testFn} )
                 expect ( result[0].more ).to.be.equal ( 'Hi, Peter' )
@@ -349,7 +374,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                let testFn = ( data, modify ) => modify ( data, { do: 'draw', tpl: 'hi' })
+                let testFn = ( [data], modify ) => modify ( [data], { do: 'draw', tpl: 'hi' })
 
                 const result = tplEngine.run ( 'doit', data, {testFn} )
                 expect ( result[0].name ).to.be.equal ( 'Hi, Peter' )
@@ -369,7 +394,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                let testFn = ( data, modify ) => modify ( data, { do: 'draw', tpl: 'hi' })
+                let testFn = ( [data], modify ) => modify ( [data], { do: 'draw', tpl: 'hi' })
 
                 const result = tplEngine.run ( 'doit', data, {testFn} )
                 expect ( result[0] ).to.not.have.property ( 'more' )
@@ -389,7 +414,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                let testFn = ( data, modify ) => modify ( data, { do: 'draw', tpl: 'hi' })
+                let testFn = ( [data], modify ) => modify ( [data], { do: 'draw', tpl: 'hi' })
 
                 const result = tplEngine.run ( 'doit', data, {testFn} )
                 expect ( result[0].name ).to.be.equal ( 'Hi, Peter' )
@@ -409,7 +434,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
 
-                let testFn = ( data, modify ) => modify ( data, { do: 'draw', tpl: 'hi' })
+                let testFn = ( [data], modify ) => modify ( [data], { do: 'draw', tpl: 'hi' })
 
                 const result = tplEngine.run ( 'doit', data, {testFn} )
                 expect ( result[0].name ).to.be.equal ( 'Peter Hi, Peter' )
@@ -429,7 +454,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
                 const 
-                      testFn = ( data, modify ) => modify ( data, { do: 'draw', tpl: 'hi' })
+                      testFn = ( [data], modify ) => modify ( [data], { do: 'draw', tpl: 'hi' })
                     , result = tplEngine.run ( 'doit', data, {testFn} )
                     ;
 
@@ -453,7 +478,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
                 const
-                      testFn = ( data, modify ) => modify ( data, { do: 'set', as: 'name' })
+                      testFn = ( [data], modify ) => modify ( [data], { do: 'set', as: 'name' })
                     , result = tplEngine.run ( 'doit', data, {testFn} )
                     ;
 
@@ -477,7 +502,7 @@ describe ( 'Hooks', () => {
                 tplEngine.insertTemplate ( { hi })
                 tplEngine.insertProcess ( process, 'doit' )
                 const
-                      testFn = ( data, modify ) => modify ( data, { do: 'block' })
+                      testFn = ( [data], modify ) => modify ( [data], { do: 'block' })
                     , result = tplEngine.run ( 'doit', data, {testFn} )
                     ;
 

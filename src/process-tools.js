@@ -229,8 +229,8 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
                                extend = todo.as || false
                              , hooked = []  // storage for hook results
                              ;
-                          current.forEach ( dataSegment => {
-                                    const dt = [dataSegment];
+                          current.forEach ( (dataSegment,i) => {
+                                    const dt = [dataSegment,i];
                                     hooked.push ( operation[step].call( lib, dt, hooks[todo.name], me )[0])
                               })
                           if ( extend ) {

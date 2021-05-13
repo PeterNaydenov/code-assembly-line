@@ -93,6 +93,10 @@ No more code changes required.
 
 ## Release History
 
+### 4.0.0 ( 2021-05-13)
+- [x] Breaking change: Hook argument comes as typles. Was: (data,modifier), become: ([data, id], modifier )
+
+
 ### 3.0.2 ( 2021-05-07 )
 - [x] Fix: WatchHook combines results even they are not for extending data record
 
