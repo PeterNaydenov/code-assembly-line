@@ -227,6 +227,7 @@ const lib = {
     const 
           name = step.as
         , result = data.reduce ( (res,item) => {
+                                if ( !item ) return res
                                 let obj = {};
                                 obj[name] = item
                                 res.push ( obj )

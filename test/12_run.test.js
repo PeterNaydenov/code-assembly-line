@@ -462,6 +462,25 @@ describe ( 'Run', () => {
     }) // it Draw with missData: _hide.
 
 
+    it ( 'Draw no-data with missData: hide', () => {
+          const
+                tplEngine   = new CodeAssemblyLine()
+              , templateLib = { random: 'Some text with {{place}}.{{more}}' }
+              , processData = [ 
+                                      { do: 'draw', tpl: 'random', missData:'_hide' } 
+                              ]                                                       
+              , renderData  = [
+                              ]
+              ;
+        
+        tplEngine.insertProcess ( processData, 'test')
+        tplEngine.insertTemplate ( templateLib )
+        
+        const result = tplEngine.run ( 'test', renderData )
+        console.log ( result )
+    })
+
+
 
     it ( 'Draw with missData: string', () => {
         const
@@ -745,6 +764,25 @@ describe ( 'Run', () => {
         expect ( result[0] ).to.be.equal ( 'Find Peter!' )
         expect ( result[1] ).to.be.equal ( 'Find Ivan!' )
     }) // it set
+
+
+    
+    it ( 'Set - ignore empty strings', () => {
+        const
+                  tplEngine = new CodeAssemblyLine()
+                , tpl = { test: 'Find {{who}}!' }
+                , data = [ '', '' ]
+                , processData = [
+                                    { do: 'set', as: 'who'}
+                                  , { do: 'draw', tpl: 'test' }
+                                ]
+                ;
+        tplEngine.insertTemplate ( tpl )
+        tplEngine.insertProcess ( processData, 'findList' )
+
+        const result = tplEngine.run ( 'findList', data )
+        expect ( result ).to.have.length (0)
+    }) // it set - ignore empty strings
     
     
     

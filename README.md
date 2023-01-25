@@ -93,12 +93,17 @@ No more code changes required.
 
 ## Release History
 
+### 4.0.1 ( 2023-01-25)
+- [x] Fix: Process-step 'set' did not ignore empty strings;
+
 ### 4.0.0 ( 2021-05-13)
 - [x] Breaking change: Hook argument comes as typles. Was: (data,modifier), become: ([data, id], modifier )
+- [ ] Bug: Process-step 'set' did not ignore empty strings;
 
 
 ### 3.0.2 ( 2021-05-07 )
 - [x] Fix: WatchHook combines results even they are not for extending data record
+- [ ] Bug: Process-step 'set' did not ignore empty strings;
 
 
 
@@ -116,10 +121,12 @@ So... the new version have:
 - [x] Hook functions modifiers can execute process-steps [ 'draw', 'block','set', 'alter', 'add', 'copy', 'remove' ]. Don't forget that scope of hook is now only a single data-segment. Hook functions have no access to templates and step **alterTemplate** is not available. Don't try to use '**hook**' inside the hook. We want to keep logic flat as possible. Should be human readable.
 - [x] Version 3.0.0 is coming with more than 190 unit tests.
 - [ ] Bug: WatchHook combines results even they are not for extending data record
+- [ ] Bug: Process-step 'set' did not ignore empty strings;
 
 
 ### 2.1.1 ( 2019-05-03 )
-- [x] Fix: WatchHook data after 'set' process-step 
+- [x] Fix: WatchHook data after 'set' process-step
+- [ ] Bug: Process-step 'set' did not ignore empty strings; 
 
 ### 2.1.0 (2019-04-30)
 Read **upgrade notes** for version 2.1.x.
@@ -129,6 +136,7 @@ Read **upgrade notes** for version 2.1.x.
 - [x] Upgrade webpack to version 4.30;
 - [x] Fix: Correct flatten of deep objects;
 - [ ] Bug: WatchHook data after 'set' process-step 
+- [ ] Bug: Process-step 'set' did not ignore empty strings;
 
 ### 2.0.0 (2018-01-09)
 - [x] Fix: method getProcessLib returns JSON representation of intProcess type object. Should be object of extProcessLib type;
@@ -136,17 +144,20 @@ Read **upgrade notes** for version 2.1.x.
 - [x] Breaking change: Method 'getProcessLib' returns 'extProcessLib'. Was JSON representation of 'extProcessLib';
 - [x] Breaking change: Argument extLib for method 'insertProcessLib' was changed. Was JSON, now is extProcessLib object;
 - [ ] Bug: Flatten of deep objects is not working as should.
+- [ ] Bug: Process-step 'set' did not ignore empty strings;
 
 
 
 ### 1.0.3 (2017-12-31)
 - [x] Run throws console error if any errors
 - [ ] Bug: method getProcessLib returns JSON representation of intProcess type object. Should be JSON representation of extProcessLib type;
+- [ ] Bug: Process-step 'set' did not ignore empty strings;
 
 ### 1.0.2 (2017-12-23)
 - [x] Process-step 'add' was switched on;
 - [x] Readme has link to documentation wiki;
 - [ ] Bug: method getProcessLib returns JSON representation of intProcess type object. Should be JSON representation of extProcessLib type;
+- [ ] Bug: Process-step 'set' did not ignore empty strings;
 
 
 ### 1.0.0 (2017-12-17)
@@ -155,6 +166,7 @@ Read **upgrade notes** for version 2.1.x.
 - [x] Browser module;
 - [x] Test package;
 - [ ] Bug: method getProcessLib returns JSON representation of intProcess type object. Should be JSON representation of extProcessLib type;
+- [ ] Bug: Process-step 'set' did not ignore empty strings;
 
 
 
