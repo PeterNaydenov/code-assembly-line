@@ -1,6 +1,6 @@
 {
           "name": "code-assembly-line",
-          "version": "4.0.0",
+          "version": "4.0.1",
           "description": "Javascript template engine. Works server and client side",
           "main": "src/index.js",
           "scripts": {
