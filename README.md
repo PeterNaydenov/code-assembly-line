@@ -1,5 +1,10 @@
 # Code Assembly Line
 
+![version](https://img.shields.io/github/package-json/v/peterNaydenov/code-assembly-line)
+![license](https://img.shields.io/github/license/peterNaydenov/code-assembly-line)
+
+
+
 Code-Assembly-Line works for node.js and browsers.
 
 
