@@ -28,7 +28,7 @@
                     "chai": "4.3.10",
                     "mocha": "10.2.0",
                     "nyc": "15.1.0",
-                    "webpack": "5.88.2",
+                    "webpack": "5.89.0",
                     "webpack-bundle-analyzer": "4.9.1",
                     "webpack-cli": "5.1.4"
           }

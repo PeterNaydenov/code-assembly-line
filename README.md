@@ -2,6 +2,8 @@
 
 ![version](https://img.shields.io/github/package-json/v/peterNaydenov/code-assembly-line)
 ![license](https://img.shields.io/github/license/peterNaydenov/code-assembly-line)
+![GitHub issues](https://img.shields.io/github/issues-raw/peterNaydenov/code-assembly-line)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/code-assembly-line)
 
 
 
