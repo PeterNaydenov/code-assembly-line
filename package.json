@@ -2,7 +2,10 @@
           "name": "code-assembly-line",
           "version": "4.0.1",
           "description": "Javascript template engine. Works server and client side",
+          "author": "Peter Naydenov",
+          "license": "MIT",
           "main": "src/index.js",
+          
           "scripts": {
                     "test": "NODE_ENV='test' mocha test",
                     "cover": "nyc mocha",
@@ -19,8 +22,6 @@
                     "type": "git",
                     "url": "https://github.com/PeterNaydenov/code-assembly-line.git"
           },
-          "author": "Peter Naydenov",
-          "license": "MIT",
           "devDependencies": {
                     "@babel/core": "7.23.3",
                     "@babel/preset-env": "7.23.3",
