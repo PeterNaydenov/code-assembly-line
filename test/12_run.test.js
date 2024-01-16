@@ -1,11 +1,8 @@
 'use strict'
 
-const 
-        chai             = require ('chai')
-      , expect           = chai.expect
-      , CodeAssemblyLine = require ( '../src/index'  )
-      , showError        = require ( '../src/errors' )
-      ;
+import { expect } from 'chai'
+import CodeAssemblyLine from '../src/index.js'
+import showError from '../src/errors.js'
 
 
 

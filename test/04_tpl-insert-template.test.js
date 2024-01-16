@@ -1,11 +1,9 @@
 'use strict';
 
-const 
-        chai = require ('chai')
-      , expect = chai.expect
-      , codeAssemblyLine = require ( '../src/index' )
-      , errors = require ( '../src/errors' )
-      ;
+import { expect } from 'chai'
+import codeAssemblyLine from '../src/index.js'
+import errors from '../src/errors.js'
+
 
 
 describe ( 'Templates', () => {

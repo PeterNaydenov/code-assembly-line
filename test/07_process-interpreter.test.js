@@ -1,13 +1,11 @@
 'use strict'
 
-const 
-        chai         = require ('chai')
-      , expect       = chai.expect
-      , help         = require ( '../src/help' )
-      , showError    = require ( '../src/errors' )
-      , processTools = require ( '../src/process-tools' )({help,showError})
-      , errors       = require ( '../src/errors' )
-      ;
+import { expect } from 'chai'
+import help from '../src/help.js'
+import showError from '../src/errors.js'
+import processToolsModule from '../src/process-tools.js'
+
+const processTools = processToolsModule ({ help, showError });
 
 
 

@@ -1,6 +1,6 @@
 "use strict";
 
-const showError = require ('./errors');
+import showError from "./errors.js"
 
 /*
      Converts string template to internal template format
@@ -50,6 +50,6 @@ function chopTemplate ( text ) {
 
 
 
-module.exports = chopTemplate;
+export default chopTemplate;
 
 

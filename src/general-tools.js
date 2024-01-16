@@ -21,6 +21,6 @@ renameTemplate : function ( extLib, mod ) {  //   (externalTemplate, mod{}) -> e
 
 
 
-module.exports = tools
+export default tools
 
 

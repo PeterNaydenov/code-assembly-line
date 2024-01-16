@@ -1,13 +1,10 @@
 'use strict'
 
-const 
-        chai       = require ('chai')
-      , expect     = chai.expect
-      , help       = require ( '../src/help' )
-      , operation = require ( '../src/process-operations' )({ help })
-      , errors     = require ( '../src/errors' )
-      ;
+import { expect } from 'chai'
+import help from '../src/help.js'
+import processOperationsModule from '../src/process-operations.js'
 
+const operation = processOperationsModule ({ help });
 
 describe ( 'Hook Modifiers', () => {
 

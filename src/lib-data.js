@@ -114,6 +114,6 @@ const lib_Data = {
 }  // getLibData func.
 
 
-   module.exports = getLibData
+   export default getLibData
 
 

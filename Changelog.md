@@ -1,7 +1,17 @@
 ## Release History
 
+
+
+### 5.0.0 ( 2024-01-16)
+- [x] Converted to ES6 module;
+- [x] CommonJS and UMD modules are available in dist folder;
+
+
+
 ### 4.0.2 ( 2023-11-12 )
 - [x] Documentation update, badges, links;
+
+
 
 ### 4.0.1 ( 2023-01-25)
 - [x] Fix: Process-step 'set' did not ignore empty strings;

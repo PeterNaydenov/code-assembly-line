@@ -232,6 +232,6 @@ const lib_Process = {
 
 
 
-module.exports = getLibProcess
+export default getLibProcess
 
 

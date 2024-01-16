@@ -45,4 +45,4 @@ const showError = function ( msgName, vars ) {
   return result
  } // msg func.
 
-module.exports = showError;
+export default showError

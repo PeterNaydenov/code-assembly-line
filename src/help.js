@@ -101,6 +101,6 @@ const help = {
 
 
   
-module.exports = getHelpLib
+export default getHelpLib
 
 

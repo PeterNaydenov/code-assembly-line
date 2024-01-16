@@ -1,12 +1,7 @@
 'use strict'
 
-const 
-        chai             = require ('chai')
-      , expect           = chai.expect
-      , CodeAssemblyLine = require ( '../src/index'  )
-      ;
-
-
+import { expect } from 'chai'
+import CodeAssemblyLine from '../src/index.js'
 
 describe ( 'Hooks', () => {
 

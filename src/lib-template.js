@@ -156,4 +156,4 @@ function getLibTemplate ({ help, templateTools, showError }) {
 } // getLibTemplate func.
 
 
-    module.exports = getLibTemplate
+    export default getLibTemplate

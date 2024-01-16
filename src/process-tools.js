@@ -317,6 +317,6 @@ interpret ( ext ) { //   (ext: extProcess) -> int: intProcess
 
 
 
-module.exports = getProcessTools
+export default getProcessTools
 
 

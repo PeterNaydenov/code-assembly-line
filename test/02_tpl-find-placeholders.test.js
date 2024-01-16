@@ -1,11 +1,11 @@
 'use strict';
 
-const 
-      chai      = require ( 'chai' )
-    , expect    = chai.expect
-    , chop      = require ( '../src/template-chop' )
-    , showError = require ( '../src/errors' )
-const findPlaceholdersAndSpaces = require ('../src/template-tools')({ chop, showError })._findPlaceholdersAndSpaces;
+import { expect }  from 'chai'
+import chop        from '../src/template-chop.js'
+import showError   from '../src/errors.js'
+import templateToolsModule from '../src/template-tools.js'
+      
+const findPlaceholdersAndSpaces = templateToolsModule ({ chop, showError })._findPlaceholdersAndSpaces;
 
 
 

@@ -9,19 +9,28 @@
      - Published on GitHub for first time: November 16th, 2017
      - Version 2.0. January 9th, 2018
      - Version 3.0. May 6th, 2019
+     - Version 5.0. ES module. January 16th, 2024
 */
 
+import showError from './errors.js'
+import chop from './template-chop.js'
+import tools from './general-tools.js'
+import templateToolsModule from './template-tools.js'
+import helpModule from './help.js'
+import operationModule from './process-operations.js'
+import processToolsModule from './process-tools.js'
+import lib_TemplateModule from './lib-template.js'
+import lib_DataModule from './lib-data.js'
+import lib_ProcessModule from './lib-process.js'
+
 const 
-       showError         = require ( './errors'             )
-     , chop              = require ( './template-chop'      )
-     , tools             = require ( './general-tools'      )
-     , templateTools     = require ( './template-tools'     )({ chop, showError })
-     , help              = require ( './help'               )({ showError })
-     , operation         = require ( './process-operations' )({ help })
-     , processTools      = require ( './process-tools'      )({ help, showError, operation })
-     , lib_Template      = require ( './lib-template'       )({ help, showError, templateTools })
-     , lib_Data          = require ( './lib-data'           )({ help, showError })
-     , lib_Process       = require ( './lib-process'        )({ help, showError, processTools })
+       templateTools     = templateToolsModule ({ chop, showError })
+     , help              = helpModule ({ showError })
+     , operation         = operationModule ({ help })
+     , processTools      = processToolsModule ({ help, showError, operation })
+     , lib_Template      = lib_TemplateModule ({ help, showError, templateTools })
+     , lib_Data          = lib_DataModule ({ help, showError })
+     , lib_Process       = lib_ProcessModule ({ help, showError, processTools })
      ;
 
 
@@ -92,6 +101,6 @@ codeAssembly.prototype = {
 
 
 
-module.exports = codeAssembly;
+export default codeAssembly;
 
 

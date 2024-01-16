@@ -1,11 +1,8 @@
 'use strict';
 
-const chai   = require ( 'chai' );
-const expect = chai.expect
-const chop   = require ('../src/template-chop');
-const callError = require ('../src/errors');
-
-
+import { expect } from 'chai';
+import chop from '../src/template-chop.js';
+import callError from '../src/errors.js';
 
 
 

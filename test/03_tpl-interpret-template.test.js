@@ -1,12 +1,11 @@
 'use strict';
 
-const 
-      chai          = require ('chai')
-    , showError     = require ( '../src/errors' )
-    , chop          = require ( '../src/template-chop' )
-    , templateTools = require ('../src/template-tools' )({ chop, showError })
-
-    , expect = chai.expect
+import { expect } from 'chai'
+import chop from '../src/template-chop.js'
+import showError from '../src/errors.js'
+import templateToolsModule from '../src/template-tools.js'
+const
+      templateTools = templateToolsModule ({ chop, showError })
     , str2intTemplate = templateTools.str2intTemplate
     , load_interpretTemplate = templateTools.load_interpretTemplate
     , interpret = load_interpretTemplate ( str2intTemplate )

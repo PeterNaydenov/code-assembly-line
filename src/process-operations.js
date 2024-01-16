@@ -443,6 +443,6 @@ return lib
 
 
 
-module.exports = getProcessOperations
+export default getProcessOperations
 
 

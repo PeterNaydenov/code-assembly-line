@@ -101,6 +101,6 @@ const lib = {
 
 
 
-module.exports = getTemplateTools
+export default getTemplateTools
 
 
