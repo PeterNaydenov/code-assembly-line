@@ -1,7 +1,7 @@
 {
           "name": "code-assembly-line",
           "description": "Javascript template engine. Works server and client side",
-          "version": "5.0.0",
+          "version": "5.0.1",
           "license": "MIT",
           "author": "Peter Naydenov",
           "main": "src/index.js",
