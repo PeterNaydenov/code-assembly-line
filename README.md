@@ -60,7 +60,7 @@ Find working example in file '**/dist/index.html**'.
 ## Links
 * [Getting started](https://github.com/PeterNaydenov/code-assembly-line/wiki/Getting-started)
 * [Documentation](https://github.com/PeterNaydenov/code-assembly-line/wiki)
-* [History of changes](https://github.com/PeterNaydenov/code-assembly-line/Changelog.md)
+* [History of changes](https://github.com/PeterNaydenov/code-assembly-line/blob/master/Changelog.md)
 * [Migration guide](https://github.com/PeterNaydenov/code-assembly-line/Migration.guide.md)
 
 
