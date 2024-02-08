@@ -1,7 +1,7 @@
 {
           "name": "code-assembly-line",
           "description": "Javascript template engine. Works server and client side",
-          "version": "5.0.1",
+          "version": "5.1.0",
           "license": "MIT",
           "author": "Peter Naydenov",
           "main": "./dist/code-assembly-line.umd.js",
@@ -16,7 +16,7 @@
                     "./dist/*": "./dist/*",
                     "./src/*": "./src/*",
                     "./README.md": "./README.md"
-                },
+          },
           "scripts": {
                     "test": "NODE_ENV='test' mocha test",
                     "cover": "c8 mocha",
