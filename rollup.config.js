@@ -9,7 +9,7 @@ export default [
 		input: 'src/index.js',
 		output: {
 			name: 'codeAssemblyLine',
-			file: 'dist/codeAssemblyLine.umd.js',
+			file: 'dist/code-assembly-line.umd.js',
 			format: 'umd'
 		},
 		plugins: [
@@ -27,10 +27,9 @@ export default [
 	// `file` and `format` for each target)
 	{
 		input: 'src/index.js',
-		external: ['ms'],
 		output: [
-			{ file: 'dist/codeAssemblyLine.cjs.js', format: 'cjs' },
-			{ file: 'dist/codeAssemblyLine.esm.js', format: 'es' }
+			{ file: 'dist/code-assembly-line.cjs.js', format: 'cjs' },
+			{ file: 'dist/code-assembly-line.esm.js', format: 'es' }
 		],
 		plugins: [ terser() ]
 	}

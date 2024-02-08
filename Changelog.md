@@ -2,6 +2,12 @@
 
 
 
+### 5.1.0 ( 2024-02-08)
+- [x] Package.json: "exports" section was added. Allows you to use package as commonjs or es6 module without additional configuration;
+- [x] Dev dependencies update. Chai@5.0.3;
+
+
+
 ### 5.0.0 ( 2024-01-16)
 - [x] Converted to ES6 module;
 - [x] CommonJS and UMD modules are available in dist folder;

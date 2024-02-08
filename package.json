@@ -4,8 +4,19 @@
           "version": "5.0.1",
           "license": "MIT",
           "author": "Peter Naydenov",
-          "main": "src/index.js",
+          "main": "./dist/code-assembly-line.umd.js",
           "type": "module",
+          "exports": {
+                    ".": {
+                              "import": "./dist/code-assembly-line.esm.mjs",
+                              "require": "./dist/code-assembly-line.cjs",
+                              "default": "./dist/code-assembly-line.umd.js"
+                    },
+                    "./package.json": "./package.json",
+                    "./dist/*": "./dist/*",
+                    "./src/*": "./src/*",
+                    "./README.md": "./README.md"
+                },
           "scripts": {
                     "test": "NODE_ENV='test' mocha test",
                     "cover": "c8 mocha",
