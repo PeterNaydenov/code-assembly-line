@@ -1,11 +1,14 @@
 ## Release History
 
 
+### 5.1.1 ( 2024-03-07)
+- [x] Fix: Build has an incorect filenames;
+
 
 ### 5.1.0 ( 2024-02-08)
 - [x] Package.json: "exports" section was added. Allows you to use package as commonjs or es6 module without additional configuration;
 - [x] Dev dependencies update. Chai@5.0.3;
-
+- [ ] Bug: Build has an incorect filenames;
 
 
 ### 5.0.0 ( 2024-01-16)

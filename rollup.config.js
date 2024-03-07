@@ -28,8 +28,8 @@ export default [
 	{
 		input: 'src/index.js',
 		output: [
-			{ file: 'dist/code-assembly-line.cjs.js', format: 'cjs' },
-			{ file: 'dist/code-assembly-line.esm.js', format: 'es' }
+			{ file: 'dist/code-assembly-line.cjs', format: 'cjs' },
+			{ file: 'dist/code-assembly-line.esm.mjs', format: 'es' }
 		],
 		plugins: [ terser() ]
 	}
