@@ -1,6 +1,12 @@
 ## Release History
 
 
+### 5.1.2 ( 2024-12-13)
+- [x] Some changes in package.json;
+- [x] No code changes;
+
+
+
 ### 5.1.1 ( 2024-03-07)
 - [x] Fix: Build has an incorect filenames;
 

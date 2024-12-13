@@ -4,13 +4,13 @@
           "version": "5.1.1",
           "license": "MIT",
           "author": "Peter Naydenov",
-          "main": "./dist/code-assembly-line.umd.js",
+          "main": "./src/index.js",
           "type": "module",
           "exports": {
                     ".": {
-                              "import": "./dist/code-assembly-line.esm.mjs",
+                              "import": "./src/index.js",
                               "require": "./dist/code-assembly-line.cjs",
-                              "default": "./dist/code-assembly-line.umd.js"
+                              "default": "./src/index.js"
                     },
                     "./package.json": "./package.json",
                     "./dist/*": "./dist/*",
